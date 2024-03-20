@@ -641,13 +641,15 @@ INPUT /usr/share/texmf-dist/fonts/tfm/public/stix/stix-mathtt.tfm
 INPUT /usr/share/texmf-dist/fonts/tfm/public/stix/t1-stixgeneral.tfm
 INPUT /usr/share/texmf-dist/fonts/tfm/public/stix/t1-stixgeneral-bold.tfm
 INPUT /usr/share/texmf-dist/fonts/tfm/public/stix/t1-stixgeneral-bolditalic.tfm
+INPUT /usr/share/texmf-dist/fonts/tfm/public/stix/t1-stixgeneral-italic.tfm
+INPUT /var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map
 INPUT ./Manuscript.bbl
 INPUT ./Manuscript.bbl
 INPUT /usr/share/texmf-dist/fonts/tfm/public/stix/t1-stixgeneral-bold.tfm
-INPUT /var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map
 INPUT ./Manuscript.aux
 INPUT ./Manuscript.out
 INPUT /usr/share/texmf-dist/fonts/type1/public/stix/STIXGeneral-Bold.pfb
 INPUT /usr/share/texmf-dist/fonts/type1/public/stix/STIXGeneral-BoldItalic.pfb
 INPUT /usr/share/texmf-dist/fonts/type1/public/stix/STIXGeneral-Italic.pfb
 INPUT /usr/share/texmf-dist/fonts/type1/public/stix/STIXGeneral-Regular.pfb
+INPUT /usr/share/texmf-dist/fonts/type1/public/stix/stix-mathit.pfb
