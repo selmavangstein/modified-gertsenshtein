@@ -1,0 +1,61 @@
+\documentclass[aps,prd,reprint,preprintnumbers,showpacs,floatfix,nofootinbib,superscript address,longbibliography]{revtex4-2}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{hhline}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{multirow,tabularx}
+\usepackage{siunitx}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{tikz}
+\usepackage{tikz-feynman}
+\usetikzlibrary{positioning,arrows.meta,fadings,through,backgrounds}
+\tikzfeynmanset{compat=1.0.0}
+\tikzset{graviton/.style={decorate, decoration={snake, amplitude=.4mm, segment length=1.5mm, pre length=.1mm, post length=.1mm}, double=white}}
+
+%\input{MacrosMAG.tex}
+\input{MacrosTextual.tex}
+\input{MacrosJournalNames.tex}
+
+\usepackage{hyperref}
+\hypersetup{%
+     colorlinks = true,%
+     linkcolor = Blue,%
+     citecolor = Blue,%
+     filecolor = Blue,%
+     urlcolor = Blue% 
+     }%
+\usepackage[capitalize,nameinlink]{cleveref}
+
+\begin{document}
+
+\title{Constraints on the production of artificial gravitational fields}
+
+%\author{Will Barker}
+%\email{wb263@cam.ac.uk}
+%\affiliation{Astrophysics Group, Cavendish Laboratory, JJ Thomson Avenue, Cambridge CB3 0HE, UK}
+%\affiliation{Kavli Institute for Cosmology, Madingley Road, Cambridge CB3 0HA, UK}
+\author{Cavendish Gravity Group}
+\affiliation{Astrophysics Group, Cavendish Laboratory, JJ Thomson Avenue, Cambridge CB3 0HE, UK}
+\affiliation{Kavli Institute for Cosmology, Madingley Road, Cambridge CB3 0HA, UK}
+
+%\date{}
+
+\begin{abstract}
+	There is a clear public interest in the artificial generation of gravitational fields, with supposed applications extending to reactionless or superluminal propulsion technologies. Despite this enthusiasm, the paradigms of modern physics are expected to impose severe constraints on such technologies. The public understanding of these constraints appears to be very limited, establishing the case for a clear commentary on the topic. In this whitepaper we offer a narrow perspective -- from within the physics community -- on the outlook for artificial gravity.
+\end{abstract}
+
+\maketitle
+
+\paragraph*{Public interest} The
+\paragraph*{General relativity}
+\paragraph*{Viability of recent patents}
+\paragraph*{Gertsenshtein done properly} We will use a convention where the initial and final states run left to right. Obviously there is no vertex $\feynmandiagram[scale=0.7,transform shape, inline=(d.base), horizontal=a to b]{a -- [photon] d [dot] -- [graviton] b}$ that allows direct conversion, since the photon and graviton have different spins. The first vertex which exists is $\feynmandiagram[scale=0.5,transform shape, inline=(d.base)]{a -- [graviton] d [dot] -- [photon] {b,c}}$, not only because of the spins but also because there is certainly a Maxwell stress-energy tensor on Minkowski spacetime. However the existence of a centre of momentum frame precludes this vertex from becoming a diagram. At next-to-leading order away from the Minkowski background, there is probably a so-called `seagull' vertex $\feynmandiagram[scale=0.45,transform shape, inline=(b), horizontal=a to d]{a -- [graviton] b [dot] -- [photon] c,d -- [graviton] b -- [photon] e}$, and this can be a diagram. However it is not clear that the Gertsenshtein effect can be interpreted as a massless two-to-two scattering process when you read~\cite{Palessandro:2023tee}, because the process strictly relies on the presence of a uniform magnetic field in the background. In case an electric field in the background is not allowed, then we will have a problem: the external legs of the seagull must be asymptotic states, and there is no frame in which either of these states looks purely magnetic. The magnetic field must come from somewhere: most likely it is sourced by an electron current. This is the point where we begin to suspect that the Gertsenshtein effect is 
+\paragraph*{Modified gravity}
+	
+%\bibliographystyle{apsrev4-1}
+\bibliography{Manuscript}
+
+\end{document}
