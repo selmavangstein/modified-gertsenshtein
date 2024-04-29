@@ -1,16 +1,16 @@
 # Fdb version 4
-["bibtex Manuscript"] 1711058351 "Manuscript.aux" "Manuscript.bbl" "Manuscript" 1711059205 0
-  "./Manuscript.bib" 1710972009 801 720e23752b89eab9482ad9c14adbb7f8 ""
-  "./ManuscriptNotes.bib" 1711059204 104 4d8bb863c86f3d7b03a471e9d4707f34 ""
+["bibtex Manuscript"] 1711061285 "Manuscript.aux" "Manuscript.bbl" "Manuscript" 1711061288 0
+  "./Manuscript.bib" 1711061284 801 720e23752b89eab9482ad9c14adbb7f8 ""
+  "./ManuscriptNotes.bib" 1711061287 104 4d8bb863c86f3d7b03a471e9d4707f34 ""
   "/usr/share/texmf-dist/bibtex/bst/revtex/apsrev4-2.bst" 1704400182 69609 e9dea59f0e753ccda3ddc8f5806d846d ""
-  "Manuscript.aux" 1711059204 1707 ec8da68fce03bf55fa734c0a534ddfe9 "pdflatex"
+  "Manuscript.aux" 1711061287 1707 ec8da68fce03bf55fa734c0a534ddfe9 "pdflatex"
   (generated)
   "Manuscript.bbl"
   "Manuscript.blg"
   (rewritten before read)
-["pdflatex"] 1711059202 "Manuscript.tex" "Manuscript.pdf" "Manuscript" 1711059205 2
-  "/home/williamb/.texlive/texmf-var/luatex-cache/generic/fonts/otl/lmroman10-regular.luc" 1708288315 127314 bd974006b1a2c5a606f48a85e2df1fa0 ""
-  "/home/williamb/.texlive/texmf-var/luatex-cache/generic/names/luaotfload-names.luc.gz" 1686949093 408337 77855d5349ea6af5bd114bb0d53b2231 ""
+["pdflatex"] 1711061285 "Manuscript.tex" "Manuscript.pdf" "Manuscript" 1711061288 2
+  "/home/williamb/.texlive/texmf-var/luatex-cache/generic/fonts/otl/lmroman10-regular.luc" 1708273564 127314 bd974006b1a2c5a606f48a85e2df1fa0 ""
+  "/home/williamb/.texlive/texmf-var/luatex-cache/generic/names/luaotfload-names.luc.gz" 1688321147 407974 e35db16f565795d3ec62066d6ef338b3 ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm" 1704400182 916 f87d7c45f9c908e672703b83b72241a3 ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam5.tfm" 1704400182 924 9904cf1d39e9767e7a3622f2a125a565 ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam7.tfm" 1704400182 928 2dc8d444221b7a635bb58038579b861a ""
@@ -370,15 +370,15 @@
   "/usr/share/texmf-dist/tex/luatex/luaotfload/luaotfload-tounicode.lua" 1704400182 7528 9bc62ed441ed23b5222925b019479f78 ""
   "/usr/share/texmf-dist/tex/luatex/luaotfload/luaotfload-unicode.lua" 1704400182 7917 30f5b1073daa0c6e85ca1db843fbd9cd ""
   "/usr/share/texmf-dist/tex/luatex/luaotfload/luaotfload.lua" 1704400182 13565 83bac25a8cf8630acccd6a7f8bb9f791 ""
-  "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1708641927 4482925 a1a254cacf5c7108f7b28226c8f3b19f ""
-  "/var/lib/texmf/web2c/luahbtex/lualatex.fmt" 1708641919 11875097 10a6d68f2d4cc7488a4870bb8ad8d034 ""
-  "MacrosJournalNames.tex" 1710967412 3450 c34d7f5ba8d82959c2092c7f15a9c109 ""
-  "MacrosMAG.tex" 1711016638 2696 2932505478215c13a650e05489ee4390 ""
-  "MacrosTextual.tex" 1710967412 802 3b301ba69396257b92d4d0a42b4a2faf ""
-  "Manuscript.aux" 1711059204 1707 ec8da68fce03bf55fa734c0a534ddfe9 "pdflatex"
-  "Manuscript.bbl" 1711058351 3397 8e79ef9d7a13fbe6bd7b8143919ca8da "bibtex Manuscript"
-  "Manuscript.out" 1711059204 583 a3ee10c23cdfe3f452e7c7a03b468411 "pdflatex"
-  "Manuscript.tex" 1711059202 9482 0810dbd1c73d7cf16243e3d504b57ed9 ""
+  "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1708630704 4482925 a1a254cacf5c7108f7b28226c8f3b19f ""
+  "/var/lib/texmf/web2c/luahbtex/lualatex.fmt" 1708630691 11875096 65b84e8dd6852aedb4268c83bfb12a4f ""
+  "MacrosJournalNames.tex" 1710770632 3450 c34d7f5ba8d82959c2092c7f15a9c109 ""
+  "MacrosMAG.tex" 1711061284 2696 2932505478215c13a650e05489ee4390 ""
+  "MacrosTextual.tex" 1710770632 802 3b301ba69396257b92d4d0a42b4a2faf ""
+  "Manuscript.aux" 1711061287 1707 ec8da68fce03bf55fa734c0a534ddfe9 "pdflatex"
+  "Manuscript.bbl" 1711061285 3397 8e79ef9d7a13fbe6bd7b8143919ca8da "bibtex Manuscript"
+  "Manuscript.out" 1711061287 583 a3ee10c23cdfe3f452e7c7a03b468411 "pdflatex"
+  "Manuscript.tex" 1711061284 9482 0810dbd1c73d7cf16243e3d504b57ed9 ""
   (generated)
   "Manuscript.aux"
   "Manuscript.log"

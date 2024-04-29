@@ -1,0 +1,89 @@
+\documentclass{article}
+\usepackage[
+a4paper,
+margin=2.cm,
+headheight=1.2cm,
+headsep=0.15cm,
+footskip=0cm
+]{geometry}
+\usepackage{cleveref}
+\usepackage{wrapfig}
+\usepackage[default]{opensans}
+\usepackage{graphicx}
+
+\usepackage{parskip}
+
+\makeatletter
+\renewcommand{\paragraph}{%
+  \@startsection{paragraph}{4}%
+  {\z@}{1.21ex \@plus 1ex \@minus .2ex}{0.9em}%
+  {\normalfont\normalsize\bfseries}%
+}
+\makeatother
+
+\usepackage{titlesec}
+\newrobustcmd{\pea}[1]{%
+	\emph{#1}\textbf{.\ \ \ ---}
+}
+\titleformat{\paragraph}[runin]{\normalfont\normalsize\bfseries}{\emph\theparagraph}{1em}{\pea}
+
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tikz}
+\usepackage{hyperref}
+\hypersetup{%
+     colorlinks = true,%
+     linkcolor = Blue,%
+     citecolor = Blue,%
+     filecolor = Blue,%
+     urlcolor = Blue% 
+     }%
+
+\begin{document}
+
+\thispagestyle{empty}
+
+\pagestyle{empty}
+
+\begin{tikzpicture}[remember picture,overlay]
+\node[anchor=north east,inner sep=0pt] at (current page.north east)
+{\includegraphics[height=4.cm]{AcademicReference/KICCLogo.jpeg}};
+\node[anchor=north west,inner sep=0pt,xshift=2cm,yshift=-2cm] at (current page.north west)
+{\includegraphics[height=2.cm]{AcademicReference/CavendishLogo.png}};
+\end{tikzpicture}
+
+\vspace{90pt}
+
+{\color{Gray}
+\begin{minipage}{0.4\textwidth}
+	 \\
+	 \\
+	 \\
+	\phantom{a} 	
+\end{minipage}
+\begin{minipage}{0.6\textwidth}
+	Dr. Will Barker \\
+	Rosamund Chambers Junior Research Fellow in Astrophysics \\
+	Girton College, Huntingdon Road, Cambridge, CB3 0JG, UK\\
+	Academic website: \href{wevbarker.com}{wevbarker.com}\\
+	Phone: +44--(0)--1223--337527\\
+	Electronic mail: \texttt{wb263@cam.ac.uk}
+\end{minipage}
+}
+
+\bigskip
+
+\bigskip
+
+\textbf{To Whom it may concern,}
+
+\vspace{20pt}
+
+This letter is to confirm that Selma Nybø Vangstein is expected to join the Cavendish Laboratory Astrophysics Group as a visitor from 17th June 2024 to 9th August 2024, on a funded research placement. Since her day-to-day research will take place at the Kavli Institute for Cosmology (KICC, Madingley Rise, Cambridge, CB3 0HA), it is necessary that she be provided with accommodation within the city of Cambridge during this period.
+
+\vspace{20pt}
+
+\vfill
+
+Yours sincerely, \hfill Dr. Will Barker ---  \today
+
+\end{document}
