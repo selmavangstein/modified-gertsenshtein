@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[    150120,       4086]
-NotebookOptionsPosition[    139789,       3939]
-NotebookOutlinePosition[    140194,       3955]
-CellTagsIndexPosition[    140151,       3952]
+NotebookDataLength[    150333,       4091]
+NotebookOptionsPosition[    140002,       3944]
+NotebookOutlinePosition[    140407,       3960]
+CellTagsIndexPosition[    140364,       3957]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -3930,9 +3930,14 @@ Cell[BoxData[
  CellLabel->"Out[21]=",ExpressionUUID->"87858107-1799-f249-a956-29abec834c33"]
 }, Open  ]],
 
-Cell["We now have to linear field equations we expected.", "Text",
- CellChangeTimes->{{3.9284914012627563`*^9, 
-  3.9284914119577847`*^9}},ExpressionUUID->"09cf8cb9-a181-ae46-a232-\
+Cell["\<\
+We now have to linear field equations we expected. Ish. I am a bit troubled \
+by the way I got this. From my understanding of the process, this now says \
+box h[-a,-b]=0 which is really not what we want. \
+\>", "Text",
+ CellChangeTimes->{{3.9284914012627563`*^9, 3.9284914119577847`*^9}, {
+  3.9284922455658855`*^9, 
+  3.928492286852211*^9}},ExpressionUUID->"09cf8cb9-a181-ae46-a232-\
 efb0475fb829"]
 }, Open  ]]
 }, Open  ]]
@@ -4085,7 +4090,7 @@ Cell[CellGroupData[{
 Cell[138088, 3890, 187, 2, 28, "Input",ExpressionUUID->"37a4910d-baea-e440-b957-0f55eb93219f"],
 Cell[138278, 3894, 1272, 35, 35, "Output",ExpressionUUID->"87858107-1799-f249-a956-29abec834c33"]
 }, Open  ]],
-Cell[139565, 3932, 196, 3, 35, "Text",ExpressionUUID->"09cf8cb9-a181-ae46-a232-efb0475fb829"]
+Cell[139565, 3932, 409, 8, 58, "Text",ExpressionUUID->"09cf8cb9-a181-ae46-a232-efb0475fb829"]
 }, Open  ]]
 }, Open  ]]
 }
