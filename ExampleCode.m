@@ -4,6 +4,19 @@
 
 (*How to do it*)
 
+(*
+	Tasks....
+
+- Write down your Lagrangian (or tweak it for a new model...)
+- Expand F
+- Use xPert to get everything to 2nd order (i.e. both metric perturbation and electromagnetic gauge potential)
+- Use your rules to replace triangle symbols with actual tensors
+- Try to get rid of explicit background electromagnetic gauge potential, replacing with background Faraday (!)
+- VarD for two sets of fields equations
+- xCoba (good luck!)
+
+*)
+
 MakeRule[{CD[-a]@A[-b],
 	(1/2)*F[-a,-b]+(1/2)*(CD[-a]@A[-b]+CD[-b]@A[-a])},
 	MetricOn->All,ContractMetrics->True];
