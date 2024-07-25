@@ -1,0 +1,206 @@
+%++++++++++++++++++++++++++++++++++++++++
+% Don't modify this section unless you know what you're doing!
+\documentclass[letterpaper,12pt]{article}
+%\usepackage{dutchcal}
+\usepackage{boondox-cal}
+\usepackage{tabularx} % extra features for tabular environment
+\usepackage{amsmath}  % improve math presentation
+\usepackage{graphicx} % takes care of graphic including machinery
+\usepackage[margin=1in,letterpaper]{geometry} % decreases margins
+\usepackage{cite} % takes care of citations
+\usepackage[final]{hyperref} % adds hyper links inside the generated pdf file
+\hypersetup{
+	colorlinks=true,       % false: boxed links; true: colored links
+	linkcolor=blue,        % color of internal links
+	citecolor=blue,        % color of links to bibliography
+	filecolor=magenta,     % color of file links
+	urlcolor=blue         
+}
+%++++++++++++++++++++++++++++++++++++++++
+
+
+\begin{document}
+
+\title{Some Title}
+\author{A. Uthor, C. Ontributor}
+\date{\today}
+\maketitle
+
+\begin{abstract}
+Doing cool stuff to find cooler stuff
+\end{abstract}
+
+
+\section{Introduction}
+
+The very important physical effect has applications to something in the world. 
+
+
+\section{Background}
+
+Gravitational theories and the Gertsenshtein effect combined in groundbreaking ways.
+We use a (1,-1,-1,-1) metric.
+
+The paper used the Einstein-Maxwell Lagrangian
+\begin{equation}
+\mathcal{L}=\sqrt{g}(R+\kappa F_{\mu \nu}F^{\mu \nu}),
+\end{equation}
+where $g$ is the determinant of the metric, $R$ is the Ricci Scalar, and $F$ is the electromagnetic field tensor. 
+
+We then used a variational approach to get the field equations, and we used a transverse traceless Lorentz gauge for $h$, the metric perturbation, with $\mathcal{h}_{\mu \nu}=\mathcal{h}_{\mu \nu}(t,z)$. Evaluating the components of the field equations, we get two mixing equations:
+\begin{equation}
+\ddot{ \mathcal{b_y}} - \mathcal{b_y}^{''}=B_0\mathcal{h}^{''}_{12}
+\end{equation}
+\begin{equation}
+\ddot{ \mathcal{h}}_{12} - \mathcal{h}^{''}_{12}=4B_0 \mathcal{b_y}
+\end{equation}
+
+Here, we have a background magnetic field $\mathbf{B_0}=\mathbf{B}_{0x}$, and a magnetic perturbation $\mathbf{b}=\mathbf{b}_y (t,z)$. We have no electric field in the background, only in the wave.
+
+We recreated the calculation with torsion, and got back the same equations.
+\section{Our stuff}
+
+We see what we get for the mixing equations with more complicated couplings in the lagrangian, with a torsion theory. We have a perturbation on the torsion given by 
+\begin{equation}
+\mathcal{T}^{\mu}_{\nu \sigma}=\epsilon^{\mu}_{\nu \sigma \lambda} \mathcal{Q}^{\lambda}+\delta^{\mu}_{[\nu} \mathcal{U}_{\sigma]}
+\end{equation}
+with
+\begin{equation}
+\mathcal{Q}_{\mu}=[\mathcal{q}_0(t,z),0,\mathcal{q}_2(t,z),0]
+\end{equation}
+and
+\begin{equation}
+\mathcal{U}_{\mu}=[\mathcal{u}_0(t,z),0,\mathcal{u}_2(t,z),0].
+\end{equation}
+
+When we add inn a background torsion $T$, we use $U=0$ and 
+\begin{equation}
+Q_{\mu}=[q_0,0,0,0]
+\end{equation}
+
+
+\textbf{Lagrangian 1 - $R_{\mu \nu} F^{\mu \nu}$}
+\begin{equation}
+\mathcal{L}=\sqrt{g}(R+\zeta R_{\mu \nu} F^{\mu \nu}+\kappa F{\mu \nu}F^{\mu \nu})
+\end{equation}
+
+\underline{With no background torsion:}
+
+Maxwell and Einstein gives us nothing new on the face of it. The torsion field equations give us a bunch of mixings (notably with only first-order derivatives):
+
+\begin{equation}
+\frac{1}{2}  B_0 \mathcal{h}_{+}^{'} -  \partial_{t}\mathcal{E}_y=0
+\end{equation}
+
+\begin{equation}
+\frac{1}{2} B_0 \mathcal{u}_0 + \frac{1}{2} B_0 \dot{\mathcal{h}}_{+}-\partial_{y} \mathcal{E}_z=0
+\end{equation}
+
+\begin{equation}
+\frac{1}{2} B_0 \dot{\mathcal{h}}_{\times} - \dot{\mathcal{b}}=0
+\end{equation}
+
+We also have these three equations, which have some interesting impact on the original mixing equations we get from Maxwell and Einstein:
+\begin{equation}
+\frac{1}{2} B_0 \mathcal{h}_{\times}^{'}-\mathcal{b}^{'}+\partial_t \mathcal{E}_x=0
+\end{equation}
+
+\begin{equation}
+\frac{1}{2} B_0 \mathcal{h}_{\times}^{'}-\mathcal{b}^{'}=0
+\end{equation}
+
+\begin{equation}
+\frac{1}{2} B_0 \mathcal{h}_{\times}^{'}+\partial_t \mathcal{E}_x=0
+\end{equation}
+
+meaning that each of the three terms individually are zero, removing the z-derivatives of both $\mathcal{h}_{\times}$ and $\mathcal{b}$ in our original mixing equations, leaving
+
+\begin{equation}
+\ddot{ \mathcal{b_y}}=0
+\end{equation}
+\begin{equation}
+\ddot{ \mathcal{h}}_{12} =4B_0 \mathcal{b_y}
+\end{equation}
+
+
+This lagrangian does not allow for a finite background torsion.
+
+
+
+\textbf{Lagrangian 2 - $R_{\mu \nu} R^{\mu \nu}$}
+\begin{equation}
+\mathcal{L}=\sqrt{g}(R+\zeta R_{\mu \nu} R^{\mu \nu}+\kappa F{\mu \nu}F^{\mu \nu})=0
+\end{equation}
+
+\underline{With no background torsion:}
+
+The torsion field equations have no EM-components, and only serve to help us simplify the other equations.
+The maxwell field equations are unchanged. 
+
+For the Einstein equation we get some higher-order derivatives, but no torsion contribution:
+
+\begin{equation}
+-4 \kappa B_0 \mathcal{b}-\mathcal{h}_{\times}^{''}+\ddot{\mathcal{h}}_{\times}+\zeta \mathcal{h}^{''''}+2  \zeta \ddot{\mathcal{h}}_{\times}^{''}+\zeta \ddddot{\mathcal{h}}_{\times}=0
+\end{equation}
+
+
+\underline{With background torsion:}
+
+Computer still running. Only expecting change in Einstein one.
+
+
+We also did a run with the indices on the second Ricci tensor swapped, but achieved the same mixing equations (different torsion field equations, but that had no effect on the mixing equations).
+
+
+\textbf{Lagrangian 3} - $ R_{\mu \nu \sigma \lambda} R^{\mu \nu \sigma \lambda}$
+\begin{equation}
+\mathcal{L}=\sqrt{g}(R+\zeta R_{\mu \nu \sigma \lambda} R^{\mu \nu \sigma \lambda}+\kappa F{\mu \nu}F^{\mu \nu})
+\end{equation}
+
+\underline{With no background torsion:}
+
+Maxwell still gives the same equations as expected.
+
+Torsion still only gives some substitutions
+
+Einstein is not done evaluating.
+
+
+
+\underline{With background torsion:}
+Not started
+
+
+\textbf{Lagrangian 4} - $\epsilon_{\mu \nu \sigma \lambda} R^{\mu \nu} F^{\sigma \lambda}$
+\begin{equation}
+\mathcal{L}=\sqrt{g}(R+\zeta \epsilon_{\mu \nu \sigma \lambda} R^{\mu \nu} F^{\sigma \lambda}+\kappa F{\mu \nu}F^{\mu \nu})
+\end{equation}
+
+\underline{With no background torsion:}
+
+No change in Maxwell, Einstein gave same mixing equation
+
+\underline{With background torsion:}
+Not started. Is it worth trying?
+
+
+\section{Conclusions}
+The world is forever changed
+
+%++++++++++++++++++++++++++++++++++++++++
+% References section will be created automatically 
+% with inclusion of "thebibliography" environment
+% as it shown below. See text starting with line
+% \begin{thebibliography}{99}
+% Note: with this approach it is YOUR responsibility to put them in order
+% of appearance.
+
+\begin{thebibliography}{99}
+
+\bibitem{bib} \emph{A source},  available at
+\texttt{https://wevbarker.com/}.
+
+\end{thebibliography}
+
+
+\end{document}
