@@ -1,3 +1,5 @@
+(* ::Package:: *)
+
 (*===================*)
 (*  ProcessOperator  *)
 (*===================*)
@@ -8,5 +10,5 @@ ProcessOperator[InputFileName_]:=Module[{Expr},
 		
 	Expr=TheOperator;
 	ProcessOperator::identify~Message~TheOperator;
-	Expr=Expr<>"1";
+	Expr=VarD[H[a,b],CD][Expr];
 Expr];

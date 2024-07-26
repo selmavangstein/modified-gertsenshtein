@@ -78,7 +78,7 @@ SetOptions[ToBackground,BackgroundSolution->bgRules];
 
 
 (* ::Subsection::Initialization:: *)
-(*Defining our tensors*)
+(*(*Defining our tensors*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -90,7 +90,7 @@ DefTensor[F[-a,-b],M,Antisymmetric[{-a,-b}]]
 
 
 (* ::Text::Initialization:: *)
-(*Perturbations:*)
+(*(*Perturbations:*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -114,7 +114,7 @@ DefTensor[pertT[a,-b,-c],M, Antisymmetric[{-b,-c}], PrintAs->"\[ScriptCapitalT]"
 
 
 (* ::Subsection::Initialization:: *)
-(*Going between F and A*)
+(*(*Going between F and A*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -126,11 +126,11 @@ AtoF = MakeRule[{CD[-a]@A[-b],(1/2)*F[-a,-b]+(1/2)*(CD[-a]@A[-b]+CD[-b]@A[-a])},
 
 
 (* ::Subsection::Initialization:: *)
-(*Perturbation rules*)
+(*(*Perturbation rules*)*)
 
 
 (* ::Text::Initialization:: *)
-(*Setting h as perturbation on the metric*)
+(*(*Setting h as perturbation on the metric*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -139,7 +139,7 @@ toH =MakeRule[{Perturbationmetric[LI[1],-a,-b],H[-a,-b]},MetricOn-> All, Contrac
 
 
 (* ::Text::Initialization:: *)
-(*Defining a perturbation on A, and setting it to pertA*)
+(*(*Defining a perturbation on A, and setting it to pertA*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -155,17 +155,16 @@ topertT= MakeRule[{perturbationT[LI[1],a,-b,-c],pertT[a,-b,-c]},MetricOn-> All, 
 
 
 (* ::Input::Initialization:: *)
-
 DefTensorPerturbation[perturbationR[LI[order],a,-b,-c],RicciScalarCDT[],M];
 perturbationR[LI[n_],___]/;n>1:=0;
 
 
 (* ::Subsection::Initialization:: *)
-(*Between \[ScriptCapitalA] and \[ScriptCapitalF]*)
+(*(*Between \[ScriptCapitalA] and \[ScriptCapitalF]*)*)
 
 
 (* ::Text::Initialization:: *)
-(*Now we connect the two perts:*)
+(*(*Now we connect the two perts:*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -177,11 +176,11 @@ pertAtoF = MakeRule[{CD[-a]@pertA[-b],(1/2)*pertF[-a,-b]+(1/2)*(CD[-a]@pertA[-b]
 
 
 (* ::Section::Initialization:: *)
-(*Defining and expanding Lagrangian*)
+(*(*Defining and expanding Lagrangian*)*)
 
 
 (* ::Subsection::Initialization:: *)
-(*Defining Lagrangian*)
+(*(*Defining Lagrangian*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -190,15 +189,15 @@ DefConstantSymbol[\[Lambda]]
 
 
 (* ::Input::Initialization:: *)
-\[ScriptCapitalL]=Sqrt[-Detmetric[]](RicciScalarCDT[]+\[Lambda] RiemannCDT[-a,-b,-c,-d]RiemannCDT[a,b,c,d]+\[Kappa] F[a,b]F[-a,-b]))/.FtoA
+\[ScriptCapitalL]=(Sqrt[-Detmetric[]](RicciScalarCDT[]+\[Lambda] RiemannCDT[-a,-b,-c,-d]RiemannCDT[a,b,c,d]+\[Kappa] F[a,b]F[-a,-b]))/.FtoA
 
 
 (* ::Subsection::Initialization:: *)
-(*Writing it in terms of torsion*)
+(*(*Writing it in terms of torsion*)*)
 
 
 (* ::Text::Initialization:: *)
-(*I have these two steps to get T and R specifically out there, and can still work easily with CD and the metric*)
+(*(*I have these two steps to get T and R specifically out there, and can still work easily with CD and the metric*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -210,7 +209,7 @@ DefConstantSymbol[\[Lambda]]
 
 
 (* ::Subsection::Initialization:: *)
-(*Expanding Lagrangian*)
+(*(*Expanding Lagrangian*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -224,7 +223,7 @@ linearizedAction = pert\[ScriptCapitalL]/.Sqrt[-Detmetric[]]->1
 
 
 (* ::Subsection::Initialization:: *)
-(*Defining traceless \[ScriptH] and Lorentz gauge*)
+(*(*Defining traceless \[ScriptH] and Lorentz gauge*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -241,11 +240,11 @@ linearizedAction=linearizedAction/.commuteCD/.lorentz//ToCanonical//CollectTenso
 
 
 (* ::Section::Initialization:: *)
-(*Field Equations*)
+(*(*Field Equations*)*)
 
 
 (* ::Subsection::Initialization:: *)
-(*With respect to H:*)
+(*(*With respect to H:*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -253,7 +252,7 @@ einsteinField=VarD[H[a,b],CDT][linearizedAction]//ContractMetric//ToCanonical
 
 
 (* ::Text::Initialization:: *)
-(*Now we convert any CDT's in there, which will give new torsion tensors, and then we simplify further*)
+(*(*Now we convert any CDT's in there, which will give new torsion tensors, and then we simplify further*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -269,7 +268,7 @@ einsteinField=einsteinField/.lorentz/.commuteCD
 
 
 (* ::Subsection::Initialization:: *)
-(*With respect to pertA:*)
+(*(*With respect to pertA:*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -277,7 +276,7 @@ maxwellField=VarD[pertA[a],CDT][linearizedAction]//ContractMetric//ToCanonical
 
 
 (* ::Text::Initialization:: *)
-(*We do a similar simplification to above:*)
+(*(*We do a similar simplification to above:*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -293,7 +292,7 @@ maxwellField=maxwellField/.lorentz/.commuteCD
 
 
 (* ::Subsection::Initialization:: *)
-(*With respect to torsion tensor:*)
+(*(*With respect to torsion tensor:*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -309,11 +308,11 @@ torsionField=torsionField/.lorentz/.commuteCD//ToCanonical//ContractMetric
 
 
 (* ::Subsection::Initialization:: *)
-(*Removing terms with \[ScriptH] but keeping CD[\[ScriptH]]*)
+(*(*Removing terms with \[ScriptH] but keeping CD[\[ScriptH]]*)*)
 
 
 (* ::Text::Initialization:: *)
-(*Note that this only works with equations linear in h*)
+(*(*Note that this only works with equations linear in h*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -325,7 +324,7 @@ ToOrderH = MakeRule[{H[-a,-b],PerturbativeParameter*H[-a,-b]},MetricOn->All,Cont
 
 
 (* ::Text::Initialization:: *)
-(*Since we have converted all derivatives from CDT to CD, this should still work:*)
+(*(*Since we have converted all derivatives from CDT to CD, this should still work:*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -379,15 +378,15 @@ torsionField=DeleteFirstOrderPart[torsionField]
 
 
 (* ::Section::Initialization::Closed:: *)
-(*Components - enter xCoba*)
+(*(*Components - enter xCoba*)*)
 
 
 (* ::Text::Initialization:: *)
-(*We now want to define the components of our tensors.*)
+(*(*We now want to define the components of our tensors.*)*)
 
 
 (* ::Subsection::Initialization::Closed:: *)
-(*\[Epsilon]:*)
+(*(*\[Epsilon]:*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -399,11 +398,11 @@ epsilonmetric~AutomaticRules~MakeRule[{epsilonmetric[{0,-cartesian},{1,-cartesia
 
 
 (* ::Subsection::Initialization:: *)
-(*\[ScriptH]:*)
+(*(*\[ScriptH]:*)*)
 
 
 (* ::Text::Initialization:: *)
-(*Setting them all to zero first:*)
+(*(*Setting them all to zero first:*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -415,7 +414,7 @@ ComponentValue[ComponentArray@H[-{a,cartesian},-{b,-cartesian}],zerovalues]
 
 
 (* ::Text::Initialization:: *)
-(*Setting the non-zero components*)
+(*(*Setting the non-zero components*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -435,7 +434,7 @@ ComponentValue[H[{1,-cartesian},{2,-cartesian}],h2[t[],z[]]]
 
 
 (* ::Text::Initialization:: *)
-(*With indices up*)
+(*(*With indices up*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -443,11 +442,11 @@ ChangeComponents[H[{a,cartesian},{b,cartesian}],H[-{a,cartesian},-{b,cartesian}]
 
 
 (* ::Subsection::Initialization::Closed:: *)
-(*F:*)
+(*(*F:*)*)
 
 
 (* ::Text::Initialization:: *)
-(*Setting all to zero:*)
+(*(*Setting all to zero:*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -455,7 +454,7 @@ ComponentValue[ComponentArray@F[-{a,cartesian},-{b,-cartesian}],zerovalues]
 
 
 (* ::Text::Initialization:: *)
-(*Giving it a constant B-field in the x-direction:*)
+(*(*Giving it a constant B-field in the x-direction:*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -475,7 +474,7 @@ ChangeComponents[F[{a,cartesian},{b,cartesian}],F[-{a,cartesian},-{b,cartesian}]
 
 
 (* ::Subsection::Initialization:: *)
-(*\[ScriptCapitalF]:*)
+(*(*\[ScriptCapitalF]:*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -503,11 +502,11 @@ ChangeComponents[pertF[{a,cartesian},{b,cartesian}],pertF[-{a,cartesian},-{b,car
 
 
 (* ::Subsection::Initialization:: *)
-(*\[ScriptCapitalT]:*)
+(*(*\[ScriptCapitalT]:*)*)
 
 
 (* ::Text::Initialization:: *)
-(*We define two 4-vectors that \[ScriptCapitalT] is built from:*)
+(*(*We define two 4-vectors that \[ScriptCapitalT] is built from:*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -544,7 +543,7 @@ ChangeComponents[pertU[{a,cartesian}],pertU[-{a,cartesian}]]
 
 
 (* ::Subsection::Initialization:: *)
-(*T:*)
+(*(*T:*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -568,15 +567,15 @@ ChangeComponents[Q[{a,cartesian}],Q[-{a,cartesian}]]
 
 
 (* ::Section::Initialization:: *)
-(*Evaluating our field equations*)
+(*(*Evaluating our field equations*)*)
 
 
 (* ::Subsection::Initialization:: *)
-(*Evaluating Torsion field equation*)
+(*(*Evaluating Torsion field equation*)*)
 
 
 (* ::Text::Initialization:: *)
-(*We run separatemetric to deal with epsilonmetrics after everything else is evaluated, to limit computation time*)
+(*(*We run separatemetric to deal with epsilonmetrics after everything else is evaluated, to limit computation time*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -589,11 +588,11 @@ torsionC//MatrixForm
 
 
 (* ::Subsection::Initialization:: *)
-(*Evaluating Einstein*)
+(*(*Evaluating Einstein*)*)
 
 
 (* ::Text::Initialization:: *)
-(*The most efficient order of doing things depends a little on the specific equations, so might want to adapt as we look at the results*)
+(*(*The most efficient order of doing things depends a little on the specific equations, so might want to adapt as we look at the results*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -606,7 +605,7 @@ einsteinC//MatrixForm
 
 
 (* ::Subsection::Initialization:: *)
-(*Curl of Maxwell*)
+(*(*Curl of Maxwell*)*)
 
 
 (* ::Input::Initialization:: *)
