@@ -4,7 +4,7 @@
 (*  ApplyParallel  *)
 (*=================*)
 
-ApplyParallel[VeryLongExpression_]:=Module[{AllFileNames,Results},
+ApplyParallel[VeryLongExpression_, commands_List]:=Module[{AllFileNames,Results},
 	AllFileNames=PrepareFiles@VeryLongExpression;
 	Get@FileNameJoin@{$ThisDirectory,"Parallelisation","SaveBinaries.m"};
 	Results=(QuietParallelSubmit@(	
@@ -12,7 +12,7 @@ ApplyParallel[VeryLongExpression_]:=Module[{AllFileNames,Results},
 		Get[FileNameJoin[{$ThisDirectory,#<>".mx"}],#]&/@{"xAct`xTensor`","xAct`xTensor`Private`","TangentM`","Global`"};
 		Get@#;
 		On@(RuleDelayed::rhs);
-	ProcessOperator[]))&~Map~AllFileNames;
+	ProcessOperator[commands]))&~Map~AllFileNames;
 	Results//=WaitAll;
 	DeleteFile/@AllFileNames;
 	Results//=Total;

@@ -8,7 +8,7 @@
 (*RR-term in lagrangian with torsion only in t,y-direction*)
 
 
-(* ::Section:: *)
+(* ::Section::Closed:: *)
 (*Setup*)
 
 
@@ -36,6 +36,14 @@ $CVVerbose=False;
 
 SetOptions[ToCanonical,UseMetricOnVBundle->All];
 SetOptions[ContractMetric,AllowUpperDerivatives->True];
+
+
+(* ::Text:: *)
+(*Importing parallelization script*)
+
+
+(* ::Input::Initialization:: *)
+Get@FileNameJoin@{NotebookDirectory[],"Parallelisation.m"};
 
 
 (* ::Subsection:: *)
@@ -77,8 +85,8 @@ bgRules = SymmetricSpaceRules[CD,0];
 SetOptions[ToBackground,BackgroundSolution->bgRules];
 
 
-(* ::Subsection::Initialization:: *)
-(*Defining our tensors*)
+(* ::Subsection::Initialization::Closed:: *)
+(*(*Defining our tensors*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -90,7 +98,7 @@ DefTensor[F[-a,-b],M,Antisymmetric[{-a,-b}]]
 
 
 (* ::Text::Initialization:: *)
-(*Perturbations:*)
+(*(*Perturbations:*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -114,7 +122,7 @@ DefTensor[pertT[a,-b,-c],M, Antisymmetric[{-b,-c}], PrintAs->"\[ScriptCapitalT]"
 
 
 (* ::Subsection::Initialization:: *)
-(*Going between F and A*)
+(*(*Going between F and A*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -126,11 +134,11 @@ AtoF = MakeRule[{CD[-a]@A[-b],(1/2)*F[-a,-b]+(1/2)*(CD[-a]@A[-b]+CD[-b]@A[-a])},
 
 
 (* ::Subsection::Initialization:: *)
-(*Perturbation rules*)
+(*(*Perturbation rules*)*)
 
 
 (* ::Text::Initialization:: *)
-(*Setting h as perturbation on the metric*)
+(*(*Setting h as perturbation on the metric*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -139,7 +147,7 @@ toH =MakeRule[{Perturbationmetric[LI[1],-a,-b],H[-a,-b]},MetricOn-> All, Contrac
 
 
 (* ::Text::Initialization:: *)
-(*Defining a perturbation on A, and setting it to pertA*)
+(*(*Defining a perturbation on A, and setting it to pertA*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -155,17 +163,16 @@ topertT= MakeRule[{perturbationT[LI[1],a,-b,-c],pertT[a,-b,-c]},MetricOn-> All, 
 
 
 (* ::Input::Initialization:: *)
-
 DefTensorPerturbation[perturbationR[LI[order],a,-b,-c],RicciScalarCDT[],M];
 perturbationR[LI[n_],___]/;n>1:=0;
 
 
 (* ::Subsection::Initialization:: *)
-(*Between \[ScriptCapitalA] and \[ScriptCapitalF]*)
+(*(*Between \[ScriptCapitalA] and \[ScriptCapitalF]*)*)
 
 
 (* ::Text::Initialization:: *)
-(*Now we connect the two perts:*)
+(*(*Now we connect the two perts:*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -177,11 +184,11 @@ pertAtoF = MakeRule[{CD[-a]@pertA[-b],(1/2)*pertF[-a,-b]+(1/2)*(CD[-a]@pertA[-b]
 
 
 (* ::Section::Initialization:: *)
-(*Defining and expanding Lagrangian*)
+(*(*Defining and expanding Lagrangian*)*)
 
 
 (* ::Subsection::Initialization:: *)
-(*Defining Lagrangian*)
+(*(*Defining Lagrangian*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -193,12 +200,12 @@ DefConstantSymbol[\[Lambda]]
 \[ScriptCapitalL]=(Sqrt[-Detmetric[]](RicciScalarCDT[]+\[Lambda] RicciCDT[a,b]RicciCDT[-a,-b]+\[Kappa] F[a,b]F[-a,-b]))/.FtoA
 
 
-(* ::Subsection::Initialization:: *)
-(*Writing it in terms of torsion*)
+(* ::Subsection::Initialization::Closed:: *)
+(*(*Writing it in terms of torsion*)*)
 
 
 (* ::Text::Initialization:: *)
-(*I have these two steps to get T and R specifically out there, and can still work easily with CD and the metric*)
+(*(*I have these two steps to get T and R specifically out there, and can still work easily with CD and the metric*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -210,7 +217,7 @@ DefConstantSymbol[\[Lambda]]
 
 
 (* ::Subsection::Initialization:: *)
-(*Expanding Lagrangian*)
+(*(*Expanding Lagrangian*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -224,7 +231,7 @@ linearizedAction = pert\[ScriptCapitalL]/.Sqrt[-Detmetric[]]->1
 
 
 (* ::Subsection::Initialization:: *)
-(*Defining traceless \[ScriptH] and Lorentz gauge*)
+(*(*Defining traceless \[ScriptH] and Lorentz gauge*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -236,24 +243,52 @@ lorentz = MakeRule[{CD[-a][H[a,b]],0},MetricOn->All,ContractMetrics->True];
 commuteCD = MakeRule[{CD[-a]@CD[c]@H[a,b],0},MetricOn->All,ContractMetrics->True];
 
 
+(* ::Text:: *)
+(*also a little slow, but not too bad*)
+
+
 (* ::Input::Initialization:: *)
 linearizedAction=linearizedAction/.commuteCD/.lorentz//ToCanonical//CollectTensors
 
 
-(* ::Section::Initialization::Closed:: *)
-(*Field Equations*)
-
-
-(* ::Subsection::Initialization:: *)
-(*With respect to H:*)
+(* ::Section:: *)
+(*Imposing background torsion*)
 
 
 (* ::Input::Initialization:: *)
-einsteinField=VarD[H[a,b],CDT][linearizedAction]//ContractMetric//ToCanonical
+DefTensor[Q[a],M]
+
+
+(* ::Input::Initialization:: *)
+TtoVec=MakeRule[{TorsionCDT[a,-b,-c],epsilonmetric[a,-b,-c,-d]Q[d]},MetricOn->All,ContractMetrics->True]
+
+
+(* ::Text:: *)
+(*A little slowish - can consider parallelization*)
+
+
+(* ::Input::Initialization:: *)
+funcTtoVec[expr_]:=expr/.TtoVec;
+
+
+(* ::Input::Initialization:: *)
+linearizedAction=ApplyParallel[linearizedAction,{funcTtoVec,ToCanonical,ContractMetric}]
+
+
+(* ::Section::Initialization:: *)
+(*(*Field Equations*)*)
+
+
+(* ::Subsection::Initialization:: *)
+(*(*With respect to H:*)*)
+
+
+(* ::Input::Initialization:: *)
+einsteinField=ApplyParallel[linearizedAction,{VarD[H[q,r],CDT],ContractMetric,ToCanonical}]
 
 
 (* ::Text::Initialization:: *)
-(*Now we convert any CDT's in there, which will give new torsion tensors, and then we simplify further*)
+(*(*Now we convert any CDT's in there, which will give new torsion tensors, and then we simplify further*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -261,15 +296,23 @@ einsteinField=ChangeCovD[einsteinField,CDT,CD]//ChristoffelToGradMetric;
 
 
 (* ::Input::Initialization:: *)
-einsteinField=einsteinField/.pertAtoF//ToCanonical//ContractMetric;
+funcPertAtoF[expr_]:=expr/.pertAtoF;
 
 
 (* ::Input::Initialization:: *)
-einsteinField=einsteinField/.lorentz/.commuteCD
+einsteinField=ApplyParallel[einsteinField,{funcPertAtoF,ToCanonical,ContractMetric}];
+
+
+(* ::Text::Initialization:: *)
+(*einsteinField = einsteinField /. pertAtoF // ToCanonical // ContractMetric;*)
+
+
+(* ::Input::Initialization:: *)
+einsteinField=ApplyParallel[einsteinField, funcLorentz,funcCD]
 
 
 (* ::Subsection::Initialization:: *)
-(*With respect to pertA:*)
+(*(*With respect to pertA:*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -277,7 +320,7 @@ maxwellField=VarD[pertA[a],CDT][linearizedAction]//ContractMetric//ToCanonical
 
 
 (* ::Text::Initialization:: *)
-(*We do a similar simplification to above:*)
+(*(*We do a similar simplification to above:*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -293,7 +336,7 @@ maxwellField=maxwellField/.lorentz/.commuteCD
 
 
 (* ::Subsection::Initialization:: *)
-(*With respect to torsion tensor:*)
+(*(*With respect to torsion tensor:*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -308,12 +351,12 @@ torsionField=ChangeCovD[torsionField,CDT,CD]//ChristoffelToGradMetric;
 torsionField=torsionField/.lorentz/.commuteCD//ToCanonical//ContractMetric
 
 
-(* ::Subsection::Initialization:: *)
-(*Removing terms with \[ScriptH] but keeping CD[\[ScriptH]]*)
+(* ::Subsection::Initialization::Closed:: *)
+(*(*Removing terms with \[ScriptH] but keeping CD[\[ScriptH]]*)*)
 
 
 (* ::Text::Initialization:: *)
-(*Note that this only works with equations linear in h*)
+(*(*Note that this only works with equations linear in h*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -325,7 +368,7 @@ ToOrderH = MakeRule[{H[-a,-b],PerturbativeParameter*H[-a,-b]},MetricOn->All,Cont
 
 
 (* ::Text::Initialization:: *)
-(*Since we have converted all derivatives from CDT to CD, this should still work:*)
+(*(*Since we have converted all derivatives from CDT to CD, this should still work:*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -379,15 +422,15 @@ torsionField=DeleteFirstOrderPart[torsionField]
 
 
 (* ::Section::Initialization::Closed:: *)
-(*Components - enter xCoba*)
+(*(*Components - enter xCoba*)*)
 
 
 (* ::Text::Initialization:: *)
-(*We now want to define the components of our tensors.*)
+(*(*We now want to define the components of our tensors.*)*)
 
 
 (* ::Subsection::Initialization::Closed:: *)
-(*\[Epsilon]:*)
+(*(*\[Epsilon]:*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -398,12 +441,12 @@ epsilonmetric~AutomaticRules~MakeRule[{epsilonmetric[{0,cartesian},{1,cartesian}
 epsilonmetric~AutomaticRules~MakeRule[{epsilonmetric[{0,-cartesian},{1,-cartesian},{2,-cartesian},{3,-cartesian}],1},MetricOn->All,ContractMetrics->True]
 
 
-(* ::Subsection::Initialization:: *)
-(*\[ScriptH]:*)
+(* ::Subsection::Initialization::Closed:: *)
+(*(*\[ScriptH]:*)*)
 
 
 (* ::Text::Initialization:: *)
-(*Setting them all to zero first:*)
+(*(*Setting them all to zero first:*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -415,7 +458,7 @@ ComponentValue[ComponentArray@H[-{a,cartesian},-{b,-cartesian}],zerovalues]
 
 
 (* ::Text::Initialization:: *)
-(*Setting the non-zero components*)
+(*(*Setting the non-zero components*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -435,7 +478,7 @@ ComponentValue[H[{1,-cartesian},{2,-cartesian}],h2[t[],z[]]]
 
 
 (* ::Text::Initialization:: *)
-(*With indices up*)
+(*(*With indices up*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -443,11 +486,11 @@ ChangeComponents[H[{a,cartesian},{b,cartesian}],H[-{a,cartesian},-{b,cartesian}]
 
 
 (* ::Subsection::Initialization::Closed:: *)
-(*F:*)
+(*(*F:*)*)
 
 
 (* ::Text::Initialization:: *)
-(*Setting all to zero:*)
+(*(*Setting all to zero:*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -455,7 +498,7 @@ ComponentValue[ComponentArray@F[-{a,cartesian},-{b,-cartesian}],zerovalues]
 
 
 (* ::Text::Initialization:: *)
-(*Giving it a constant B-field in the x-direction:*)
+(*(*Giving it a constant B-field in the x-direction:*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -474,8 +517,8 @@ F[-{a,cartesian},-{b,cartesian}]//ComponentArray//ToValues//MatrixForm
 ChangeComponents[F[{a,cartesian},{b,cartesian}],F[-{a,cartesian},-{b,cartesian}]];
 
 
-(* ::Subsection::Initialization:: *)
-(*\[ScriptCapitalF]:*)
+(* ::Subsection::Initialization::Closed:: *)
+(*(*\[ScriptCapitalF]:*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -502,12 +545,12 @@ ComponentValue[ComponentArray[pertF[{0,-cartesian},-{a,cartesian}]],{0,\[ScriptC
 ChangeComponents[pertF[{a,cartesian},{b,cartesian}],pertF[-{a,cartesian},-{b,cartesian}]];
 
 
-(* ::Subsection::Initialization:: *)
-(*\[ScriptCapitalT]:*)
+(* ::Subsection::Initialization::Closed:: *)
+(*(*\[ScriptCapitalT]:*)*)
 
 
 (* ::Text::Initialization:: *)
-(*We define two 4-vectors that \[ScriptCapitalT] is built from:*)
+(*(*We define two 4-vectors that \[ScriptCapitalT] is built from:*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -544,15 +587,7 @@ ChangeComponents[pertU[{a,cartesian}],pertU[-{a,cartesian}]]
 
 
 (* ::Subsection::Initialization:: *)
-(*T:*)
-
-
-(* ::Input::Initialization:: *)
-DefTensor[Q[a],M]
-
-
-(* ::Input::Initialization:: *)
-TtoVec=MakeRule[{TorsionCDT[a,-b,-c],epsilonmetric[a,-b,-c,-d]Q[d]},MetricOn->All,ContractMetrics->True]
+(*(*T:*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -568,20 +603,30 @@ ChangeComponents[Q[{a,cartesian}],Q[-{a,cartesian}]]
 
 
 (* ::Section::Initialization:: *)
-(*Evaluating our field equations*)
+(*(*(*(*Evaluating our field equations*)*)*)*)
 
 
 (* ::Subsection::Initialization:: *)
-(*Evaluating Torsion field equation*)
+(*(*(*(*Evaluating Torsion field equation*)*)*)*)
 
 
 (* ::Text::Initialization:: *)
-(*We run separatemetric to deal with epsilonmetrics after everything else is evaluated, to limit computation time*)
+(*(*(*(*We run separatemetric to deal with epsilonmetrics after everything else is evaluated, to limit computation time*)*)*)*)
 
 
 (* ::Input::Initialization:: *)
-torsionC=torsionField/.pertTtoVec/.TtoVec//ToCanonical//ToBasis[cartesian];
-torsionC=torsionC/.ChristoffelCDPDcartesian->Zero//ToBasis[cartesian]/.ChristoffelCDPDcartesian->Zero//TraceBasisDummy//ComponentArray//ToValues//ToValues//ToCanonical//SeparateMetric[metric]//ToBasis[cartesian]//TraceBasisDummy//ToCanonical//ToValues;
+funcPertTtoVec[expr_]:=expr/.pertTtoVec;
+funcChristCartZero[expr_]:=expr/.ChristoffelCDPDcartesian->Zero;
+
+
+(* ::Input::Initialization:: *)
+torsionC=ApplyParallel[torsionField,{funcPertTtoVec,TtoVec,ToCanonical,ToBasis[cartesian]}];
+torsionC=ApplyParallel[torsionC,{funcChristCartZero,ToBasis[cartesian],funcChristCartZero,TraceBasisDummy,ComponentArray,ToValues,ToValues,ToCanonical,SeparateMetric[metric],ToBasis[cartesian],TraceBasisDummy,ToCanonical,ToValues}]
+
+
+(* ::Text::Initialization:: *)
+(*torsionC = torsionField /. pertTtoVec /. TtoVec // ToCanonical // ToBasis[cartesian];*)
+(*torsionC = torsionC /. ChristoffelCDPDcartesian -> Zero // ToBasis[cartesian] /. ChristoffelCDPDcartesian -> Zero // TraceBasisDummy // ComponentArray // ToValues // ToValues // ToCanonical // SeparateMetric[metric] // ToBasis[cartesian] // TraceBasisDummy // ToCanonical // ToValues;*)
 
 
 (* ::Input::Initialization:: *)
@@ -589,16 +634,21 @@ torsionC//MatrixForm
 
 
 (* ::Subsection::Initialization:: *)
-(*Evaluating Einstein*)
+(*(*(*(*Evaluating Einstein*)*)*)*)
 
 
 (* ::Text::Initialization:: *)
-(*The most efficient order of doing things depends a little on the specific equations, so might want to adapt as we look at the results*)
+(*(*(*(*The most efficient order of doing things depends a little on the specific equations, so might want to adapt as we look at the results*)*)*)*)
 
 
 (* ::Input::Initialization:: *)
-einsteinC=einsteinField/.pertTtoVec/.TtoVec//SeparateMetric[metric] //ToCanonical//ToBasis[cartesian]//ToBasis[cartesian];
-einsteinC=einsteinC/.ChristoffelCDPDcartesian->Zero//TraceBasisDummy//ComponentArray//ToValues//ToValues;
+einsteinC=ApplyParallel[einsteinField,{funcPertTtoVec,funcTtoVec, SeparateMetric[metric] ,ToCanonical,ToBasis[cartesian],ToBasis[cartesian]}];
+einsteinC=ApplyParallel[einsteinC, {funcChristCartZero,TraceBasisDummy,ComponentArray,ToValues,ToValues}]
+
+
+(* ::Text::Initialization:: *)
+(*einsteinC = einsteinField /. pertTtoVec /. TtoVec // SeparateMetric[metric] // ToCanonical // ToBasis[cartesian] // ToBasis[cartesian];*)
+(*einsteinC = einsteinC /. ChristoffelCDPDcartesian -> Zero // TraceBasisDummy // ComponentArray // ToValues // ToValues;*)
 
 
 (* ::Input::Initialization:: *)
@@ -606,25 +656,26 @@ einsteinC//MatrixForm
 
 
 (* ::Subsection::Initialization:: *)
-(*Curl of Maxwell*)
+(*(*(*(*Curl of Maxwell*)*)*)*)
 
 
 (* ::Input::Initialization:: *)
 DefTensor[u[a],M];
 u~AutomaticRules ~MakeRule[{u[a]u[-a],1},MetricOn->All,ContractMetrics->True];
-
-
-(* ::Input::Initialization:: *)
 AllComponentValues[u[-{a,cartesian}],{1,0,0,0}];
 
 
 (* ::Input::Initialization:: *)
-maxwellC=maxwellField/.pertTtoVec//ToCanonical//ToBasis[cartesian]//ToBasis[cartesian];
+maxwellC=ApplyParallel[maxwellField,{funcPertTtoVec,ToCanonical,ToBasis[cartesian], ToBasis[cartesian]}];
+
+
+(* ::Input::Initialization:: *)
 maxwellC=maxwellC/.ChristoffelCDPDcartesian->Zero;
 
 
 (* ::Input::Initialization:: *)
-maxwellC=u[-{l,cartesian}]epsilonmetric[{l,cartesian},{i,cartesian},{f,cartesian},{a,cartesian}]CD[-{i,cartesian}][maxwellC]//ContractMetric//TraceBasisDummy//ComponentArray//ToValues//ToValues//ToCanonical//SeparateMetric[metric]//ToBasis[cartesian]//TraceBasisDummy//ToCanonical//ToValues;
+maxwellC=u[-{l,cartesian}]epsilonmetric[{l,cartesian},{i,cartesian},{f,cartesian},{a,cartesian}]CD[-{i,cartesian}][maxwellC];
+maxwellC=ApplyParallel[maxwellC,{ContractMetric,TraceBasisDummy,ComponentArray,ToValues,ToValues,ToCanonical,SeparateMetric[metric],ToBasis[cartesian],TraceBasisDummy,ToCanonical,ToValues}]
 
 
 (* ::Input::Initialization:: *)
