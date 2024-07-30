@@ -2,6 +2,9 @@
 
 (* ::Title:: *)
 (*Modified Gertsenshtein Effect*)
+<<xAct`xPlain`;
+Title@"Here is a title";
+Quit[];
 
 
 (* ::Text:: *)
