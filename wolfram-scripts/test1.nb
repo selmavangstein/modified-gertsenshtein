@@ -1,0 +1,2597 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 14.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     90474,       2589]
+NotebookOptionsPosition[     69402,       2206]
+NotebookOutlinePosition[     69814,       2222]
+CellTagsIndexPosition[     69771,       2219]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["The Gertsenshtein Effect", "Title",ExpressionUUID->"22d4178c-3ceb-2744-b831-e772d616abc8"],
+
+Cell["Following Palessandro and Rothman 2023", "Subtitle",ExpressionUUID->"0dfc3e36-8edc-cd45-b5a9-678fc3f50c8a"],
+
+Cell[CellGroupData[{
+
+Cell["(*(*Setup*)*)", "Section",
+ InitializationCell->
+  True,ExpressionUUID->"2a9cb9f2-9d49-e749-bd66-117a8e4e38d2"],
+
+Cell[CellGroupData[{
+
+Cell["(*(*Loading packages*)*)", "Subsection",
+ InitializationCell->
+  True,ExpressionUUID->"bedf7e27-975d-f04a-bdc7-94a56e337dcd"],
+
+Cell[BoxData[""], "Input",ExpressionUUID->"ba0ded45-3569-a640-96fa-913f35063275"],
+
+Cell["(*(*xTras should load all the packages we need*)*)", "Text",
+ InitializationCell->
+  True,ExpressionUUID->"1e8cf771-e7e9-e344-8b88-a08352feaa91"],
+
+Cell[BoxData[{
+ RowBox[{"<<", "xAct`xTras`"}], "\n", 
+ RowBox[{"<<", "xAct`xPlain`"}]}], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"df49a0e9-73ee-ed44-89fe-6ab9cf0c0db8"],
+
+Cell["(*(*Some convenient settings*)*)", "Text",
+ InitializationCell->
+  True,ExpressionUUID->"0e5f1701-e1ec-ed44-b969-1e7c73e72334"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"$PrePrint", " ", "=", " ", "ScreenDollarIndices"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"$CovDFormat", " ", "=", " ", "\"\<Prefix\>\""}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"$CommuteCovDsOnScalars", "=", "True"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"$CVVerbose", "=", "False"}], ";"}], "\n"}], "\n", 
+ RowBox[{
+  RowBox[{"SetOptions", "[", 
+   RowBox[{"ToCanonical", ",", 
+    RowBox[{"UseMetricOnVBundle", "->", "All"}]}], "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"SetOptions", "[", 
+   RowBox[{"ContractMetric", ",", 
+    RowBox[{"AllowUpperDerivatives", "->", "True"}]}], "]"}], ";"}]}], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"37aaf63c-8ec7-6440-9937-f6e479fe4c00"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Print", "@", "\"\<getting parallelization\>\""}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"Get", "@", 
+   RowBox[{"FileNameJoin", "@", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"NotebookDirectory", "[", "]"}], ",", 
+      "\"\<Parallelisation.m\>\""}], "}"}]}]}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{
+  3.9314264526376457`*^9, {3.931427961650156*^9, 
+   3.931427978058403*^9}},ExpressionUUID->"be8b7c16-3467-f14b-bf59-\
+8fbc76f57f7d"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Manifold, basis, metric", "Subsection",ExpressionUUID->"abcc6281-d4d5-4045-93bd-52539d56c909"],
+
+Cell["\<\
+Defining a manifold, a metric, a small perturbation h, and making the \
+background flat with SymmetricSpaceRules\
+\>", "Text",ExpressionUUID->"d585be4f-5bbe-344d-828b-3af6e893d7f5"],
+
+Cell[BoxData[{
+ RowBox[{"Print", "@", 
+  "\"\<Setup manifold, metric, chart, defining tensors and their \
+relationships\>\""}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"DefManifold", "[", 
+    RowBox[{"M", ",", "4", ",", 
+     RowBox[{"IndexRange", "[", 
+      RowBox[{"{", 
+       RowBox[{"a", ",", "s"}], "}"}], "]"}]}], "]"}], ";"}], " ", 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"might", " ", "fix", " ", 
+     RowBox[{"formatting", ":", " ", 
+      RowBox[{"type", " ", "roman"}]}]}], ",", " ", 
+    RowBox[{"look", " ", 
+     RowBox[{"greek", ".", " ", "See"}], " ", "DefManifold", " ", 
+     "notebook"}]}], "*)"}]}], "\n", 
+ RowBox[{
+  RowBox[{"DefMetric", "[", 
+   RowBox[{
+    RowBox[{"-", "1"}], ",", 
+    RowBox[{"metric", "[", 
+     RowBox[{
+      RowBox[{"-", "a"}], ",", 
+      RowBox[{"-", "b"}]}], "]"}], ",", "CD", ",", 
+    RowBox[{"PrintAs", "->", "\"\<g\>\""}], ",", 
+    RowBox[{"SymCovDQ", "->", "True"}]}], "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"DefCovD", "[", 
+   RowBox[{
+    RowBox[{"CDT", "[", 
+     RowBox[{"-", "a"}], "]"}], ",", 
+    RowBox[{"Torsion", "->", "True"}], ",", " ", 
+    RowBox[{"SymbolOfCovD", "->", 
+     RowBox[{"{", 
+      RowBox[{"\"\<#\>\"", ",", "\"\<D\>\""}], "}"}]}], ",", 
+    RowBox[{"FromMetric", "->", "metric"}]}], "]"}], ";"}]}], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"cc0de318-5115-d34c-b21c-17b6952d515e"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DefChart", "[", 
+   RowBox[{"cartesian", ",", "M", ",", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", "1", ",", "2", ",", "3"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"t", "[", "]"}], ",", 
+      RowBox[{"x", "[", "]"}], ",", 
+      RowBox[{"y", "[", "]"}], ",", 
+      RowBox[{"z", "[", "]"}]}], "}"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"678a7380-f2ca-034f-939f-5d9474bd2563"],
+
+Cell["Place metric on that chart:", "Text",ExpressionUUID->"e5f9ff6f-725a-a845-9214-691aceb6a5c6"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"MetricInBasis", "[", 
+   RowBox[{"metric", ",", " ", 
+    RowBox[{"-", "cartesian"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"1", ",", 
+      RowBox[{"-", "1"}], ",", 
+      RowBox[{"-", "1"}], ",", 
+      RowBox[{"-", "1"}]}], "}"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"6fc1064b-d050-5341-a9be-28ec7a73f672"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"MetricCompute", "[", 
+   RowBox[{"metric", ",", "cartesian", ",", " ", "All"}], "]"}], 
+  ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"5f8eb9e5-b702-1449-89eb-650051e48865"],
+
+Cell["Setting a flat background", "Text",ExpressionUUID->"3d927238-e2be-f349-bb76-0c4fc686fd34"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"bgRules", " ", "=", " ", 
+   RowBox[{"SymmetricSpaceRules", "[", 
+    RowBox[{"CD", ",", "0"}], "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"SetOptions", "[", 
+   RowBox[{"ToBackground", ",", 
+    RowBox[{"BackgroundSolution", "->", "bgRules"}]}], "]"}], ";"}]}], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"45bc5e71-9fc5-e14f-b297-1c76a2769e3b"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["(*(*Defining our tensors*)*)", "Subsection",
+ InitializationCell->
+  True,ExpressionUUID->"8f67c7b3-c7cb-c94b-97c9-3f4b06f930f5"],
+
+Cell[BoxData[
+ RowBox[{"DefTensor", "[", 
+  RowBox[{
+   RowBox[{"A", "[", 
+    RowBox[{"-", "a"}], "]"}], ",", " ", "M"}], "]"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"7ef60a0c-9835-a043-9531-5b583c88ce15"],
+
+Cell[BoxData[
+ RowBox[{"DefTensor", "[", 
+  RowBox[{
+   RowBox[{"F", "[", 
+    RowBox[{
+     RowBox[{"-", "a"}], ",", 
+     RowBox[{"-", "b"}]}], "]"}], ",", "M", ",", 
+   RowBox[{"Antisymmetric", "[", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"-", "a"}], ",", 
+      RowBox[{"-", "b"}]}], "}"}], "]"}]}], "]"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"eedb354d-c1b1-454f-8260-885722b58377"],
+
+Cell["(*(*Perturbations:*)*)", "Text",
+ InitializationCell->
+  True,ExpressionUUID->"7aa75d97-c7d8-ff41-b155-f5d51ba2bfa9"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DefTensor", "[", 
+   RowBox[{
+    RowBox[{"H", "[", 
+     RowBox[{
+      RowBox[{"-", "a"}], ",", 
+      RowBox[{"-", "b"}]}], "]"}], ",", "M", ",", 
+    RowBox[{"Symmetric", "[", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"-", "a"}], ",", 
+       RowBox[{"-", "b"}]}], "}"}], "]"}], ",", 
+    RowBox[{"PrintAs", "->", "\"\<\[ScriptH]\>\""}]}], "]"}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"2c21e2d5-e02f-de4c-86e7-66b2676efc1a"],
+
+Cell[BoxData[
+ RowBox[{"DefTensor", "[", 
+  RowBox[{
+   RowBox[{"pertA", "[", 
+    RowBox[{"-", "a"}], "]"}], ",", "M", ",", 
+   RowBox[{"PrintAs", "->", "\"\<\[ScriptCapitalA]\>\""}]}], "]"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"39efce46-60b1-9647-84e6-0d7e938dd02d"],
+
+Cell[BoxData[
+ RowBox[{"DefTensor", "[", 
+  RowBox[{
+   RowBox[{"pertF", "[", 
+    RowBox[{
+     RowBox[{"-", "a"}], ",", 
+     RowBox[{"-", "b"}]}], "]"}], ",", "M", ",", " ", 
+   RowBox[{"Antisymmetric", "[", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"-", "a"}], ",", 
+      RowBox[{"-", "b"}]}], "}"}], "]"}], ",", " ", 
+   RowBox[{"PrintAs", "->", "\"\<\[ScriptCapitalF]\>\""}]}], "]"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"5d9d1bf4-8813-cf42-a0c9-0451a90ecf1e"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DefTensor", "[", 
+   RowBox[{
+    RowBox[{"pertT", "[", 
+     RowBox[{"a", ",", 
+      RowBox[{"-", "b"}], ",", 
+      RowBox[{"-", "c"}]}], "]"}], ",", "M", ",", " ", 
+    RowBox[{"Antisymmetric", "[", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"-", "b"}], ",", 
+       RowBox[{"-", "c"}]}], "}"}], "]"}], ",", " ", 
+    RowBox[{"PrintAs", "->", "\"\<\[ScriptCapitalT]\>\""}]}], "]"}], 
+  ";"}]], "Code",ExpressionUUID->"e0a4d095-f582-bf46-aafd-6ebba870c1e9"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["(*Rules*)", "Section",
+ InitializationCell->
+  True,ExpressionUUID->"65ad8ada-04fd-824c-98f6-ebba9391e02b"],
+
+Cell[CellGroupData[{
+
+Cell["(*Going between F and A*)", "Subsection",
+ InitializationCell->
+  True,ExpressionUUID->"a9c28eef-df8d-924d-8618-fea9c2db1382"],
+
+Cell[BoxData[
+ RowBox[{"FtoA", " ", "=", " ", 
+  RowBox[{"MakeRule", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"F", "[", 
+       RowBox[{
+        RowBox[{"-", "a"}], ",", 
+        RowBox[{"-", "b"}]}], "]"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"CD", "[", 
+         RowBox[{"-", "a"}], "]"}], "[", 
+        RowBox[{"A", "[", 
+         RowBox[{"-", "b"}], "]"}], "]"}], "-", 
+       RowBox[{
+        RowBox[{"CD", "[", 
+         RowBox[{"-", "b"}], "]"}], "[", 
+        RowBox[{"A", "[", 
+         RowBox[{"-", "a"}], "]"}], "]"}]}]}], "}"}], ",", 
+    RowBox[{"MetricOn", "->", "All"}], ",", 
+    RowBox[{"ContractMetrics", "->", "True"}]}], "]"}]}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"b2dac4ce-1487-ce44-b295-f1f6f92b414c"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"AtoF", " ", "=", " ", 
+   RowBox[{"MakeRule", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"CD", "[", 
+         RowBox[{"-", "a"}], "]"}], "@", 
+        RowBox[{"A", "[", 
+         RowBox[{"-", "b"}], "]"}]}], ",", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"1", "/", "2"}], ")"}], "*", 
+         RowBox[{"F", "[", 
+          RowBox[{
+           RowBox[{"-", "a"}], ",", 
+           RowBox[{"-", "b"}]}], "]"}]}], "+", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"1", "/", "2"}], ")"}], "*", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"CD", "[", 
+             RowBox[{"-", "a"}], "]"}], "@", 
+            RowBox[{"A", "[", 
+             RowBox[{"-", "b"}], "]"}]}], "+", 
+           RowBox[{
+            RowBox[{"CD", "[", 
+             RowBox[{"-", "b"}], "]"}], "@", 
+            RowBox[{"A", "[", 
+             RowBox[{"-", "a"}], "]"}]}]}], ")"}]}]}]}], "}"}], ",", 
+     RowBox[{"MetricOn", "->", "All"}], ",", 
+     RowBox[{"ContractMetrics", "->", "True"}]}], "]"}]}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"2997c2be-8ae9-6641-a417-fcb2c4781077"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["(*Perturbation rules*)", "Subsection",
+ InitializationCell->
+  True,ExpressionUUID->"b1a201ac-7303-7f4a-b80a-6e75da42a685"],
+
+Cell["(*Setting h as perturbation on the metric*)", "Text",
+ InitializationCell->
+  True,ExpressionUUID->"04654473-52c3-6a4c-bc79-90f7231acf68"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"Perturbationmetric", "[", 
+    RowBox[{
+     RowBox[{"LI", "[", "n_", "]"}], ",", "___"}], "]"}], "/;", 
+   RowBox[{"n", ">", "1"}]}], ":=", "0"}], "\n", 
+ RowBox[{"toH", " ", "=", 
+  RowBox[{"MakeRule", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"Perturbationmetric", "[", 
+       RowBox[{
+        RowBox[{"LI", "[", "1", "]"}], ",", 
+        RowBox[{"-", "a"}], ",", 
+        RowBox[{"-", "b"}]}], "]"}], ",", 
+      RowBox[{"H", "[", 
+       RowBox[{
+        RowBox[{"-", "a"}], ",", 
+        RowBox[{"-", "b"}]}], "]"}]}], "}"}], ",", 
+    RowBox[{"MetricOn", "->", " ", "All"}], ",", " ", 
+    RowBox[{"ContractMetrics", "->", " ", "True"}]}], "]"}]}]}], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"f8355042-5abf-c242-a1d3-21722a5b26a8"],
+
+Cell["(*Defining a perturbation on A, and setting it to pertA*)", "Text",
+ InitializationCell->
+  True,ExpressionUUID->"8e3ce571-a95b-dd4c-bc07-e6d020bc26a3"],
+
+Cell[BoxData[
+ RowBox[{"DefTensorPerturbation", "[", 
+  RowBox[{
+   RowBox[{"perturbationA", "[", 
+    RowBox[{
+     RowBox[{"LI", "[", "order", "]"}], ",", 
+     RowBox[{"-", "a"}]}], "]"}], ",", 
+   RowBox[{"A", "[", 
+    RowBox[{"-", "a"}], "]"}], ",", "M"}], "]"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"e43962a7-c225-db4e-b2e4-7602af395f24"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"perturbationA", "[", 
+    RowBox[{
+     RowBox[{"LI", "[", "n_", "]"}], ",", "___"}], "]"}], "/;", 
+   RowBox[{"n", ">", "1"}]}], ":=", "0"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"aa1197cf-fdb9-2a48-b7fa-051fd850010f"],
+
+Cell[BoxData[
+ RowBox[{"topertA", " ", "=", " ", 
+  RowBox[{"MakeRule", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"perturbationA", "[", 
+       RowBox[{
+        RowBox[{"LI", "[", "1", "]"}], ",", 
+        RowBox[{"-", "a"}]}], "]"}], ",", 
+      RowBox[{"pertA", "[", 
+       RowBox[{"-", "a"}], "]"}]}], "}"}], ",", 
+    RowBox[{"MetricOn", "->", " ", "All"}], ",", " ", 
+    RowBox[{"ContractMetrics", "->", " ", "True"}]}], "]"}]}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"233b79a5-c3e3-7e42-a155-55fd84d79a1d"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"DefTensorPerturbation", "[", 
+   RowBox[{
+    RowBox[{"perturbationT", "[", 
+     RowBox[{
+      RowBox[{"LI", "[", "order", "]"}], ",", "a", ",", 
+      RowBox[{"-", "b"}], ",", 
+      RowBox[{"-", "c"}]}], "]"}], ",", 
+    RowBox[{"TorsionCDT", "[", 
+     RowBox[{"a", ",", 
+      RowBox[{"-", "b"}], ",", 
+      RowBox[{"-", "c"}]}], "]"}], ",", "M"}], "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"perturbationT", "[", 
+     RowBox[{
+      RowBox[{"LI", "[", "n_", "]"}], ",", "___"}], "]"}], "/;", 
+    RowBox[{"n", ">", "1"}]}], ":=", "0"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"topertT", "=", " ", 
+   RowBox[{"MakeRule", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"perturbationT", "[", 
+        RowBox[{
+         RowBox[{"LI", "[", "1", "]"}], ",", "a", ",", 
+         RowBox[{"-", "b"}], ",", 
+         RowBox[{"-", "c"}]}], "]"}], ",", 
+       RowBox[{"pertT", "[", 
+        RowBox[{"a", ",", 
+         RowBox[{"-", "b"}], ",", 
+         RowBox[{"-", "c"}]}], "]"}]}], "}"}], ",", 
+     RowBox[{"MetricOn", "->", " ", "All"}], ",", " ", 
+     RowBox[{"ContractMetrics", "->", " ", "True"}]}], "]"}]}], 
+  ";"}]}], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"21c1ab9f-6ee7-8b4c-a7f0-702fafdc5552"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"funcToPertT", "[", "expr_", "]"}], ":=", 
+  RowBox[{"expr", "/.", "topertT"}]}]], "Code",ExpressionUUID->"3c1b8230-cc70-\
+d94d-a54f-59c184c47857"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"DefTensorPerturbation", "[", 
+   RowBox[{
+    RowBox[{"perturbationR", "[", 
+     RowBox[{
+      RowBox[{"LI", "[", "order", "]"}], ",", "a", ",", 
+      RowBox[{"-", "b"}], ",", 
+      RowBox[{"-", "c"}]}], "]"}], ",", 
+    RowBox[{"RicciScalarCDT", "[", "]"}], ",", "M"}], "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"perturbationR", "[", 
+     RowBox[{
+      RowBox[{"LI", "[", "n_", "]"}], ",", "___"}], "]"}], "/;", 
+    RowBox[{"n", ">", "1"}]}], ":=", "0"}], ";"}]}], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"825ab4ba-5d4f-0f46-9a2f-b8866eb4a3c5"],
+
+Cell["\<\
+(*Note that both of these get rid of perturbations of second order and \
+higher. They do that in the paper as well.*)\
+\>", "Text",
+ InitializationCell->
+  True,ExpressionUUID->"e3bcf0f7-c777-f44d-908f-154f6c0460b3"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["(*Between \[ScriptCapitalA] and \[ScriptCapitalF]*)", "Subsection",
+ InitializationCell->
+  True,ExpressionUUID->"005b9a75-1771-494e-a353-95379070d210"],
+
+Cell["(*Now we connect the two perts:*)", "Text",
+ InitializationCell->
+  True,ExpressionUUID->"59dab859-9505-4649-ae84-8c2e9c5e0985"],
+
+Cell[BoxData[
+ RowBox[{"pertFtoA", " ", "=", " ", 
+  RowBox[{"MakeRule", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"pertF", "[", 
+       RowBox[{
+        RowBox[{"-", "a"}], ",", 
+        RowBox[{"-", "b"}]}], "]"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"CD", "[", 
+         RowBox[{"-", "a"}], "]"}], "[", 
+        RowBox[{"pertA", "[", 
+         RowBox[{"-", "b"}], "]"}], "]"}], "-", 
+       RowBox[{
+        RowBox[{"CD", "[", 
+         RowBox[{"-", "b"}], "]"}], "[", 
+        RowBox[{"pertA", "[", 
+         RowBox[{"-", "a"}], "]"}], "]"}]}]}], "}"}], ",", 
+    RowBox[{"MetricOn", "->", "All"}], ",", 
+    RowBox[{"ContractMetrics", "->", "True"}]}], "]"}]}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"f2b8e870-7401-fc46-80fa-51c3110d1a5d"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"pertAtoF", " ", "=", " ", 
+   RowBox[{"MakeRule", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"CD", "[", 
+         RowBox[{"-", "a"}], "]"}], "@", 
+        RowBox[{"pertA", "[", 
+         RowBox[{"-", "b"}], "]"}]}], ",", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"1", "/", "2"}], ")"}], "*", 
+         RowBox[{"pertF", "[", 
+          RowBox[{
+           RowBox[{"-", "a"}], ",", 
+           RowBox[{"-", "b"}]}], "]"}]}], "+", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"1", "/", "2"}], ")"}], "*", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"CD", "[", 
+             RowBox[{"-", "a"}], "]"}], "@", 
+            RowBox[{"pertA", "[", 
+             RowBox[{"-", "b"}], "]"}]}], "+", 
+           RowBox[{
+            RowBox[{"CD", "[", 
+             RowBox[{"-", "b"}], "]"}], "@", 
+            RowBox[{"pertA", "[", 
+             RowBox[{"-", "a"}], "]"}]}]}], ")"}]}]}]}], "}"}], ",", 
+     RowBox[{"MetricOn", "->", "All"}], ",", 
+     RowBox[{"ContractMetrics", "->", "True"}]}], "]"}]}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"43b5987f-0f67-7445-9e0a-483abad7f565"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["(*Defining and expanding Lagrangian*)", "Section",
+ InitializationCell->
+  True,ExpressionUUID->"2fde35c5-ddda-0648-a29e-cd9180298561"],
+
+Cell[CellGroupData[{
+
+Cell["(*Defining Lagrangian*)", "Subsection",
+ InitializationCell->
+  True,ExpressionUUID->"ed148e3a-e2e5-bc41-a342-ac2a27212f09"],
+
+Cell[BoxData[
+ RowBox[{"Print", "@", "\"\<Defining and expanding lagrangian\>\""}]], "Code",\
+ExpressionUUID->"e6c3da0e-166a-2d49-afb7-f8740e450dbb"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"DefConstantSymbol", "[", "\[Kappa]", "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"DefConstantSymbol", "[", "\[Lambda]", "]"}], ";"}]}], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"4a9a81f3-45f0-6040-b705-8b1bbc1d1da2"],
+
+Cell[BoxData[
+ RowBox[{"\[ScriptCapitalL]", "=", 
+  RowBox[{
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"Sqrt", "[", 
+      RowBox[{"-", 
+       RowBox[{"Detmetric", "[", "]"}]}], "]"}], 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"RicciScalarCDT", "[", "]"}], "+", 
+       RowBox[{"\[Kappa]", " ", 
+        RowBox[{"F", "[", 
+         RowBox[{"a", ",", "b"}], "]"}], 
+        RowBox[{"F", "[", 
+         RowBox[{
+          RowBox[{"-", "a"}], ",", 
+          RowBox[{"-", "b"}]}], "]"}]}]}], ")"}]}], ")"}], "/.", 
+   "FtoA"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.9314267151697063`*^9, 3.9314267413910007`*^9}, 
+   3.931427684515276*^9},ExpressionUUID->"db131a0a-e7bf-f04d-976e-\
+206f9416f0d7"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["(*Writing it in terms of torsion*)", "Subsection",
+ InitializationCell->
+  True,ExpressionUUID->"999f6805-5f19-9045-9541-99cadae9f745"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"\[ScriptCapitalL]", "=", 
+    RowBox[{"ChangeCovD", "[", 
+     RowBox[{"\[ScriptCapitalL]", ",", "CDT", ",", "CD"}], "]"}]}], ";"}], 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"redundant", " ", "step"}], " ", "-", " ", 
+    RowBox[{"no", " ", 
+     RowBox[{"CDT", "'"}], "s", " ", "in", " ", "lagrangian"}]}], 
+   "*)"}]}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"a2c0c61b-2754-034a-8b6c-6681030e0354"],
+
+Cell[BoxData[
+ RowBox[{"\[ScriptCapitalL]", "=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"ChangeCurvature", "[", 
+      RowBox[{"\[ScriptCapitalL]", ",", "CDT", ",", "CD"}], "]"}], "//", 
+     "ChristoffelToGradMetric"}], "//", "ContractMetric"}], "//", 
+   "ToCanonical"}]}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"8b39fa53-c528-b24f-925c-bed8c3c05a8d"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["(*Expanding Lagrangian*)", "Subsection",
+ InitializationCell->
+  True,ExpressionUUID->"85390e1c-b54f-6441-a5da-e4d8f837533f"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"linearizedAction", "=", 
+    RowBox[{
+     RowBox[{"PerturbBackground", "[", " ", 
+      RowBox[{"\[ScriptCapitalL]", " ", ",", "2", ",", "\n", 
+       RowBox[{"BackgroundSolution", "->", "bgRules"}]}], "]"}], "//", 
+     "ExpandPerturbation"}]}], ";"}], "\n", 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"linearizedAction", "=", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"linearizedAction", "//", "ExpandPerturbation"}], "//", 
+       "ToBackground"}], "//", "CollectTensors"}]}], ";", "\n", 
+    RowBox[{"linearizedAction", "=", 
+     RowBox[{"ApplyParallel", "[", 
+      RowBox[{"linearizedAction", ",", 
+       RowBox[{"{", 
+        RowBox[{
+        "ExpandPerturbation", ",", "ToBackground", ",", "CollectTensors"}], 
+        "}"}]}], "]"}]}], ";"}], "*)"}], "\n", 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{
+    "I", " ", "am", " ", "struggling", " ", "to", " ", "get", " ", 
+     "ApplyParallel", " ", "to", " ", "work", " ", "with", " ", 
+     "ExpandPertrubation", " ", "for", " ", "some", " ", "reason"}], "..."}], 
+   "*)"}]}], "\n", 
+ RowBox[{"linearizedAction", "=", 
+  RowBox[{"ApplyParallel", "[", 
+   RowBox[{"linearizedAction", ",", 
+    RowBox[{"{", 
+     RowBox[{"ToBackground", ",", "CollectTensors"}], "}"}]}], 
+   "]"}]}]}], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"8fb4c7db-a7f4-814d-88c4-9135d54c78bd"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"funcToH", "[", "expr_", "]"}], ":=", 
+   RowBox[{"expr", "/.", "toH"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"funcToPertA", "[", "expr_", "]"}], ":=", 
+   RowBox[{"expr", "/.", "topertA"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"funcAtoF", "[", "expr_", "]"}], ":=", 
+   RowBox[{"expr", "/.", "AtoF"}]}], ";"}]}], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"fc5f6ad2-7d53-cf44-b45c-e57f445dd18a"],
+
+Cell[BoxData[{
+ RowBox[{"linearizedAction", "=", 
+  RowBox[{"ApplyParallel", "[", 
+   RowBox[{"linearizedAction", ",", 
+    RowBox[{"{", 
+     RowBox[{
+     "funcToH", ",", "funcToPertA", ",", " ", "funcAtoF", ",", "funcToPertT", 
+      ",", "ToCanonical"}], "}"}]}], "]"}]}], "\n", 
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"linearizedAction", "=", 
+     RowBox[{
+      RowBox[{
+       RowBox[{
+        RowBox[{"linearizedAction", "/.", "toH"}], "/.", "topertA"}], "/.", 
+       "AtoF"}], "//", "ToCanonical"}]}], ";"}], "*)"}]}]}], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"b9b4881f-5eee-864b-a863-99bad08fb9a4"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"linearizedAction", " ", "=", " ", 
+   RowBox[{"linearizedAction", "/.", 
+    RowBox[{
+     RowBox[{"Sqrt", "[", 
+      RowBox[{"-", 
+       RowBox[{"Detmetric", "[", "]"}]}], "]"}], "->", "1"}]}]}], 
+  ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"4027c7ca-6b20-3c49-8851-d9c078a51ab3"],
+
+Cell[BoxData[{
+ RowBox[{"Print", "[", "\"\<We ended up with\>\"", "]"}], "\n", 
+ RowBox[{"Print", "[", 
+  RowBox[{"linearizedAction", "//", "ScreenDollarIndices"}], "]"}]}], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"208d8aa8-f2f8-6845-8741-39fb37b19d4d"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Imposing background torsion", "Subsection",ExpressionUUID->"c58bf725-f955-394c-9191-ec56e620fbfe"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Print", "@", "\"\<Imposing background torsion\>\""}], 
+  ";"}]], "Code",ExpressionUUID->"c1172944-ee53-e84e-a226-7d75b4196cd0"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DefTensor", "[", 
+   RowBox[{
+    RowBox[{"Q", "[", "a", "]"}], ",", "M"}], "]"}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"71c0e4d8-5c1e-a341-836d-a594afcf32bd"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TtoVec", "=", 
+   RowBox[{"MakeRule", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"TorsionCDT", "[", 
+        RowBox[{"a", ",", 
+         RowBox[{"-", "b"}], ",", 
+         RowBox[{"-", "c"}]}], "]"}], ",", 
+       RowBox[{
+        RowBox[{"epsilonmetric", "[", 
+         RowBox[{"a", ",", 
+          RowBox[{"-", "b"}], ",", 
+          RowBox[{"-", "c"}], ",", 
+          RowBox[{"-", "d"}]}], "]"}], 
+        RowBox[{"Q", "[", "d", "]"}]}]}], "}"}], ",", 
+     RowBox[{"MetricOn", "->", "All"}], ",", 
+     RowBox[{"ContractMetrics", "->", "True"}]}], "]"}]}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"492680f5-0c9b-444b-b38d-1576532d3ef7"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"funcTtoVec", "[", "expr_", "]"}], ":=", 
+   RowBox[{"expr", "/.", "TtoVec"}]}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"a2fa7a9b-4204-9e46-853b-b0423c3c92e5"],
+
+Cell[BoxData[
+ RowBox[{"linearizedAction", "=", 
+  RowBox[{"ApplyParallel", "[", 
+   RowBox[{"linearizedAction", ",", 
+    RowBox[{"{", 
+     RowBox[{"funcTtoVec", ",", "ToCanonical", ",", "ContractMetric"}], 
+     "}"}]}], "]"}]}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"e76bbbe4-b7b9-7943-a865-56d978113b2a"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["(*Adding in traceless \[ScriptH] and Lorentz gauge*)", "Section",
+ InitializationCell->
+  True,ExpressionUUID->"f9f36b1f-1a01-1145-94d5-11a8cd20d473"],
+
+Cell["\<\
+(*Okay, weird observation here. If I use H~automaticRules on the two \
+containing CD I get a bug with CD being incompatible with the metric at the \
+very end! ToCanonical[] seems to still struggle with metric, but we just \
+don't use it and we are good-ish*)\
+\>", "Text",
+ InitializationCell->
+  True,ExpressionUUID->"a525b315-a736-ec46-b9a3-5e0446fed600"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"H", "~", "AutomaticRules", "~", " ", 
+    RowBox[{"MakeRule", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"H", "[", 
+         RowBox[{
+          RowBox[{"-", "a"}], ",", "a"}], "]"}], ",", "0"}], "}"}], ",", 
+      RowBox[{"MetricOn", "->", "All"}], ",", 
+      RowBox[{"ContractMetrics", "->", "True"}]}], "]"}]}], ";"}], 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"H", "~", "AutomaticRules", "~", 
+     RowBox[{"MakeRule", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"CD", "[", 
+           RowBox[{"-", "a"}], "]"}], "[", 
+          RowBox[{"H", "[", 
+           RowBox[{"a", ",", "b"}], "]"}], "]"}], ",", "0"}], "}"}], ",", 
+       RowBox[{"MetricOn", "->", "All"}], ",", 
+       RowBox[{"ContractMetrics", "->", "True"}]}], "]"}]}], ";"}], 
+   "*)"}]}], "\n", 
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"CD", "~", "AutomaticRules", "~", 
+     RowBox[{"MakeRule", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"CD", "[", 
+           RowBox[{"-", "a"}], "]"}], "@", 
+          RowBox[{
+           RowBox[{"CD", "[", "c", "]"}], "@", 
+           RowBox[{"H", "[", 
+            RowBox[{"a", ",", "b"}], "]"}]}]}], ",", "0"}], "}"}], ",", 
+       RowBox[{"MetricOn", "->", "All"}], ",", 
+       RowBox[{"ContractMetrics", "->", "True"}]}], "]"}]}], ";"}], 
+   "*)"}]}]}], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"490ee7c8-abf6-8345-b21a-8f90bb496279"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"lorentz", " ", "=", " ", 
+   RowBox[{"MakeRule", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"CD", "[", 
+         RowBox[{"-", "a"}], "]"}], "[", 
+        RowBox[{"H", "[", 
+         RowBox[{"a", ",", "b"}], "]"}], "]"}], ",", "0"}], "}"}], ",", 
+     RowBox[{"MetricOn", "->", "All"}], ",", 
+     RowBox[{"ContractMetrics", "->", "True"}]}], "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"commuteCD", " ", "=", " ", 
+   RowBox[{"MakeRule", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"CD", "[", 
+         RowBox[{"-", "a"}], "]"}], "@", 
+        RowBox[{
+         RowBox[{"CD", "[", "c", "]"}], "@", 
+         RowBox[{"H", "[", 
+          RowBox[{"a", ",", "b"}], "]"}]}]}], ",", "0"}], "}"}], ",", 
+     RowBox[{"MetricOn", "->", "All"}], ",", 
+     RowBox[{"ContractMetrics", "->", "True"}]}], "]"}]}], ";"}]}], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"d70c53ca-f827-ee48-abe1-36bc24796677"],
+
+Cell[BoxData[{
+ RowBox[{"linearizedAction", "=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"linearizedAction", "/.", "commuteCD"}], "/.", "lorentz"}], "//",
+     "ToCanonical"}], "//", "CollectTensors"}]}], "\n", 
+ RowBox[{"Print", "[", "\"\<We now have\>\"", "]"}], "\n", 
+ RowBox[{"Print", "[", 
+  RowBox[{"linearizedAction", "//", "ScreenDollarIndices"}], "]"}]}], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"33e132b3-db60-064d-889f-ee4c042c8b02"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["(*Field Equations*)", "Section",
+ InitializationCell->
+  True,ExpressionUUID->"ab235622-cec6-b24e-bc8b-67986e22b455"],
+
+Cell[CellGroupData[{
+
+Cell["(*With respect to torsion tensor:*)", "Subsection",
+ InitializationCell->
+  True,ExpressionUUID->"53bc2873-e3a9-a64f-8ad3-28b2156e16c9"],
+
+Cell[BoxData[
+ RowBox[{"Print", "@", 
+  "\"\<Calculating torsion field equations\>\""}]], "Code",ExpressionUUID->\
+"14a77183-faa5-974b-97de-14c62c2b7d6e"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"torsionField", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"VarD", "[", 
+       RowBox[{
+        RowBox[{"pertT", "[", 
+         RowBox[{"a", ",", 
+          RowBox[{"-", "b"}], ",", 
+          RowBox[{"-", "c"}]}], "]"}], ",", "CDT"}], "]"}], "[", 
+      "linearizedAction", "]"}], "//", "ContractMetric"}], "//", 
+    "ToCanonical"}]}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"6085c3d0-8b5c-b048-8c15-51c23460dd37"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"torsionField", "=", 
+   RowBox[{
+    RowBox[{"ChangeCovD", "[", 
+     RowBox[{"torsionField", ",", "CDT", ",", "CD"}], "]"}], "//", 
+    "ChristoffelToGradMetric"}]}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"25baa5af-8a9e-0441-8f4c-c0bb3ba57fe2"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"funcLorentz", "[", "expr_", "]"}], ":=", 
+   RowBox[{"expr", "/.", "lorentz"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"funcCD", "[", "expr_", "]"}], ":=", 
+   RowBox[{"expr", "/.", "commuteCD"}]}], ";"}]}], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"aa83f0f7-ef4d-4b46-b092-22cc71591962"],
+
+Cell[BoxData[
+ RowBox[{"torsionField", "=", 
+  RowBox[{"ApplyParallel", "[", 
+   RowBox[{"torsionField", ",", 
+    RowBox[{"{", 
+     RowBox[{
+     "funcLorentz", ",", "funcCD", ",", "ToCanonical", ",", 
+      "ContractMetric"}], "}"}]}], "]"}]}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"63000771-e0a9-a048-b574-d0453e3d313a"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["(*With respect to H:*)", "Subsection",
+ InitializationCell->
+  True,ExpressionUUID->"99be24c3-1362-e044-9b5b-3ae51b679659"],
+
+Cell[BoxData[
+ RowBox[{"einstein", "=", 
+  RowBox[{"ApplyParallel", "[", 
+   RowBox[{"linearizedAction", ",", " ", 
+    RowBox[{"{", 
+     RowBox[{"VarD", "[", 
+      RowBox[{
+       RowBox[{"H", "[", 
+        RowBox[{"k", ",", "l"}], "]"}], ",", "CD"}], "]"}], "}"}]}], 
+   "]"}]}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"63ab5ed7-fad6-c74f-b385-6f5f82e83ea6"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"funcCD", "[", "expr_", "]"}], ":=", 
+   RowBox[{"expr", "/.", "commuteCD"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"funcPertAtoF", "[", "expr_", "]"}], ":=", 
+   RowBox[{"expr", "/.", "pertAtoF"}]}], ";"}]}], "Code",
+ CellChangeTimes->{{3.9314271615006695`*^9, 
+  3.9314271617821484`*^9}},ExpressionUUID->"cc0ab1de-7ee9-b740-a91c-\
+d45d60aaef3e"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"einsteinField", "=", 
+   RowBox[{"ApplyParallel", "[", 
+    RowBox[{"einsteinField", ",", 
+     RowBox[{"{", 
+      RowBox[{"funcPertAtoF", ",", "ToCanonical", ",", "ContractMetric"}], 
+      "}"}]}], "]"}]}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.931427474128252*^9, 
+  3.931427506447357*^9}},ExpressionUUID->"376bb3e3-7343-2d42-8d6c-\
+7990178395b5"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"einsteinField", "=", 
+   RowBox[{
+    RowBox[{"ChangeCovD", "[", 
+     RowBox[{"einsteinField", ",", "CDT", ",", "CD"}], "]"}], "//", 
+    "ChristoffelToGradMetric"}]}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"f3885a3d-c058-1246-b340-e355c79909b9"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"einsteinField", "=", 
+   RowBox[{"ApplyParallel", "[", 
+    RowBox[{"einsteinField", ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"funcLorentz", ",", "funcCD", ",", "ToCanonical"}], "}"}]}], 
+    "]"}]}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"a944a303-02de-b141-9408-c314ba37a366"],
+
+Cell[BoxData[{
+ RowBox[{"Print", "[", "\"\<Einstein is now:\>\"", "]"}], "\n", 
+ RowBox[{"Print", "[", 
+  RowBox[{"einstein", "//", "ScreenDollarIndices"}], "]"}]}], "Code",Expressio\
+nUUID->"cbfbadb6-6c16-7341-9672-8df9b8ccebdf"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["(*With respect to pertA:*)", "Subsection",
+ InitializationCell->
+  True,ExpressionUUID->"7bff2cd8-c34d-dd4e-86a0-f03c38c9057f"],
+
+Cell[BoxData[
+ RowBox[{"maxwell", "=", 
+  RowBox[{"ApplyParallel", "[", 
+   RowBox[{"linearizedAction", ",", 
+    RowBox[{"{", 
+     RowBox[{"VarD", "[", 
+      RowBox[{
+       RowBox[{"pertA", "[", "k", "]"}], ",", "CD"}], "]"}], "}"}]}], 
+   "]"}]}]], "Code",ExpressionUUID->"e51c0dad-1ed4-a94d-8e29-a1c092f5587b"],
+
+Cell[BoxData[
+ RowBox[{"maxwell", "=", 
+  RowBox[{
+   RowBox[{"maxwell", "//", "ContractMetric"}], "//", 
+   "ToCanonical"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.931427409010292*^9, 
+  3.931427409706663*^9}},ExpressionUUID->"5a1726fc-ed2d-5745-a17b-\
+2dd8b1494a4c"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"maxwellField", "=", 
+   RowBox[{
+    RowBox[{"ChangeCovD", "[", 
+     RowBox[{"maxwellField", ",", "CDT", ",", "CD"}], "]"}], "//", 
+    "ChristoffelToGradMetric"}]}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"41af082f-a99a-3f49-8fb2-3f3bd1f0e347"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"maxwellField", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"maxwellField", "/.", "pertAtoF"}], "//", "ToCanonical"}], "//", 
+    "ContractMetric"}]}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"048051e5-3a22-cc45-90ff-ef984b979095"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"maxwellField", "=", 
+   RowBox[{
+    RowBox[{"maxwellField", "/.", "lorentz"}], "/.", "commuteCD"}]}], 
+  ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"a62f8115-d2ee-5648-bccb-a7d95da30557"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["(*Removing terms with \[ScriptH] but keeping CD[\[ScriptH]]*)", \
+"Subsection",
+ InitializationCell->
+  True,ExpressionUUID->"26c6c234-ec3d-3f4c-8eaa-0b869543aa31"],
+
+Cell["(*Note that this only works with equations linear in h*)", "Text",
+ InitializationCell->
+  True,ExpressionUUID->"0115f425-42c4-7f40-ad95-e4a067ad1d8d"],
+
+Cell[BoxData[
+ RowBox[{"DefConstantSymbol", "[", 
+  RowBox[{"PerturbativeParameter", ",", " ", 
+   RowBox[{"PrintAs", "->", "\"\<\[Epsilon]\>\""}]}], "]"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"c257faae-af6e-e742-aaf5-03a4f7900c93"],
+
+Cell[BoxData[
+ RowBox[{"ToOrderH", " ", "=", " ", 
+  RowBox[{"MakeRule", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"H", "[", 
+       RowBox[{
+        RowBox[{"-", "a"}], ",", 
+        RowBox[{"-", "b"}]}], "]"}], ",", 
+      RowBox[{"PerturbativeParameter", "*", 
+       RowBox[{"H", "[", 
+        RowBox[{
+         RowBox[{"-", "a"}], ",", 
+         RowBox[{"-", "b"}]}], "]"}]}]}], "}"}], ",", 
+    RowBox[{"MetricOn", "->", "All"}], ",", 
+    RowBox[{"ContractMetrics", "->", "True"}]}], "]"}]}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"a79a502c-8d10-9a45-b38f-b2846b586daf"],
+
+Cell[BoxData[
+ RowBox[{"ToOrderCDH", "=", 
+  RowBox[{"MakeRule", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"CD", "[", 
+        RowBox[{"-", "c"}], "]"}], "@", 
+       RowBox[{"H", "[", 
+        RowBox[{
+         RowBox[{"-", "a"}], ",", 
+         RowBox[{"-", "b"}]}], "]"}]}], ",", 
+      RowBox[{"PerturbativeParameter", "*", 
+       RowBox[{
+        RowBox[{"CD", "[", 
+         RowBox[{"-", "c"}], "]"}], "@", 
+        RowBox[{"H", "[", 
+         RowBox[{
+          RowBox[{"-", "a"}], ",", 
+          RowBox[{"-", "b"}]}], "]"}]}]}]}], "}"}], ",", 
+    RowBox[{"MetricOn", "->", "All"}], ",", 
+    RowBox[{"ContractMetrics", "->", "True"}]}], "]"}]}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"46f1be17-fa8f-9a4c-85a2-7b71dfd53fb1"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"DeleteFirstOrderPart", "[", "InputExpr_", "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"OutputLagrangian", "=", "InputExpr"}], ",", "SecondOrderPart",
+        ",", "FirstOrderPart", ",", "NullOrderPart"}], "}"}], ",", 
+     RowBox[{
+      RowBox[{"OutputLagrangian", "=", 
+       RowBox[{
+        RowBox[{"OutputLagrangian", "/.", "ToOrderCDH"}], "/.", 
+        "ToOrderH"}]}], ";", "\n", 
+      RowBox[{"SecondOrderPart", "=", 
+       RowBox[{"OutputLagrangian", "//", 
+        RowBox[{
+         RowBox[{"Series", "[", 
+          RowBox[{"#", ",", 
+           RowBox[{"{", 
+            RowBox[{"PerturbativeParameter", ",", "0", ",", "2"}], "}"}]}], 
+          "]"}], "&"}]}]}], ";", "\n", 
+      RowBox[{"SecondOrderPart", "//=", "Normal"}], ";", "\n", 
+      RowBox[{"SecondOrderPart", "=", 
+       RowBox[{"SecondOrderPart", "/.", 
+        RowBox[{"PerturbativeParameter", "->", "1"}]}]}], ";", "\n", 
+      RowBox[{"SecondOrderPart", "//=", "ToCanonical"}], ";", "\n", 
+      RowBox[{"SecondOrderPart", "//=", "ContractMetric"}], ";", "\n", 
+      RowBox[{"SecondOrderPart", "//=", "ScreenDollarIndices"}], ";", "\n", 
+      RowBox[{"SecondOrderPart", "//=", "CollectTensors"}], ";", "\n", "\n", 
+      RowBox[{"FirstOrderPart", "=", 
+       RowBox[{"OutputLagrangian", "//", 
+        RowBox[{
+         RowBox[{"Series", "[", 
+          RowBox[{"#", ",", 
+           RowBox[{"{", 
+            RowBox[{"PerturbativeParameter", ",", "0", ",", "1"}], "}"}]}], 
+          "]"}], "&"}]}]}], ";", "\n", 
+      RowBox[{"FirstOrderPart", "//=", "Normal"}], ";", "\n", 
+      RowBox[{"FirstOrderPart", "=", 
+       RowBox[{"FirstOrderPart", "/.", 
+        RowBox[{"PerturbativeParameter", "->", "1"}]}]}], ";", "\n", 
+      RowBox[{"FirstOrderPart", "//=", "ToCanonical"}], ";", "\n", 
+      RowBox[{"FirstOrderPart", "//=", "ContractMetric"}], ";", "\n", 
+      RowBox[{"FirstOrderPart", "//=", "ScreenDollarIndices"}], ";", "\n", 
+      RowBox[{"FirstOrderPart", "//=", "CollectTensors"}], ";", "\n", "\n", 
+      RowBox[{"NullOrderPart", "=", 
+       RowBox[{"OutputLagrangian", "//", 
+        RowBox[{
+         RowBox[{"Series", "[", 
+          RowBox[{"#", ",", 
+           RowBox[{"{", 
+            RowBox[{"PerturbativeParameter", ",", "0", ",", "0"}], "}"}]}], 
+          "]"}], "&"}]}]}], ";", "\n", 
+      RowBox[{"NullOrderPart", "//=", "Normal"}], ";", "\n", 
+      RowBox[{"NullOrderPart", "=", 
+       RowBox[{"NullOrderPart", "/.", 
+        RowBox[{"PerturbativeParameter", "->", "1"}]}]}], ";", "\n", 
+      RowBox[{"NullOrderPart", "//=", "ToCanonical"}], ";", "\n", 
+      RowBox[{"NullOrderPart", "//=", "ContractMetric"}], ";", "\n", 
+      RowBox[{"NullOrderPart", "//=", "ScreenDollarIndices"}], ";", "\n", 
+      RowBox[{"NullOrderPart", "//=", "CollectTensors"}], ";", "\n", "\n", 
+      RowBox[{"OutputLagrangian", "=", 
+       RowBox[{"SecondOrderPart", "-", 
+        RowBox[{"(", 
+         RowBox[{"FirstOrderPart", "-", "NullOrderPart"}], ")"}]}]}], ";", 
+      "\n", 
+      RowBox[{"OutputLagrangian", "//=", "ToCanonical"}], ";", "\n", 
+      RowBox[{"OutputLagrangian", "//=", "ContractMetric"}], ";", "\n", 
+      RowBox[{"OutputLagrangian", "//=", "ScreenDollarIndices"}], ";", "\n", 
+      RowBox[{"OutputLagrangian", "//=", "CollectTensors"}], ";", "\n", 
+      "OutputLagrangian"}]}], "]"}]}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"b27567a9-b9e2-2c43-b966-26a567a8b983"],
+
+Cell[BoxData[
+ RowBox[{"einstein", "=", 
+  RowBox[{"ApplyParallel", "[", 
+   RowBox[{"einstein", ",", 
+    RowBox[{"{", "DeleteFirstOrderPart", "}"}]}], "]"}]}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"abdb1d60-e535-594a-8af7-bbde180b55ec"],
+
+Cell[BoxData[
+ RowBox[{"maxwell", "=", 
+  RowBox[{"DeleteFirstOrderPart", "[", "maxwell", "]"}]}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"51ec7546-3950-5f47-9b38-afb338eb7667"],
+
+Cell[BoxData[
+ RowBox[{"torsionField", "=", 
+  RowBox[{"DeleteFirstOrderPart", "[", "torsionField", "]"}]}]], "Input",Expre\
+ssionUUID->"4e8571d2-db9c-1048-a38b-6c900fd0af1a"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["(*Components - enter xCoba*)", "Section",
+ InitializationCell->
+  True,ExpressionUUID->"ae9e06ad-ed09-d047-9d4a-0ac77120c703"],
+
+Cell["\<\
+(*(*(*(*(*(*(*(*(*We now want to define the components of our \
+tensors.*)*)*)*)*)*)*)*)*)\
+\>", "Text",
+ InitializationCell->
+  True,ExpressionUUID->"0ab6a15f-e841-274f-bf91-093582e8e232"],
+
+Cell[BoxData[
+ RowBox[{"Print", "@", "\"\<Setting all components\>\""}]], "Code",ExpressionU\
+UID->"da636fda-92ce-af45-8466-36be3e294fab"],
+
+Cell[CellGroupData[{
+
+Cell["(*(*(*(*(*(*(*(*(*\[Epsilon]:*)*)*)*)*)*)*)*)*)", "Subsection",
+ InitializationCell->
+  True,ExpressionUUID->"aa1d3071-1214-2e4d-ab82-7e391f8e2e4a"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"epsilonmetric", "~", "AutomaticRules", "~", 
+   RowBox[{"MakeRule", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"epsilonmetric", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"0", ",", "cartesian"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"1", ",", "cartesian"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"2", ",", "cartesian"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"3", ",", "cartesian"}], "}"}]}], "]"}], ",", "1"}], "}"}], 
+     ",", 
+     RowBox[{"MetricOn", "->", "All"}], ",", 
+     RowBox[{"ContractMetrics", "->", "True"}]}], "]"}]}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"c76846b1-80cf-8847-b01d-f0f77556a23c"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"epsilonmetric", "~", "AutomaticRules", "~", 
+   RowBox[{"MakeRule", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"epsilonmetric", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"0", ",", 
+           RowBox[{"-", "cartesian"}]}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"1", ",", 
+           RowBox[{"-", "cartesian"}]}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"2", ",", 
+           RowBox[{"-", "cartesian"}]}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"3", ",", 
+           RowBox[{"-", "cartesian"}]}], "}"}]}], "]"}], ",", "1"}], "}"}], 
+     ",", 
+     RowBox[{"MetricOn", "->", "All"}], ",", 
+     RowBox[{"ContractMetrics", "->", "True"}]}], "]"}]}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"34e49f1e-16f7-5c41-8a25-415c97cce0ed"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["(*(*(*(*(*(*(*(*(*\[ScriptH]:*)*)*)*)*)*)*)*)*)", "Subsection",
+ InitializationCell->
+  True,ExpressionUUID->"79259f4f-4d32-f345-a454-d7d3d4be3f90"],
+
+Cell["\<\
+(*(*(*(*(*(*(*(*(*Setting them all to zero first:*)*)*)*)*)*)*)*)*)\
+\>", "Text",
+ InitializationCell->
+  True,ExpressionUUID->"e06be337-93c8-9d49-b242-20de8809a543"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"zerovalues", "=", 
+   RowBox[{"Table", "[", 
+    RowBox[{"0", ",", 
+     RowBox[{"{", 
+      RowBox[{"i", ",", "0", ",", "3"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"j", ",", "0", ",", "3"}], "}"}]}], "]"}]}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"f0b1484c-5028-db4c-877f-da1e30c8597f"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ComponentValue", "[", 
+   RowBox[{
+    RowBox[{"ComponentArray", "@", 
+     RowBox[{"H", "[", 
+      RowBox[{
+       RowBox[{"-", 
+        RowBox[{"{", 
+         RowBox[{"a", ",", "cartesian"}], "}"}]}], ",", 
+       RowBox[{"-", 
+        RowBox[{"{", 
+         RowBox[{"b", ",", 
+          RowBox[{"-", "cartesian"}]}], "}"}]}]}], "]"}]}], ",", 
+    "zerovalues"}], "]"}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"541c2c06-5abb-1048-843c-ede965700c4a"],
+
+Cell["\<\
+(*(*(*(*(*(*(*(*(*Setting the non-zero components*)*)*)*)*)*)*)*)*)\
+\>", "Text",
+ InitializationCell->
+  True,ExpressionUUID->"c4245ac0-ff21-1743-b5bc-b0a76c4d1098"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DefScalarFunction", "[", 
+   RowBox[{"{", 
+    RowBox[{"h1", ",", "h2"}], "}"}], "]"}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"53909e00-63cf-b54c-9e8c-fe74930af12e"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ComponentValue", "[", 
+   RowBox[{
+    RowBox[{"H", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"1", ",", 
+        RowBox[{"-", "cartesian"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"1", ",", 
+        RowBox[{"-", "cartesian"}]}], "}"}]}], "]"}], ",", 
+    RowBox[{"h1", "[", 
+     RowBox[{
+      RowBox[{"t", "[", "]"}], ",", 
+      RowBox[{"z", "[", "]"}]}], "]"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"60e77f6b-922e-9942-8a12-d6615c55fff7"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ComponentValue", "[", 
+   RowBox[{
+    RowBox[{"H", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"2", ",", 
+        RowBox[{"-", "cartesian"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"2", ",", 
+        RowBox[{"-", "cartesian"}]}], "}"}]}], "]"}], ",", 
+    RowBox[{"-", 
+     RowBox[{"H", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"1", ",", 
+         RowBox[{"-", "cartesian"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"1", ",", 
+         RowBox[{"-", "cartesian"}]}], "}"}]}], "]"}]}]}], "]"}], 
+  ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"26a82d2f-17a9-5642-a543-f34dad7ef86e"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ComponentValue", "[", 
+   RowBox[{
+    RowBox[{"H", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"1", ",", 
+        RowBox[{"-", "cartesian"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"2", ",", 
+        RowBox[{"-", "cartesian"}]}], "}"}]}], "]"}], ",", 
+    RowBox[{"h2", "[", 
+     RowBox[{
+      RowBox[{"t", "[", "]"}], ",", 
+      RowBox[{"z", "[", "]"}]}], "]"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"88fa3ea0-c8cf-604a-a2dc-30c88125169c"],
+
+Cell["(*(*(*(*(*(*(*(*(*With indices up*)*)*)*)*)*)*)*)*)", "Text",
+ InitializationCell->
+  True,ExpressionUUID->"0202ee78-d18d-ad4c-91cd-10e080e62238"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ChangeComponents", "[", 
+   RowBox[{
+    RowBox[{"H", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"a", ",", "cartesian"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"b", ",", "cartesian"}], "}"}]}], "]"}], ",", 
+    RowBox[{"H", "[", 
+     RowBox[{
+      RowBox[{"-", 
+       RowBox[{"{", 
+        RowBox[{"a", ",", "cartesian"}], "}"}]}], ",", 
+      RowBox[{"-", 
+       RowBox[{"{", 
+        RowBox[{"b", ",", "cartesian"}], "}"}]}]}], "]"}]}], "]"}], 
+  ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"a7755764-1d78-8049-9f7f-2efa6ce00a7f"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["(*(*(*(*(*(*(*(*(*F:*)*)*)*)*)*)*)*)*)", "Subsection",
+ InitializationCell->
+  True,ExpressionUUID->"d6f67a80-4f45-d245-905f-096f6991d858"],
+
+Cell["(*(*(*(*(*(*(*(*(*Setting all to zero:*)*)*)*)*)*)*)*)*)", "Text",
+ InitializationCell->
+  True,ExpressionUUID->"9f5de620-32d1-ec4d-9919-8cdc203304f6"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ComponentValue", "[", 
+   RowBox[{
+    RowBox[{"ComponentArray", "@", 
+     RowBox[{"F", "[", 
+      RowBox[{
+       RowBox[{"-", 
+        RowBox[{"{", 
+         RowBox[{"a", ",", "cartesian"}], "}"}]}], ",", 
+       RowBox[{"-", 
+        RowBox[{"{", 
+         RowBox[{"b", ",", 
+          RowBox[{"-", "cartesian"}]}], "}"}]}]}], "]"}]}], ",", 
+    "zerovalues"}], "]"}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"b85e19ad-5728-cc4c-a0de-3d889f1d5f13"],
+
+Cell["\<\
+(*(*(*(*(*(*(*(*(*Giving it a constant B-field in the \
+x-direction:*)*)*)*)*)*)*)*)*)\
+\>", "Text",
+ InitializationCell->
+  True,ExpressionUUID->"38fd5c12-d179-b14c-a250-c0a24b6e5da3"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DefConstantSymbol", "[", "Bx", "]"}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"0fb48d81-c364-ef42-a791-282d69d0bfa3"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ComponentValue", "[", 
+   RowBox[{
+    RowBox[{"F", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"2", ",", 
+        RowBox[{"-", "cartesian"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"3", ",", 
+        RowBox[{"-", "cartesian"}]}], "}"}]}], "]"}], ",", "Bx"}], "]"}], 
+  ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"de7bb791-e89c-e74e-b1d4-4951ec0e921d"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"F", "[", 
+      RowBox[{
+       RowBox[{"-", 
+        RowBox[{"{", 
+         RowBox[{"a", ",", "cartesian"}], "}"}]}], ",", 
+       RowBox[{"-", 
+        RowBox[{"{", 
+         RowBox[{"b", ",", "cartesian"}], "}"}]}]}], "]"}], "//", 
+     "ComponentArray"}], "//", "ToValues"}], "//", "MatrixForm"}], 
+  ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"701557aa-8e1d-5544-8dc0-5dee7a9c7d36"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ChangeComponents", "[", 
+   RowBox[{
+    RowBox[{"F", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"a", ",", "cartesian"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"b", ",", "cartesian"}], "}"}]}], "]"}], ",", 
+    RowBox[{"F", "[", 
+     RowBox[{
+      RowBox[{"-", 
+       RowBox[{"{", 
+        RowBox[{"a", ",", "cartesian"}], "}"}]}], ",", 
+      RowBox[{"-", 
+       RowBox[{"{", 
+        RowBox[{"b", ",", "cartesian"}], "}"}]}]}], "]"}]}], "]"}], 
+  ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"7c667b98-1488-d847-8b07-e4bb8d5fdcf3"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["(*(*(*(*(*(*(*(*(*\[ScriptCapitalF]:*)*)*)*)*)*)*)*)*)", "Subsection",
+ InitializationCell->
+  True,ExpressionUUID->"7ee0ec84-9986-ed4c-ac61-bcb4053b45e4"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"AllComponentValues", "[", 
+   RowBox[{
+    RowBox[{"pertF", "[", 
+     RowBox[{
+      RowBox[{"-", 
+       RowBox[{"{", 
+        RowBox[{"a", ",", "cartesian"}], "}"}]}], ",", 
+      RowBox[{"-", 
+       RowBox[{"{", 
+        RowBox[{"b", ",", "cartesian"}], "}"}]}]}], "]"}], ",", 
+    "zerovalues"}], "]"}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"07c41a30-13fd-2f45-8d26-11f2c3d130bf"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DefScalarFunction", "[", "\[ScriptB]", "]"}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"cbba9454-a347-fa45-9e3c-00599826d5de"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ComponentValue", "[", 
+   RowBox[{
+    RowBox[{"pertF", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"1", ",", 
+        RowBox[{"-", "cartesian"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"3", ",", 
+        RowBox[{"-", "cartesian"}]}], "}"}]}], "]"}], ",", 
+    RowBox[{"-", 
+     RowBox[{"\[ScriptB]", "[", 
+      RowBox[{
+       RowBox[{"t", "[", "]"}], ",", 
+       RowBox[{"z", "[", "]"}]}], "]"}]}]}], "]"}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"38810371-54e0-0747-a0f9-e337f0e10e1d"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DefScalarFunction", "[", 
+   RowBox[{"{", 
+    RowBox[{
+    "\[ScriptCapitalE]x", ",", "\[ScriptCapitalE]y", ",", 
+     "\[ScriptCapitalE]z"}], "}"}], "]"}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"ab649ece-3a0d-ac41-a32f-6e3fe85ecca5"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ComponentValue", "[", 
+   RowBox[{
+    RowBox[{"ComponentArray", "[", 
+     RowBox[{"pertF", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"0", ",", 
+         RowBox[{"-", "cartesian"}]}], "}"}], ",", 
+       RowBox[{"-", 
+        RowBox[{"{", 
+         RowBox[{"a", ",", "cartesian"}], "}"}]}]}], "]"}], "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", 
+      RowBox[{"\[ScriptCapitalE]x", "[", 
+       RowBox[{
+        RowBox[{"t", "[", "]"}], ",", 
+        RowBox[{"x", "[", "]"}], ",", 
+        RowBox[{"y", "[", "]"}], ",", 
+        RowBox[{"z", "[", "]"}]}], "]"}], ",", 
+      RowBox[{"\[ScriptCapitalE]y", "[", 
+       RowBox[{
+        RowBox[{"t", "[", "]"}], ",", 
+        RowBox[{"x", "[", "]"}], ",", 
+        RowBox[{"y", "[", "]"}], ",", 
+        RowBox[{"z", "[", "]"}]}], "]"}], ",", 
+      RowBox[{"\[ScriptCapitalE]z", "[", 
+       RowBox[{
+        RowBox[{"t", "[", "]"}], ",", 
+        RowBox[{"x", "[", "]"}], ",", 
+        RowBox[{"y", "[", "]"}], ",", 
+        RowBox[{"z", "[", "]"}]}], "]"}]}], "}"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"f5a6e4b4-a1c4-4642-a8eb-54e896c9c3d4"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ChangeComponents", "[", 
+   RowBox[{
+    RowBox[{"pertF", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"a", ",", "cartesian"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"b", ",", "cartesian"}], "}"}]}], "]"}], ",", 
+    RowBox[{"pertF", "[", 
+     RowBox[{
+      RowBox[{"-", 
+       RowBox[{"{", 
+        RowBox[{"a", ",", "cartesian"}], "}"}]}], ",", 
+      RowBox[{"-", 
+       RowBox[{"{", 
+        RowBox[{"b", ",", "cartesian"}], "}"}]}]}], "]"}]}], "]"}], 
+  ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"0aeee4f5-d960-754d-8f4d-265279ccbdb5"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["(*(*(*(*(*(*(*(*(*\[ScriptCapitalT]:*)*)*)*)*)*)*)*)*)", "Subsection",
+ InitializationCell->
+  True,ExpressionUUID->"d8dffe07-5bc5-be4e-a6f3-8cd3b1a47ca4"],
+
+Cell["\<\
+(*(*(*(*(*(*(*(*(*We define two 4-vectors that \[ScriptCapitalT] is built \
+from:*)*)*)*)*)*)*)*)*)\
+\>", "Text",
+ InitializationCell->
+  True,ExpressionUUID->"b47cef27-80db-7644-be24-df7e0e67bcfa"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"DefTensor", "[", 
+   RowBox[{
+    RowBox[{"pertQ", "[", 
+     RowBox[{"-", "a"}], "]"}], ",", "M", ",", 
+    RowBox[{"PrintAs", "->", "\"\<\[ScriptCapitalQ]\>\""}]}], "]"}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{"DefTensor", "[", 
+   RowBox[{
+    RowBox[{"pertU", "[", 
+     RowBox[{"-", "a"}], "]"}], ",", "M", ",", " ", 
+    RowBox[{"PrintAs", "->", "\"\<\[ScriptCapitalU]\>\""}]}], "]"}], 
+  ";"}]}], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"fe55c80e-78eb-124c-b96d-ecfa074aa69e"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"pertTtoVec", "=", 
+   RowBox[{"MakeRule", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"pertT", "[", 
+        RowBox[{"a", ",", 
+         RowBox[{"-", "b"}], ",", 
+         RowBox[{"-", "c"}]}], "]"}], ",", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"epsilonmetric", "[", 
+          RowBox[{"a", ",", 
+           RowBox[{"-", "b"}], ",", 
+           RowBox[{"-", "c"}], ",", 
+           RowBox[{"-", "d"}]}], "]"}], 
+         RowBox[{"pertQ", "[", "d", "]"}]}], "+", 
+        RowBox[{
+         RowBox[{"1", "/", "2"}], " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"-", 
+             RowBox[{"delta", "[", 
+              RowBox[{"a", ",", 
+               RowBox[{"-", "c"}]}], "]"}]}], "  ", 
+            RowBox[{"pertU", "[", 
+             RowBox[{"-", "b"}], "]"}]}], "+", 
+           RowBox[{
+            RowBox[{"delta", "[", 
+             RowBox[{"a", ",", 
+              RowBox[{"-", "b"}]}], "]"}], "   ", 
+            RowBox[{"pertU", "[", 
+             RowBox[{"-", "c"}], "]"}]}]}], ")"}]}]}]}], "}"}], ",", 
+     RowBox[{"MetricOn", "->", "All"}], ",", 
+     RowBox[{"ContractMetrics", "->", "True"}]}], "]"}]}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"835e0774-1073-df48-8e72-73c48fbe14ba"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DefScalarFunction", "[", 
+   RowBox[{"{", 
+    RowBox[{
+    "\[ScriptQ]0", ",", "\[ScriptQ]2", ",", "\[ScriptU]0", ",", 
+     "\[ScriptU]2"}], "}"}], "]"}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"3c7becad-7eb8-de46-8fa0-be67919faf04"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"AllComponentValues", "[", 
+   RowBox[{
+    RowBox[{"pertQ", "[", 
+     RowBox[{"-", 
+      RowBox[{"{", 
+       RowBox[{"a", ",", "cartesian"}], "}"}]}], "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"\[ScriptQ]0", "[", 
+       RowBox[{
+        RowBox[{"t", "[", "]"}], ",", 
+        RowBox[{"z", "[", "]"}]}], "]"}], ",", "0", ",", 
+      RowBox[{"\[ScriptQ]2", "[", 
+       RowBox[{
+        RowBox[{"t", "[", "]"}], ",", 
+        RowBox[{"z", "[", "]"}]}], "]"}], ",", "0"}], "}"}]}], "]"}], 
+  ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"0cd50ebf-8491-ea4e-aac0-2c0fb5c1b574"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ChangeComponents", "[", 
+   RowBox[{
+    RowBox[{"pertQ", "[", 
+     RowBox[{"{", 
+      RowBox[{"a", ",", "cartesian"}], "}"}], "]"}], ",", 
+    RowBox[{"pertQ", "[", 
+     RowBox[{"-", 
+      RowBox[{"{", 
+       RowBox[{"a", ",", "cartesian"}], "}"}]}], "]"}]}], "]"}], 
+  ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"28849bdc-304b-264c-9571-cec9dd6d2b27"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"AllComponentValues", "[", 
+   RowBox[{
+    RowBox[{"pertU", "[", 
+     RowBox[{"-", 
+      RowBox[{"{", 
+       RowBox[{"a", ",", "cartesian"}], "}"}]}], "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"\[ScriptU]0", "[", 
+       RowBox[{
+        RowBox[{"t", "[", "]"}], ",", 
+        RowBox[{"z", "[", "]"}]}], "]"}], ",", "0", ",", 
+      RowBox[{"\[ScriptU]2", "[", 
+       RowBox[{
+        RowBox[{"t", "[", "]"}], ",", 
+        RowBox[{"z", "[", "]"}]}], "]"}], ",", "0"}], "}"}]}], "]"}], 
+  ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"40131767-2b45-8e46-a257-7ea4e41ccb59"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ChangeComponents", "[", 
+   RowBox[{
+    RowBox[{"pertU", "[", 
+     RowBox[{"{", 
+      RowBox[{"a", ",", "cartesian"}], "}"}], "]"}], ",", 
+    RowBox[{"pertU", "[", 
+     RowBox[{"-", 
+      RowBox[{"{", 
+       RowBox[{"a", ",", "cartesian"}], "}"}]}], "]"}]}], "]"}], 
+  ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"fa1062fc-1412-cc41-96ab-66c39bf87e0b"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["(*(*(*(*(*(*(*(*(*T:*)*)*)*)*)*)*)*)*)", "Subsection",
+ InitializationCell->
+  True,ExpressionUUID->"d1fee646-7199-de45-a894-fb24f1f51983"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DefScalarFunction", "[", "q0", "]"}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"72ec9e6d-3d00-c34e-a754-f15b9218a882"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"AllComponentValues", "[", 
+   RowBox[{
+    RowBox[{"Q", "[", 
+     RowBox[{"-", 
+      RowBox[{"{", 
+       RowBox[{"a", ",", "cartesian"}], "}"}]}], "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"q0", "[", 
+       RowBox[{
+        RowBox[{"t", "[", "]"}], ",", 
+        RowBox[{"z", "[", "]"}]}], "]"}], ",", "0", ",", "0", ",", "0"}], 
+     "}"}]}], "]"}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"b7c463d1-13d5-4f4d-9a1a-ae8e548860b8"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ChangeComponents", "[", 
+   RowBox[{
+    RowBox[{"Q", "[", 
+     RowBox[{"{", 
+      RowBox[{"a", ",", "cartesian"}], "}"}], "]"}], ",", 
+    RowBox[{"Q", "[", 
+     RowBox[{"-", 
+      RowBox[{"{", 
+       RowBox[{"a", ",", "cartesian"}], "}"}]}], "]"}]}], "]"}], 
+  ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"a8ff0573-bb06-ba43-9c02-eb96ca2ed164"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Evaluating our field equations", "Section",ExpressionUUID->"40664604-e269-f947-80de-0dc518c173ac"],
+
+Cell[CellGroupData[{
+
+Cell["(*Evaluating Torsion field equation*)", "Subsection",
+ InitializationCell->
+  True,ExpressionUUID->"b7abe40b-4aa4-1c4e-97db-131487287f53"],
+
+Cell[BoxData[
+ RowBox[{"Print", "@", "\"\<Evaluating torsion component eqs\>\""}]], "Code",E\
+xpressionUUID->"a7af413b-fc90-1746-8693-3000b8edadff"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"funcPertTtoVec", "[", "expr_", "]"}], ":=", 
+   RowBox[{"expr", "/.", "pertTtoVec"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"funcChristCartZero", "[", "expr_", "]"}], ":=", 
+   RowBox[{"expr", "/.", 
+    RowBox[{"ChristoffelCDPDcartesian", "->", "Zero"}]}]}], ";"}]}], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"5aaa7e3e-a404-0048-9585-a4ebf7343a8b"],
+
+Cell[BoxData[
+ RowBox[{"torsionC", "=", 
+  RowBox[{"ApplyParallel", "[", 
+   RowBox[{"torsionField", ",", 
+    RowBox[{"{", 
+     RowBox[{"funcPertTtoVec", ",", "funcTtoVec", ",", "ToCanonical", ",", 
+      RowBox[{"ToBasis", "[", "cartesian", "]"}]}], "}"}]}], "]"}]}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"4dcffd9e-c24a-ec4f-b5c3-3796a8c6d52b"],
+
+Cell[BoxData[
+ RowBox[{"torsionExpr", "=", 
+  RowBox[{"ApplyParallel", "[", 
+   RowBox[{"torsionC", ",", 
+    RowBox[{"{", 
+     RowBox[{"funcChristCartZero", ",", 
+      RowBox[{"ToBasis", "[", "cartesian", "]"}], ",", "funcChristCartZero", 
+      ",", 
+      RowBox[{"ToBasis", "[", "cartesian", "]"}], ",", "funcChristCartZero", 
+      ",", "TraceBasisDummy", ",", "TraceBasisDummy", ",", "ComponentArray", 
+      ",", "ToValues", ",", "ToValues", ",", "ToValues", ",", "ToCanonical", 
+      ",", 
+      RowBox[{"SeparateMetric", "[", "metric", "]"}], ",", 
+      RowBox[{"ToBasis", "[", "cartesian", "]"}], ",", 
+      RowBox[{"ToBasis", "[", "cartesian", "]"}], ",", "TraceBasisDummy", ",",
+       "TraceBasisDummy", ",", "ToCanonical", ",", "ToValues"}], "}"}]}], 
+   "]"}]}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"264f5c28-c92e-d940-be8a-5fd5566bddeb"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["(*Evaluating Einstein*)", "Subsection",
+ InitializationCell->
+  True,ExpressionUUID->"d69ba30d-7ddf-f44c-a442-63ec06412775"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Print", "[", "\"\<starting to evaluate einstein\>\"", "]"}], 
+  ";"}]], "Code",ExpressionUUID->"c83d54a1-5ff3-3b4f-9cc8-002d327f6ecc"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"funcPertTtoVec", "[", "expr_", "]"}], ":=", 
+   RowBox[{"expr", "/.", "pertTtoVec"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"funcChristCartZero", "[", "expr_", "]"}], ":=", 
+   RowBox[{"expr", "/.", 
+    RowBox[{"ChristoffelCDPDcartesian", "->", "Zero"}]}]}], ";"}]}], "Code",
+ CellChangeTimes->{{3.931427151419859*^9, 
+  3.931427152040613*^9}},ExpressionUUID->"8341111f-cd6d-044a-b658-\
+1809a18a7401"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"einsteinC", "=", 
+   RowBox[{"ApplyParallel", "[", 
+    RowBox[{"einstein", ",", 
+     RowBox[{"{", 
+      RowBox[{"funcPertTtoVec", ",", "funcTtoVec", ",", " ", 
+       RowBox[{"SeparateMetric", "[", "metric", "]"}], " ", ",", 
+       "ToCanonical", ",", 
+       RowBox[{"ToBasis", "[", "cartesian", "]"}], ",", 
+       RowBox[{"ToBasis", "[", "cartesian", "]"}]}], "}"}]}], "]"}]}], 
+  ";"}], "\n", 
+ RowBox[{"einsteinExpr", "=", 
+  RowBox[{"ApplyParallel", "[", 
+   RowBox[{"einsteinC", ",", " ", 
+    RowBox[{"{", 
+     RowBox[{
+     "funcChristCartZero", ",", "TraceBasisDummy", ",", "TraceBasisDummy", 
+      ",", "ComponentArray", ",", "ToValues", ",", "ToValues", ",", 
+      "ToCanonical"}], "}"}]}], "]"}]}]}], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"4acdaa2f-d859-f148-ac04-bdaa0e4c6bfd"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Print", "[", "\"\<Done evaluating einstein\>\"", "]"}], 
+  ";"}]], "Code",ExpressionUUID->"cf04c46c-afeb-2e40-a8a3-d178ad7a9443"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Print", "[", "\"\<Just saved einstein to file\>\"", "]"}], 
+  ";"}]], "Code",ExpressionUUID->"0cf34c81-cb1a-1944-b1f7-8399de9ce548"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["(*(*(*(*(*(*(*Curl of Maxwell*)*)*)*)*)*)*)", "Subsection",
+ InitializationCell->
+  True,ExpressionUUID->"acb060a7-ae75-804d-94df-f01122bd9f1d"],
+
+Cell[BoxData[
+ RowBox[{"Print", "@", "\"\<Evaluating Maxwell component eqs\>\""}]], "Code",E\
+xpressionUUID->"eae79e9d-6fa2-3f4c-9492-c06d0fe58633"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"DefTensor", "[", 
+   RowBox[{
+    RowBox[{"u", "[", "a", "]"}], ",", "M"}], "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"u", "~", "AutomaticRules", " ", "~", 
+   RowBox[{"MakeRule", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"u", "[", "a", "]"}], 
+        RowBox[{"u", "[", 
+         RowBox[{"-", "a"}], "]"}]}], ",", "1"}], "}"}], ",", 
+     RowBox[{"MetricOn", "->", "All"}], ",", 
+     RowBox[{"ContractMetrics", "->", "True"}]}], "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"AllComponentValues", "[", 
+   RowBox[{
+    RowBox[{"u", "[", 
+     RowBox[{"-", 
+      RowBox[{"{", 
+       RowBox[{"a", ",", "cartesian"}], "}"}]}], "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"1", ",", "0", ",", "0", ",", "0"}], "}"}]}], "]"}], 
+  ";"}]}], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"5f903881-a45b-e344-a43f-4c7931fa2647"],
+
+Cell[BoxData[{
+ RowBox[{"Print", "[", "\"\<calculating maxwell\>\"", "]"}], "\n", 
+ RowBox[{
+  RowBox[{"maxwellC", "=", 
+   RowBox[{"ApplyParallel", "[", 
+    RowBox[{"maxwell", ",", 
+     RowBox[{"{", 
+      RowBox[{"funcPertAtoF", ",", "funcPertTtoVec", ",", "ToCanonical", ",", 
+       RowBox[{"ToBasis", "[", "cartesian", "]"}], ",", " ", 
+       RowBox[{"ToBasis", "[", "cartesian", "]"}]}], "}"}]}], "]"}]}], 
+  ";"}]}], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"e8e1e751-a185-494c-9b41-90200b5e4a17"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"maxwellC", "=", 
+   RowBox[{"maxwellC", "/.", 
+    RowBox[{"ChristoffelCDPDcartesian", "->", "Zero"}]}]}], ";"}]], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"65677138-63a8-3a49-a2af-7e197ab685cf"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"maxwellCa", "=", 
+   RowBox[{
+    RowBox[{"u", "[", 
+     RowBox[{"-", 
+      RowBox[{"{", 
+       RowBox[{"l", ",", "cartesian"}], "}"}]}], "]"}], 
+    RowBox[{"epsilonmetric", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"l", ",", "cartesian"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"i", ",", "cartesian"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"f", ",", "cartesian"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"k", ",", "cartesian"}], "}"}]}], "]"}], 
+    RowBox[{
+     RowBox[{"CD", "[", 
+      RowBox[{"-", 
+       RowBox[{"{", 
+        RowBox[{"i", ",", "cartesian"}], "}"}]}], "]"}], "[", "maxwellC", 
+     "]"}]}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"maxwellExpr", "=", 
+   RowBox[{"ApplyParallel", "[", 
+    RowBox[{"maxwellCa", ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "ContractMetric", ",", "TraceBasisDummy", ",", "TraceBasisDummy", ",", 
+       "ComponentArray", ",", "ToValues", ",", "ToValues", ",", "ToCanonical",
+        ",", 
+       RowBox[{"SeparateMetric", "[", "metric", "]"}], ",", 
+       RowBox[{"ToBasis", "[", "cartesian", "]"}], ",", 
+       RowBox[{"ToBasis", "[", "cartesian", "]"}], ",", "TraceBasisDummy", 
+       ",", "TraceBasisDummy", ",", "ToCanonical", ",", "ToValues"}], "}"}]}],
+     "]"}]}], ";"}]}], "Input",
+ InitializationCell->
+  True,ExpressionUUID->"b4e99d73-8b7a-3a49-816e-4bfcd71797e0"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Saving and goodbye", "Subsection",ExpressionUUID->"5d0e2570-1ce9-a543-8378-229212e14422"],
+
+Cell[BoxData[
+ RowBox[{"Print", "@", "\"\<Saving results...\>\""}]], "Code",ExpressionUUID->"b2da777e-3417-d042-ac59-ea0633e688d6"],
+
+Cell[BoxData[
+ RowBox[{"DumpSave", "[", 
+  RowBox[{
+   RowBox[{"FileNameJoin", "[", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"NotebookDirectory", "[", "]"}], ",", 
+      "\"\<sandboxresults.mx\>\""}], "}"}], "]"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+    "maxwell", ",", "maxwellExpr", ",", "einstein", ",", "einsteinExpr", ",", 
+     "torsionField", ",", "torsionExpr"}], "}"}]}], "]"}]], "Code",
+ CellChangeTimes->{{3.9314264647257957`*^9, 3.9314264667111015`*^9}, 
+   3.931427982741049*^9},ExpressionUUID->"71bb84cf-2211-b044-a20c-\
+aa236f4e57a8"],
+
+Cell[BoxData[
+ RowBox[{"Print", "@", 
+  "\"\<Goodbye and thanks for all the fish\>\""}]], "Code",ExpressionUUID->\
+"3b3fa465-36d5-f345-9281-5e9dbc2556d9"],
+
+Cell[BoxData[
+ RowBox[{"Quit", "[", "]"}]], "Code",ExpressionUUID->"beee8903-3441-3b45-92fa-3d7189c779fb"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{960, 532.5},
+WindowMargins->{{-4.875, Automatic}, {Automatic, -4.875}},
+FrontEndVersion->"14.0 for Microsoft Windows (64-bit) (December 12, 2023)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"fcfe1138-1cbc-fd48-96e9-16edf093e5f3"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 96, 0, 98, "Title",ExpressionUUID->"22d4178c-3ceb-2744-b831-e772d616abc8"],
+Cell[679, 24, 113, 0, 53, "Subtitle",ExpressionUUID->"0dfc3e36-8edc-cd45-b5a9-678fc3f50c8a"],
+Cell[CellGroupData[{
+Cell[817, 28, 117, 2, 67, "Section",ExpressionUUID->"2a9cb9f2-9d49-e749-bd66-117a8e4e38d2",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[959, 34, 131, 2, 54, "Subsection",ExpressionUUID->"bedf7e27-975d-f04a-bdc7-94a56e337dcd",
+ InitializationCell->True],
+Cell[1093, 38, 81, 0, 28, "Input",ExpressionUUID->"ba0ded45-3569-a640-96fa-913f35063275"],
+Cell[1177, 40, 151, 2, 35, "Text",ExpressionUUID->"1e8cf771-e7e9-e344-8b88-a08352feaa91",
+ InitializationCell->True],
+Cell[1331, 44, 182, 4, 64, "Input",ExpressionUUID->"df49a0e9-73ee-ed44-89fe-6ab9cf0c0db8",
+ InitializationCell->True],
+Cell[1516, 50, 133, 2, 35, "Text",ExpressionUUID->"0e5f1701-e1ec-ed44-b969-1e7c73e72334",
+ InitializationCell->True],
+Cell[1652, 54, 728, 19, 159, "Input",ExpressionUUID->"37aaf63c-8ec7-6440-9937-f6e479fe4c00",
+ InitializationCell->True],
+Cell[2383, 75, 497, 14, 64, "Input",ExpressionUUID->"be8b7c16-3467-f14b-bf59-8fbc76f57f7d",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2917, 94, 100, 0, 54, "Subsection",ExpressionUUID->"abcc6281-d4d5-4045-93bd-52539d56c909"],
+Cell[3020, 96, 191, 3, 35, "Text",ExpressionUUID->"d585be4f-5bbe-344d-828b-3af6e893d7f5"],
+Cell[3214, 101, 1385, 40, 121, "Input",ExpressionUUID->"cc0de318-5115-d34c-b21c-17b6952d515e",
+ InitializationCell->True],
+Cell[4602, 143, 466, 13, 44, "Input",ExpressionUUID->"678a7380-f2ca-034f-939f-5d9474bd2563",
+ InitializationCell->True],
+Cell[5071, 158, 98, 0, 35, "Text",ExpressionUUID->"e5f9ff6f-725a-a845-9214-691aceb6a5c6"],
+Cell[5172, 160, 378, 11, 44, "Input",ExpressionUUID->"6fc1064b-d050-5341-a9be-28ec7a73f672",
+ InitializationCell->True],
+Cell[5553, 173, 226, 6, 44, "Input",ExpressionUUID->"5f8eb9e5-b702-1449-89eb-650051e48865",
+ InitializationCell->True],
+Cell[5782, 181, 96, 0, 35, "Text",ExpressionUUID->"3d927238-e2be-f349-bb76-0c4fc686fd34"],
+Cell[5881, 183, 392, 10, 64, "Input",ExpressionUUID->"45bc5e71-9fc5-e14f-b297-1c76a2769e3b",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6310, 198, 135, 2, 54, "Subsection",ExpressionUUID->"8f67c7b3-c7cb-c94b-97c9-3f4b06f930f5",
+ InitializationCell->True],
+Cell[6448, 202, 224, 6, 35, "Input",ExpressionUUID->"7ef60a0c-9835-a043-9531-5b583c88ce15",
+ InitializationCell->True],
+Cell[6675, 210, 412, 13, 35, "Input",ExpressionUUID->"eedb354d-c1b1-454f-8260-885722b58377",
+ InitializationCell->True],
+Cell[7090, 225, 123, 2, 35, "Text",ExpressionUUID->"7aa75d97-c7d8-ff41-b155-f5d51ba2bfa9",
+ InitializationCell->True],
+Cell[7216, 229, 495, 15, 35, "Input",ExpressionUUID->"2c21e2d5-e02f-de4c-86e7-66b2676efc1a",
+ InitializationCell->True],
+Cell[7714, 246, 288, 7, 35, "Input",ExpressionUUID->"39efce46-60b1-9647-84e6-0d7e938dd02d",
+ InitializationCell->True],
+Cell[8005, 255, 491, 14, 35, "Input",ExpressionUUID->"5d9d1bf4-8813-cf42-a0c9-0451a90ecf1e",
+ InitializationCell->True],
+Cell[8499, 271, 502, 14, 35, "Code",ExpressionUUID->"e0a4d095-f582-bf46-aafd-6ebba870c1e9"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[9050, 291, 113, 2, 53, "Section",ExpressionUUID->"65ad8ada-04fd-824c-98f6-ebba9391e02b",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[9188, 297, 132, 2, 54, "Subsection",ExpressionUUID->"a9c28eef-df8d-924d-8618-fea9c2db1382",
+ InitializationCell->True],
+Cell[9323, 301, 784, 24, 35, "Input",ExpressionUUID->"b2dac4ce-1487-ce44-b295-f1f6f92b414c",
+ InitializationCell->True],
+Cell[10110, 327, 1239, 38, 55, "Input",ExpressionUUID->"2997c2be-8ae9-6641-a417-fcb2c4781077",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[11386, 370, 129, 2, 54, "Subsection",ExpressionUUID->"b1a201ac-7303-7f4a-b80a-6e75da42a685",
+ InitializationCell->True],
+Cell[11518, 374, 144, 2, 35, "Text",ExpressionUUID->"04654473-52c3-6a4c-bc79-90f7231acf68",
+ InitializationCell->True],
+Cell[11665, 378, 822, 24, 55, "Input",ExpressionUUID->"f8355042-5abf-c242-a1d3-21722a5b26a8",
+ InitializationCell->True],
+Cell[12490, 404, 158, 2, 35, "Text",ExpressionUUID->"8e3ce571-a95b-dd4c-bc07-e6d020bc26a3",
+ InitializationCell->True],
+Cell[12651, 408, 364, 10, 35, "Input",ExpressionUUID->"e43962a7-c225-db4e-b2e4-7602af395f24",
+ InitializationCell->True],
+Cell[13018, 420, 284, 8, 35, "Input",ExpressionUUID->"aa1197cf-fdb9-2a48-b7fa-051fd850010f",
+ InitializationCell->True],
+Cell[13305, 430, 553, 15, 35, "Input",ExpressionUUID->"233b79a5-c3e3-7e42-a155-55fd84d79a1d",
+ InitializationCell->True],
+Cell[13861, 447, 1297, 39, 74, "Input",ExpressionUUID->"21c1ab9f-6ee7-8b4c-a7f0-702fafdc5552",
+ InitializationCell->True],
+Cell[15161, 488, 181, 4, 35, "Code",ExpressionUUID->"3c1b8230-cc70-d94d-a54f-59c184c47857"],
+Cell[15345, 494, 626, 18, 55, "Input",ExpressionUUID->"825ab4ba-5d4f-0f46-9a2f-b8866eb4a3c5",
+ InitializationCell->True],
+Cell[15974, 514, 226, 5, 35, "Text",ExpressionUUID->"e3bcf0f7-c777-f44d-908f-154f6c0460b3",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[16237, 524, 158, 2, 54, "Subsection",ExpressionUUID->"005b9a75-1771-494e-a353-95379070d210",
+ InitializationCell->True],
+Cell[16398, 528, 134, 2, 35, "Text",ExpressionUUID->"59dab859-9505-4649-ae84-8c2e9c5e0985",
+ InitializationCell->True],
+Cell[16535, 532, 800, 24, 35, "Input",ExpressionUUID->"f2b8e870-7401-fc46-80fa-51c3110d1a5d",
+ InitializationCell->True],
+Cell[17338, 558, 1259, 38, 55, "Input",ExpressionUUID->"43b5987f-0f67-7445-9e0a-483abad7f565",
+ InitializationCell->True]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[18646, 602, 141, 2, 53, "Section",ExpressionUUID->"2fde35c5-ddda-0648-a29e-cd9180298561",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[18812, 608, 130, 2, 54, "Subsection",ExpressionUUID->"ed148e3a-e2e5-bc41-a342-ac2a27212f09",
+ InitializationCell->True],
+Cell[18945, 612, 149, 2, 50, "Code",ExpressionUUID->"e6c3da0e-166a-2d49-afb7-f8740e450dbb"],
+Cell[19097, 616, 262, 6, 64, "Input",ExpressionUUID->"4a9a81f3-45f0-6040-b705-8b1bbc1d1da2",
+ InitializationCell->True],
+Cell[19362, 624, 726, 22, 44, "Input",ExpressionUUID->"db131a0a-e7bf-f04d-976e-206f9416f0d7",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[20125, 651, 141, 2, 54, "Subsection",ExpressionUUID->"999f6805-5f19-9045-9541-99cadae9f745",
+ InitializationCell->True],
+Cell[20269, 655, 464, 13, 44, "Input",ExpressionUUID->"a2c0c61b-2754-034a-8b6c-6681030e0354",
+ InitializationCell->True],
+Cell[20736, 670, 381, 10, 44, "Input",ExpressionUUID->"8b39fa53-c528-b24f-925c-bed8c3c05a8d",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[21154, 685, 131, 2, 54, "Subsection",ExpressionUUID->"85390e1c-b54f-6441-a5da-e4d8f837533f",
+ InitializationCell->True],
+Cell[21288, 689, 1388, 37, 140, "Input",ExpressionUUID->"8fb4c7db-a7f4-814d-88c4-9135d54c78bd",
+ InitializationCell->True],
+Cell[22679, 728, 476, 14, 83, "Input",ExpressionUUID->"fc5f6ad2-7d53-cf44-b45c-e57f445dd18a",
+ InitializationCell->True],
+Cell[23158, 744, 637, 18, 64, "Input",ExpressionUUID->"b9b4881f-5eee-864b-a863-99bad08fb9a4",
+ InitializationCell->True],
+Cell[23798, 764, 338, 10, 44, "Input",ExpressionUUID->"4027c7ca-6b20-3c49-8851-d9c078a51ab3",
+ InitializationCell->True],
+Cell[24139, 776, 267, 5, 64, "Input",ExpressionUUID->"208d8aa8-f2f8-6845-8741-39fb37b19d4d",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[24443, 786, 104, 0, 54, "Subsection",ExpressionUUID->"c58bf725-f955-394c-9191-ec56e620fbfe"],
+Cell[24550, 788, 162, 3, 50, "Code",ExpressionUUID->"c1172944-ee53-e84e-a226-7d75b4196cd0"],
+Cell[24715, 793, 219, 6, 44, "Input",ExpressionUUID->"71c0e4d8-5c1e-a341-836d-a594afcf32bd",
+ InitializationCell->True],
+Cell[24937, 801, 723, 21, 64, "Input",ExpressionUUID->"492680f5-0c9b-444b-b38d-1576532d3ef7",
+ InitializationCell->True],
+Cell[25663, 824, 228, 6, 44, "Input",ExpressionUUID->"a2fa7a9b-4204-9e46-853b-b0423c3c92e5",
+ InitializationCell->True],
+Cell[25894, 832, 327, 8, 44, "Input",ExpressionUUID->"e76bbbe4-b7b9-7943-a865-56d978113b2a",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[26270, 846, 156, 2, 67, "Section",ExpressionUUID->"f9f36b1f-1a01-1145-94d5-11a8cd20d473",
+ InitializationCell->True],
+Cell[26429, 850, 367, 7, 58, "Text",ExpressionUUID->"a525b315-a736-ec46-b9a3-5e0446fed600",
+ InitializationCell->True],
+Cell[26799, 859, 1549, 47, 83, "Input",ExpressionUUID->"490ee7c8-abf6-8345-b21a-8f90bb496279",
+ InitializationCell->True],
+Cell[28351, 908, 1023, 30, 64, "Input",ExpressionUUID->"d70c53ca-f827-ee48-abe1-36bc24796677",
+ InitializationCell->True],
+Cell[29377, 940, 469, 11, 83, "Input",ExpressionUUID->"33e132b3-db60-064d-889f-ee4c042c8b02",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[29883, 956, 123, 2, 67, "Section",ExpressionUUID->"ab235622-cec6-b24e-bc8b-67986e22b455",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[30031, 962, 142, 2, 54, "Subsection",ExpressionUUID->"53bc2873-e3a9-a64f-8ad3-28b2156e16c9",
+ InitializationCell->True],
+Cell[30176, 966, 154, 3, 50, "Code",ExpressionUUID->"14a77183-faa5-974b-97de-14c62c2b7d6e"],
+Cell[30333, 971, 490, 15, 44, "Input",ExpressionUUID->"6085c3d0-8b5c-b048-8c15-51c23460dd37",
+ InitializationCell->True],
+Cell[30826, 988, 304, 8, 44, "Input",ExpressionUUID->"25baa5af-8a9e-0441-8f4c-c0bb3ba57fe2",
+ InitializationCell->True],
+Cell[31133, 998, 358, 10, 64, "Input",ExpressionUUID->"aa83f0f7-ef4d-4b46-b092-22cc71591962",
+ InitializationCell->True],
+Cell[31494, 1010, 342, 9, 44, "Input",ExpressionUUID->"63000771-e0a9-a048-b574-d0453e3d313a",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[31873, 1024, 129, 2, 54, "Subsection",ExpressionUUID->"99be24c3-1362-e044-9b5b-3ae51b679659",
+ InitializationCell->True],
+Cell[32005, 1028, 378, 11, 44, "Input",ExpressionUUID->"63ab5ed7-fad6-c74f-b385-6f5f82e83ea6",
+ InitializationCell->True],
+Cell[32386, 1041, 404, 11, 68, "Code",ExpressionUUID->"cc0ab1de-7ee9-b740-a91c-d45d60aaef3e"],
+Cell[32793, 1054, 414, 11, 44, "Input",ExpressionUUID->"376bb3e3-7343-2d42-8d6c-7990178395b5",
+ InitializationCell->True],
+Cell[33210, 1067, 306, 8, 44, "Input",ExpressionUUID->"f3885a3d-c058-1246-b340-e355c79909b9",
+ InitializationCell->True],
+Cell[33519, 1077, 340, 9, 44, "Input",ExpressionUUID->"a944a303-02de-b141-9408-c314ba37a366",
+ InitializationCell->True],
+Cell[33862, 1088, 230, 4, 68, "Code",ExpressionUUID->"cbfbadb6-6c16-7341-9672-8df9b8ccebdf"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[34129, 1097, 133, 2, 54, "Subsection",ExpressionUUID->"7bff2cd8-c34d-dd4e-86a0-f03c38c9057f",
+ InitializationCell->True],
+Cell[34265, 1101, 316, 8, 50, "Code",ExpressionUUID->"e51c0dad-1ed4-a94d-8e29-a1c092f5587b"],
+Cell[34584, 1111, 290, 8, 44, "Input",ExpressionUUID->"5a1726fc-ed2d-5745-a17b-2dd8b1494a4c",
+ InitializationCell->True],
+Cell[34877, 1121, 304, 8, 44, "Input",ExpressionUUID->"41af082f-a99a-3f49-8fb2-3f3bd1f0e347",
+ InitializationCell->True],
+Cell[35184, 1131, 287, 8, 44, "Input",ExpressionUUID->"048051e5-3a22-cc45-90ff-ef984b979095",
+ InitializationCell->True],
+Cell[35474, 1141, 242, 7, 44, "Input",ExpressionUUID->"a62f8115-d2ee-5648-bccb-a7d95da30557",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[35753, 1153, 170, 3, 54, "Subsection",ExpressionUUID->"26c6c234-ec3d-3f4c-8eaa-0b869543aa31",
+ InitializationCell->True],
+Cell[35926, 1158, 157, 2, 35, "Text",ExpressionUUID->"0115f425-42c4-7f40-ad95-e4a067ad1d8d",
+ InitializationCell->True],
+Cell[36086, 1162, 251, 5, 44, "Input",ExpressionUUID->"c257faae-af6e-e742-aaf5-03a4f7900c93",
+ InitializationCell->True],
+Cell[36340, 1169, 616, 18, 44, "Input",ExpressionUUID->"a79a502c-8d10-9a45-b38f-b2846b586daf",
+ InitializationCell->True],
+Cell[36959, 1189, 789, 24, 64, "Input",ExpressionUUID->"46f1be17-fa8f-9a4c-85a2-7b71dfd53fb1",
+ InitializationCell->True],
+Cell[37751, 1215, 3532, 74, 654, "Input",ExpressionUUID->"b27567a9-b9e2-2c43-b966-26a567a8b983",
+ InitializationCell->True],
+Cell[41286, 1291, 256, 6, 44, "Input",ExpressionUUID->"abdb1d60-e535-594a-8af7-bbde180b55ec",
+ InitializationCell->True],
+Cell[41545, 1299, 193, 4, 44, "Input",ExpressionUUID->"51ec7546-3950-5f47-9b38-afb338eb7667",
+ InitializationCell->True],
+Cell[41741, 1305, 175, 3, 28, "Input",ExpressionUUID->"4e8571d2-db9c-1048-a38b-6c900fd0af1a"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[41965, 1314, 132, 2, 67, "Section",ExpressionUUID->"ae9e06ad-ed09-d047-9d4a-0ac77120c703",
+ InitializationCell->True],
+Cell[42100, 1318, 199, 5, 35, "Text",ExpressionUUID->"0ab6a15f-e841-274f-bf91-093582e8e232",
+ InitializationCell->True],
+Cell[42302, 1325, 138, 2, 35, "Code",ExpressionUUID->"da636fda-92ce-af45-8466-36be3e294fab"],
+Cell[CellGroupData[{
+Cell[42465, 1331, 154, 2, 54, "Subsection",ExpressionUUID->"aa1d3071-1214-2e4d-ab82-7e391f8e2e4a",
+ InitializationCell->True],
+Cell[42622, 1335, 767, 21, 74, "Input",ExpressionUUID->"c76846b1-80cf-8847-b01d-f0f77556a23c",
+ InitializationCell->True],
+Cell[43392, 1358, 875, 25, 74, "Input",ExpressionUUID->"34e49f1e-16f7-5c41-8a25-415c97cce0ed",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[44304, 1388, 154, 2, 54, "Subsection",ExpressionUUID->"79259f4f-4d32-f345-a454-d7d3d4be3f90",
+ InitializationCell->True],
+Cell[44461, 1392, 176, 4, 35, "Text",ExpressionUUID->"e06be337-93c8-9d49-b242-20de8809a543",
+ InitializationCell->True],
+Cell[44640, 1398, 355, 10, 35, "Input",ExpressionUUID->"f0b1484c-5028-db4c-877f-da1e30c8597f",
+ InitializationCell->True],
+Cell[44998, 1410, 510, 16, 35, "Input",ExpressionUUID->"541c2c06-5abb-1048-843c-ede965700c4a",
+ InitializationCell->True],
+Cell[45511, 1428, 176, 4, 35, "Text",ExpressionUUID->"c4245ac0-ff21-1743-b5bc-b0a76c4d1098",
+ InitializationCell->True],
+Cell[45690, 1434, 224, 6, 35, "Input",ExpressionUUID->"53909e00-63cf-b54c-9e8c-fe74930af12e",
+ InitializationCell->True],
+Cell[45917, 1442, 535, 17, 35, "Input",ExpressionUUID->"60e77f6b-922e-9942-8a12-d6615c55fff7",
+ InitializationCell->True],
+Cell[46455, 1461, 685, 23, 35, "Input",ExpressionUUID->"26a82d2f-17a9-5642-a543-f34dad7ef86e",
+ InitializationCell->True],
+Cell[47143, 1486, 535, 17, 35, "Input",ExpressionUUID->"88fa3ea0-c8cf-604a-a2dc-30c88125169c",
+ InitializationCell->True],
+Cell[47681, 1505, 152, 2, 35, "Text",ExpressionUUID->"0202ee78-d18d-ad4c-91cd-10e080e62238",
+ InitializationCell->True],
+Cell[47836, 1509, 611, 20, 35, "Input",ExpressionUUID->"a7755764-1d78-8049-9f7f-2efa6ce00a7f",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[48484, 1534, 145, 2, 54, "Subsection",ExpressionUUID->"d6f67a80-4f45-d245-905f-096f6991d858",
+ InitializationCell->True],
+Cell[48632, 1538, 157, 2, 35, "Text",ExpressionUUID->"9f5de620-32d1-ec4d-9919-8cdc203304f6",
+ InitializationCell->True],
+Cell[48792, 1542, 510, 16, 35, "Input",ExpressionUUID->"b85e19ad-5728-cc4c-a0de-3d889f1d5f13",
+ InitializationCell->True],
+Cell[49305, 1560, 195, 5, 35, "Text",ExpressionUUID->"38fd5c12-d179-b14c-a250-c0a24b6e5da3",
+ InitializationCell->True],
+Cell[49503, 1567, 174, 4, 35, "Input",ExpressionUUID->"0fb48d81-c364-ef42-a791-282d69d0bfa3",
+ InitializationCell->True],
+Cell[49680, 1573, 428, 14, 35, "Input",ExpressionUUID->"de7bb791-e89c-e74e-b1d4-4951ec0e921d",
+ InitializationCell->True],
+Cell[50111, 1589, 480, 16, 35, "Input",ExpressionUUID->"701557aa-8e1d-5544-8dc0-5dee7a9c7d36",
+ InitializationCell->True],
+Cell[50594, 1607, 611, 20, 35, "Input",ExpressionUUID->"7c667b98-1488-d847-8b07-e4bb8d5fdcf3",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[51242, 1632, 161, 2, 54, "Subsection",ExpressionUUID->"7ee0ec84-9986-ed4c-ac61-bcb4053b45e4",
+ InitializationCell->True],
+Cell[51406, 1636, 446, 14, 35, "Input",ExpressionUUID->"07c41a30-13fd-2f45-8d26-11f2c3d130bf",
+ InitializationCell->True],
+Cell[51855, 1652, 182, 4, 35, "Input",ExpressionUUID->"cbba9454-a347-fa45-9e3c-00599826d5de",
+ InitializationCell->True],
+Cell[52040, 1658, 571, 18, 35, "Input",ExpressionUUID->"38810371-54e0-0747-a0f9-e337f0e10e1d",
+ InitializationCell->True],
+Cell[52614, 1678, 294, 8, 35, "Input",ExpressionUUID->"ab649ece-3a0d-ac41-a32f-6e3fe85ecca5",
+ InitializationCell->True],
+Cell[52911, 1688, 1189, 34, 55, "Input",ExpressionUUID->"f5a6e4b4-a1c4-4642-a8eb-54e896c9c3d4",
+ InitializationCell->True],
+Cell[54103, 1724, 619, 20, 35, "Input",ExpressionUUID->"0aeee4f5-d960-754d-8f4d-265279ccbdb5",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[54759, 1749, 161, 2, 54, "Subsection",ExpressionUUID->"d8dffe07-5bc5-be4e-a6f3-8cd3b1a47ca4",
+ InitializationCell->True],
+Cell[54923, 1753, 208, 5, 35, "Text",ExpressionUUID->"b47cef27-80db-7644-be24-df7e0e67bcfa",
+ InitializationCell->True],
+Cell[55134, 1760, 532, 16, 55, "Input",ExpressionUUID->"fe55c80e-78eb-124c-b96d-ecfa074aa69e",
+ InitializationCell->True],
+Cell[55669, 1778, 1333, 39, 74, "Input",ExpressionUUID->"835e0774-1073-df48-8e72-73c48fbe14ba",
+ InitializationCell->True],
+Cell[57005, 1819, 293, 8, 35, "Input",ExpressionUUID->"3c7becad-7eb8-de46-8fa0-be67919faf04",
+ InitializationCell->True],
+Cell[57301, 1829, 646, 20, 35, "Input",ExpressionUUID->"0cd50ebf-8491-ea4e-aac0-2c0fb5c1b574",
+ InitializationCell->True],
+Cell[57950, 1851, 412, 13, 35, "Input",ExpressionUUID->"28849bdc-304b-264c-9571-cec9dd6d2b27",
+ InitializationCell->True],
+Cell[58365, 1866, 646, 20, 35, "Input",ExpressionUUID->"40131767-2b45-8e46-a257-7ea4e41ccb59",
+ InitializationCell->True],
+Cell[59014, 1888, 412, 13, 35, "Input",ExpressionUUID->"fa1062fc-1412-cc41-96ab-66c39bf87e0b",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[59463, 1906, 145, 2, 54, "Subsection",ExpressionUUID->"d1fee646-7199-de45-a894-fb24f1f51983",
+ InitializationCell->True],
+Cell[59611, 1910, 174, 4, 35, "Input",ExpressionUUID->"72ec9e6d-3d00-c34e-a754-f15b9218a882",
+ InitializationCell->True],
+Cell[59788, 1916, 508, 16, 35, "Input",ExpressionUUID->"b7c463d1-13d5-4f4d-9a1a-ae8e548860b8",
+ InitializationCell->True],
+Cell[60299, 1934, 404, 13, 35, "Input",ExpressionUUID->"a8ff0573-bb06-ba43-9c02-eb96ca2ed164",
+ InitializationCell->True]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[60752, 1953, 104, 0, 53, "Section",ExpressionUUID->"40664604-e269-f947-80de-0dc518c173ac"],
+Cell[CellGroupData[{
+Cell[60881, 1957, 144, 2, 54, "Subsection",ExpressionUUID->"b7abe40b-4aa4-1c4e-97db-131487287f53",
+ InitializationCell->True],
+Cell[61028, 1961, 148, 2, 50, "Code",ExpressionUUID->"a7af413b-fc90-1746-8693-3000b8edadff"],
+Cell[61179, 1965, 420, 11, 64, "Input",ExpressionUUID->"5aaa7e3e-a404-0048-9585-a4ebf7343a8b",
+ InitializationCell->True],
+Cell[61602, 1978, 365, 8, 44, "Input",ExpressionUUID->"4dcffd9e-c24a-ec4f-b5c3-3796a8c6d52b",
+ InitializationCell->True],
+Cell[61970, 1988, 877, 18, 121, "Input",ExpressionUUID->"264f5c28-c92e-d940-be8a-5fd5566bddeb",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[62884, 2011, 130, 2, 54, "Subsection",ExpressionUUID->"d69ba30d-7ddf-f44c-a442-63ec06412775",
+ InitializationCell->True],
+Cell[63017, 2015, 169, 3, 50, "Code",ExpressionUUID->"c83d54a1-5ff3-3b4f-9cc8-002d327f6ecc"],
+Cell[63189, 2020, 460, 12, 68, "Code",ExpressionUUID->"8341111f-cd6d-044a-b658-1809a18a7401"],
+Cell[63652, 2034, 850, 21, 121, "Input",ExpressionUUID->"4acdaa2f-d859-f148-ac04-bdaa0e4c6bfd",
+ InitializationCell->True],
+Cell[64505, 2057, 164, 3, 50, "Code",ExpressionUUID->"cf04c46c-afeb-2e40-a8a3-d178ad7a9443"],
+Cell[64672, 2062, 167, 3, 50, "Code",ExpressionUUID->"0cf34c81-cb1a-1944-b1f7-8399de9ce548"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[64876, 2070, 150, 2, 54, "Subsection",ExpressionUUID->"acb060a7-ae75-804d-94df-f01122bd9f1d",
+ InitializationCell->True],
+Cell[65029, 2074, 148, 2, 50, "Code",ExpressionUUID->"eae79e9d-6fa2-3f4c-9492-c06d0fe58633"],
+Cell[65180, 2078, 905, 28, 83, "Input",ExpressionUUID->"5f903881-a45b-e344-a43f-4c7931fa2647",
+ InitializationCell->True],
+Cell[66088, 2108, 520, 12, 83, "Input",ExpressionUUID->"e8e1e751-a185-494c-9b41-90200b5e4a17",
+ InitializationCell->True],
+Cell[66611, 2122, 243, 6, 44, "Input",ExpressionUUID->"65677138-63a8-3a49-a2af-7e197ab685cf",
+ InitializationCell->True],
+Cell[66857, 2130, 1414, 39, 121, "Input",ExpressionUUID->"b4e99d73-8b7a-3a49-816e-4bfcd71797e0",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[68308, 2174, 95, 0, 54, "Subsection",ExpressionUUID->"5d0e2570-1ce9-a543-8378-229212e14422"],
+Cell[68406, 2176, 131, 1, 50, "Code",ExpressionUUID->"b2da777e-3417-d042-ac59-ea0633e688d6"],
+Cell[68540, 2179, 556, 14, 50, "Code",ExpressionUUID->"71bb84cf-2211-b044-a20c-aa236f4e57a8"],
+Cell[69099, 2195, 154, 3, 50, "Code",ExpressionUUID->"3b3fa465-36d5-f345-9281-5e9dbc2556d9"],
+Cell[69256, 2200, 106, 1, 50, "Code",ExpressionUUID->"beee8903-3441-3b45-92fa-3d7189c779fb"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+

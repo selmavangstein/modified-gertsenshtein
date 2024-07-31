@@ -1,3 +1,5 @@
+(* ::Package:: *)
+
 (*===================*)
 (*  Parallelisation  *)
 (*===================*)
@@ -11,11 +13,13 @@ Comment@"Loading packages, if not loaded already...";
 Off@ValidateSymbol::used;
 <<xAct`xTensor`;
 <<xAct`xTras`;
+<<xAct`xCoba`;
 On@ValidateSymbol::used;
 Comment@"Using ParallelNeeds...";
 ParallelNeeds["xAct`xPlain`"];
 ParallelNeeds["xAct`xTensor`"];
 ParallelNeeds["xAct`xTras`"];
+ParallelNeeds["xAct`xCoba`"];
 $DefInfoQ=False;
 Unprotect@AutomaticRules;
 Options[AutomaticRules]={Verbose->False};

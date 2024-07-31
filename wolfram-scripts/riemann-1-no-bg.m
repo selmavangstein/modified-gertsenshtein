@@ -400,7 +400,7 @@ epsilonmetric~AutomaticRules~MakeRule[{epsilonmetric[{0,cartesian},{1,cartesian}
 epsilonmetric~AutomaticRules~MakeRule[{epsilonmetric[{0,-cartesian},{1,-cartesian},{2,-cartesian},{3,-cartesian}],1},MetricOn->All,ContractMetrics->True]
 
 
-(* ::Subsection::Initialization::Closed:: *)
+(* ::Subsection::Initialization:: *)
 (*(*(*(*\[ScriptH]:*)*)*)*)
 
 
@@ -444,7 +444,7 @@ ComponentValue[H[{1,-cartesian},{2,-cartesian}],h2[t[],z[]]]
 ChangeComponents[H[{a,cartesian},{b,cartesian}],H[-{a,cartesian},-{b,cartesian}]];
 
 
-(* ::Subsection::Initialization::Closed:: *)
+(* ::Subsection::Initialization:: *)
 (*(*(*(*F:*)*)*)*)
 
 
@@ -476,7 +476,7 @@ F[-{a,cartesian},-{b,cartesian}]//ComponentArray//ToValues//MatrixForm
 ChangeComponents[F[{a,cartesian},{b,cartesian}],F[-{a,cartesian},-{b,cartesian}]];
 
 
-(* ::Subsection::Initialization::Closed:: *)
+(* ::Subsection::Initialization:: *)
 (*(*(*(*\[ScriptCapitalF]:*)*)*)*)
 
 
@@ -504,7 +504,7 @@ ComponentValue[ComponentArray[pertF[{0,-cartesian},-{a,cartesian}]],{0,\[ScriptC
 ChangeComponents[pertF[{a,cartesian},{b,cartesian}],pertF[-{a,cartesian},-{b,cartesian}]];
 
 
-(* ::Subsection::Initialization::Closed:: *)
+(* ::Subsection::Initialization:: *)
 (*(*(*(*\[ScriptCapitalT]:*)*)*)*)
 
 
@@ -571,7 +571,7 @@ torsionC=ApplyParallel[torsionC,{funcChristCartZero,ToBasis[cartesian],funcChris
 torsionC//MatrixForm
 
 
-(* ::Subsection::Initialization:: *)
+(* ::Subsection::Initialization::Closed:: *)
 (*(*(*(*Evaluating Einstein*)*)*)*)
 
 
