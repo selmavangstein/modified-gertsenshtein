@@ -1,5 +1,7 @@
 (* ::Package:: *)
 
+$ThisDirectory=If[NotebookDirectory[]==$Failed,Directory[],NotebookDirectory[],NotebookDirectory[]];
+
 (* ::Title:: *)
 (*The Gertsenshtein Effect*)
 
@@ -48,9 +50,7 @@ SetOptions[ContractMetric,AllowUpperDerivatives->True];
 
 (* ::Input::Initialization:: *)
 Comment@"getting parallelization";
-directory=DirectoryName[$InputFileName];
-Get@FileNameJoin@{directory,"Parallelisation.m"};
-
+Get@FileNameJoin@{$ThisDirectory,"Parallelisation.m"};
 
 (* ::Subsection:: *)
 (*Manifold, basis, metric*)
@@ -672,7 +672,7 @@ maxwellExpr=ApplyParallel[maxwellCurl,{ContractMetric,TraceBasisDummy,TraceBasis
 Comment@"Saving results..."
 
 
-DumpSave[FileNameJoin[{directory,"results/erf-no-bg-results.mx"}],{\[ScriptCapitalL],maxwellCurl,maxwellC,maxwellField,maxwellExpr,einsteinField,einsteinExpr,torsionField,torsionExpr}]
+DumpSave[FileNameJoin[{$ThisDirectory,"results/erf-no-bg-results.mx"}],{\[ScriptCapitalL],maxwellCurl,maxwellC,maxwellField,maxwellExpr,einsteinField,einsteinExpr,torsionField,torsionExpr}]
 
 
 Comment@"Goodbye and thanks for all the fish"
