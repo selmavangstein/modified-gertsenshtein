@@ -4,26 +4,48 @@
 (*  EvaluateLagrangianBG  *)
 (*=====================*)
 
-EvaluateLagrangianBG[Lagrangian_,resultsFileName_]:=Module[{lagrangian=Lagrangian,linearizedAction,FtoA,AtoF,funcAtoF,toH,funcToH,
+
+(*stuff from gert*)
+Print@"Stuff from gert";
+Get@FileNameJoin@{$ThisDirectory,"Parallelisation.m"};
+
+Comment@"Setup of manifold, metric, defining tensors";
+Print@"Setup of manifold, metric, defining tensors";
+DefManifold[M,4,IndexRange[{a,s}]]; 
+DefMetric[-1,metric[-a,-b],CD,PrintAs->"g",SymCovDQ->True];
+DefCovD[CDT[-a],Torsion->True, SymbolOfCovD->{"#","D"},FromMetric->metric];
+
+Print["Chart and basis on chart"];
+DefChart[cartesian,M,{0,1,2,3},{t[],x[],y[],z[]}];
+MetricInBasis[metric, -cartesian,{1,-1,-1,-1}];
+MetricCompute[metric,cartesian, All];
+
+bgRules = SymmetricSpaceRules[CD,0];
+SetOptions[ToBackground,BackgroundSolution->bgRules];
+
+DefTensor[A[-a], M];
+DefTensor[F[-a,-b],M,Antisymmetric[{-a,-b}]];
+DefTensor[H[-a,-b],M,Symmetric[{-a,-b}],PrintAs->"\[ScriptH]"];
+DefTensor[pertA[-a],M,PrintAs->"\[ScriptCapitalA]"];
+DefTensor[pertF[-a,-b],M, Antisymmetric[{-a,-b}], PrintAs->"\[ScriptCapitalF]"];
+DefTensor[pertT[a,-b,-c],M, Antisymmetric[{-b,-c}], PrintAs->"\[ScriptCapitalT]"];
+
+Comment@"Ready for use";
+Print@"Ready for use";
+(*stuff from gert over*)
+
+EvaluateLagrangianBG[Lagrangian_,resultsFileName_]:=Module[{lagrangian=Lagrangian,FtoA,AtoF,funcAtoF,toH,funcToH,
 	topertA,funcToPertA,topertT,funcToPertT,pertFtoA,pertAtoF,funcPertAtoF,TtoVec,funcTtoVec,lorentz,commuteCD,
-		funcLorentz,funcCD,torsionField,maxwellField,einsteinField,ToOrderH,ToOrderCDH,DeleteFirstOrderPart,zeroValues,
-		pertTtoVec,funcPertTtoVec,funcChristCartZero,torsionC,einsteinC,maxwellC,maxwellCurl,
-		 torsionExpr, einsteinExpr, maxwellExpr},
+		funcLorentz,funcCD,ToOrderH,ToOrderCDH,DeleteFirstOrderPart,zeroValues,
+		pertTtoVec,funcPertTtoVec,funcChristCartZero,torsionC,einsteinC,maxwellC,maxwellCurl},
 Comment@"Takes lagrangian, calculates field equations and evaluates the component equations with a constant torsion
-	 background";
-Print@"Takes lagrangian, calculates field equations and evaluates the component equations with a constant torsion
 	 background";
 Comment@"Everything is stashed together for now, will split up for readability later";
 
-Get@FileNameJoin@{$ThisDirectory,"Parallelisation.m"};
-
-Comment@"Defining tensor relationships - can this be a separate file?";
-Comment@"Will - if I do this in a separate file, do I have to do something for these to be defined in this file as well?";
+Comment@"Defining tensor relationships";
 Print@"Defining tensor relationships";
 (*\[Epsilon]:*)
-Print@"epsilon 1";
 epsilonmetric~AutomaticRules~MakeRule[{epsilonmetric[{0,cartesian},{1,cartesian},{2,cartesian},{3,cartesian}],1},MetricOn->All,ContractMetrics->True];
-Print@"epsilon 2";
 epsilonmetric~AutomaticRules~MakeRule[{epsilonmetric[{0,-cartesian},{1,-cartesian},{2,-cartesian},{3,-cartesian}],1},MetricOn->All,ContractMetrics->True];
 
 Print@"making rules";
@@ -85,23 +107,12 @@ expr];
 Comment@"Starting to manipulate the lagrangian";
 Print@"Starting to manipulate the lagrangian";
 lagrangian=lagrangian/.FtoA;
-Print@"initial lagrangian";
-Print@lagrangian;
 
 Comment@"Writing the lagrangian in terms of the torsion tensor";
 Print@"Writing the lagrangian in terms of the torsion tensor";
 lagrangian=ChangeCovD[lagrangian,CDT,CD]//ToCanonical//ContractMetric//ScreenDollarIndices//CollectTensors;
-Print@"ChangeCovD";
-Print@lagrangian;
-lagrangian=ChangeCurvature[lagrangian,CDT,CD];
-lagrangian//=ChristoffelToGradMetric;
-lagrangian//=ContractMetric;
-lagrangian//=ToCanonical;
-lagrangian//=ScreenDollarIndices;
-Print["Written in terms of torsion:"];
-Print[lagrangian];
-
-
+lagrangian=ChangeCurvature[lagrangian,CDT,CD]//ScreenDollarIndices;
+lagrangian//=ChristoffelToGradMetric//ContractMetric//ToCanonical//ScreenDollarIndices;
 
 Comment@"Expanding and linearizing the lagrangian";
 Print@"Expanding and linearizing the lagrangian";
@@ -116,17 +127,11 @@ linearizedAction = linearizedAction/.Sqrt[-Detmetric[]]->1;
 linearizedAction//=ToCanonical;
 linearizedAction//=ContractMetric;
 linearizedAction//=ScreenDollarIndices;
-Print["Expanded and linearized:"];
-Print[lagrangian];
-
-
 
 Comment@"Imposing background torsion";
 Print@"Imposing background torsion";
 linearizedAction//=Expand;
 linearizedAction=ApplyParallel[linearizedAction,{funcTtoVec,ToCanonical,ContractMetric}];
-Print["Imposed bg torsion:"];
-Print[lagrangian];
 
 Comment@"Adding in traceless \[ScriptH] and Lorentz gauge";
 Print@"Adding in traceless \[ScriptH] and Lorentz gauge";
@@ -149,21 +154,12 @@ linearizedAction=linearizedAction//funcLorentz//funcCD//BreakScalars;
 linearizedAction//=Expand;
 Print["Final linearized action:"];
 Print[linearizedAction];
-Quit[];
-
-
-
-
-
-
-
-
 
 Comment@"Calculating torsion field equations";
 Print@"Calculating torsion field equations";
 torsionField=ApplyParallel[linearizedAction, {VarD[pertT[k,-l,-m],CDT]}];
 torsionField//=Expand;
-torsionField=ApplyParallel[linearizedAction, {ToCanonical,ContractMetric}];
+torsionField=ApplyParallel[torsionField, {ToCanonical,ContractMetric}];
 torsionField=ChangeCovD[torsionField,CDT,CD]//ChristoffelToGradMetric//ToCanonical//ContractMetric//ScreenDollarIndices;
 torsionField//=Expand;
 torsionField=ApplyParallel[torsionField,{funcLorentz,funcCD,funcTtoVec}];
@@ -172,7 +168,7 @@ Comment@"Calculating einstein field equations";
 Print@"Calculating einstein field equations";
 einsteinField=ApplyParallel[linearizedAction, {VarD[H[r,s],CDT]}];
 Print@"VarD done, toCanonical next";
-einsteinField=ApplyParallel[linearizedAction, {ToCanonical,ContractMetric,ScreenDollarIndices}];
+einsteinField=ApplyParallel[einsteinField, {ToCanonical,ContractMetric,ScreenDollarIndices}];
 einsteinField//=Expand;
 einsteinField=ApplyParallel[einsteinField,{funcPertAtoF}];
 einsteinField=ChangeCovD[einsteinField,CDT,CD]//ChristoffelToGradMetric//ContractMetric;
@@ -234,10 +230,12 @@ torsionField//=Expand;
 einsteinField=ApplyParallel[einsteinField,{DeleteFirstOrderPart}];
 maxwellField=ApplyParallel[maxwellField,{DeleteFirstOrderPart}];
 torsionField=ApplyParallel[torsionField,{DeleteFirstOrderPart}];
-
-Print@"Will be doing coord stuff but quitting now";
-Quit[];
-
+Print@"maxwell";
+Print@maxwellField;
+Print@"einstein";
+Print@einsteinField;
+Print@"torsion";
+Print@torsionField;
 
 Comment@"Setting chart and all components";
 (*\[ScriptH]:*)
@@ -283,19 +281,27 @@ AllComponentValues[Q[-{a,cartesian}],{q0,0,0,0}];
 ChangeComponents[Q[{a,cartesian}],Q[-{a,cartesian}]];
 
 Comment@"Evaluating torsion component eqs...";
+Print@"Evaluating torsion component eqs...";
 funcChristCartZero[expr_]:=expr/.ChristoffelCDPDcartesian->Zero;
 torsionField//=Expand;
 torsionC=ApplyParallel[torsionField,{funcPertTtoVec,funcTtoVec,ToBasis[cartesian]}];
 torsionC//Expand;
 torsionExpr=ApplyParallel[torsionC,{funcChristCartZero,ToBasis[cartesian],funcChristCartZero,ToBasis[cartesian],funcChristCartZero,TraceBasisDummy,TraceBasisDummy,ComponentArray,ToValues,ToValues,ToValues,ToCanonical,SeparateMetric[metric],ToBasis[cartesian],ToBasis[cartesian],TraceBasisDummy,TraceBasisDummy,ToCanonical,ToValues}];
+Print@"torsionExpr";
+Print@torsionExpr;
+
 
 Comment["Evaluating Einstein component eqs..."];
+Print["Evaluating Einstein component eqs..."];
 einsteinField//=Expand;
 einsteinC=ApplyParallel[einsteinField,{funcPertTtoVec,funcTtoVec,funcPertAtoF, SeparateMetric[metric],ToCanonical,ToBasis[cartesian]}];
 einsteinC//=Expand;
 einsteinExpr=ApplyParallel[einsteinC, {funcChristCartZero,ToBasis[cartesian],funcChristCartZero,ToBasis[cartesian],funcChristCartZero,TraceBasisDummy,TraceBasisDummy,TraceBasisDummy,ComponentArray,ToValues,ToValues,ToValues,ToCanonical}];
+Print@"einsteinExpr";
+Print@einsteinExpr;
 
 Comment@"Evaluating Maxwell component eqs";
+Print@"Evaluating Maxwell component eqs";
 DefTensor[u[a],M];
 u~AutomaticRules ~MakeRule[{u[a]u[-a],1},MetricOn->All,ContractMetrics->True];
 AllComponentValues[u[-{a,cartesian}],{1,0,0,0}];
@@ -305,8 +311,14 @@ maxwellC=maxwellC/.ChristoffelCDPDcartesian->Zero;
 maxwellCurl=u[-{l,cartesian}]epsilonmetric[{l,cartesian},{i,cartesian},{f,cartesian},{k,cartesian}]CD[-{i,cartesian}][maxwellC];
 maxwellCurl//=Expand;
 maxwellExpr=ApplyParallel[maxwellCurl,{ContractMetric,TraceBasisDummy,TraceBasisDummy,ComponentArray,ToValues,ToValues,ToCanonical,SeparateMetric[metric],ToBasis[cartesian],ToBasis[cartesian],TraceBasisDummy,TraceBasisDummy,ToCanonical,ToValues}];
+Print@"maxwellExpr";
+Print@maxwellExpr;
+
 
 Comment@"Saving results...";
-DumpSave[FileNameJoin[{$ThisDirectory,"results",resultsFileName<>".mx"}],{\[ScriptCapitalL],maxwellCurl,maxwellC,maxwellField,maxwellExpr,einsteinField,einsteinExpr,torsionField,torsionExpr}];
+Print@"Saving results...";
+DumpSave[FileNameJoin[{$ThisDirectory,"results",resultsFileName<>".mx"}],{linearizedAction,maxwellField,maxwellExpr,einsteinField,einsteinExpr,torsionField,torsionExpr}];
 Comment@"Goodbye and thanks for all the fish";
+Print@"Goodbye and thanks for all the fish";
+{lagrangian,maxwellField,resultMaxwell,einsteinField,resultEinstein,torsionField,resultTorsion}
 ]

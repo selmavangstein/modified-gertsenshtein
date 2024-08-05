@@ -33,9 +33,6 @@ $ThisDirectory=If[NotebookDirectory[]==$Failed,Directory[],NotebookDirectory[],N
 <<xAct`xPlain`
 
 
-Title@"Welcome to the SANDBOX"
-
-
 (* ::Text::Initialization:: *)
 (*(*(*(*(*(*(*(*(*(*(*Some convenient settings*)*)*)*)*)*)*)*)*)*)*)
 
@@ -185,7 +182,7 @@ funcToPertT[expr_]:=expr/.topertT;
 (*(*(*(*(*(*(*(*(*(*Note that both of these get rid of perturbations of second order and higher. They do that in the paper as well.*)*)*)*)*)*)*)*)*)*)
 
 
-(* ::Subsection::Initialization::Closed:: *)
+(* ::Subsection::Initialization:: *)
 (*(*(*(*(*(*(*(*(*(*Between \[ScriptCapitalA] and \[ScriptCapitalF]*)*)*)*)*)*)*)*)*)*)
 
 
@@ -319,7 +316,8 @@ funcCD[expr_]:=expr/.commuteCD;
 
 (* ::Input::Initialization:: *)
 linearizedAction=linearizedAction/.commuteCD/.lorentz//ToCanonical//CollectTensors;
-Quit[]
+Print["Final linearized action:"];
+Print[linearizedAction];
 
 
 (* ::Section::Initialization:: *)
@@ -335,6 +333,7 @@ Comment@"Calculating torsion field equations"
 
 (* ::Input::Initialization:: *)
 torsionField=ApplyParallel[linearizedAction, {VarD[pertT[k,-l,-m],CDT]}];
+torsionField//=Expand;
 torsionField=ApplyParallel[torsionField, {ToCanonical,ContractMetric}];
 
 
@@ -343,6 +342,7 @@ torsionField=ChangeCovD[torsionField,CDT,CD]//ChristoffelToGradMetric;
 
 
 (* ::Input::Initialization:: *)
+torsionField//=Expand;
 torsionField=ApplyParallel[torsionField,{funcLorentz,funcCD,funcTtoVec,ToCanonical,ContractMetric}];
 
 
@@ -460,6 +460,15 @@ maxwellField=ApplyParallel[maxwellField,{DeleteFirstOrderPart}];
 
 (* ::Input::Initialization:: *)
 torsionField=ApplyParallel[torsionField,{DeleteFirstOrderPart}];
+
+
+Print@"maxwell";
+Print@maxwellField;
+Print@"einstein";
+Print@einsteinField;
+Print@"torsion";
+Print@torsionField;
+Quit[];
 
 
 (* ::Section::Initialization:: *)
