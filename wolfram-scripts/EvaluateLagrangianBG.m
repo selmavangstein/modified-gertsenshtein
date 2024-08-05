@@ -9,12 +9,21 @@ Get@FileNameJoin@{$ThisDirectory,"Geometry.m"};
 Get@FileNameJoin@{$ThisDirectory,"DefFields.m"};
 Get@FileNameJoin@{$ThisDirectory,"DefRules.m"};
 Get@FileNameJoin@{$ThisDirectory,"DeleteFirstOrderPart.m"};
+
+
+Expr=D[Sincc[x,y],{x,2},{y,2}];
+Expr//DisplayExpression;
+Expr//=TraditionalForm;
+Expr//DisplayExpression;
+Quit[];
+
 Get@FileNameJoin@{$ThisDirectory,"Components.m"};
 Get@FileNameJoin@{$ThisDirectory,"InitialExpand.m"};
 Get@FileNameJoin@{$ThisDirectory,"FurtherExpand.m"};
 Get@FileNameJoin@{$ThisDirectory,"SimplifyLagrangian.m"};
 Get@FileNameJoin@{$ThisDirectory,"ImposeBackgroundTorsion.m"};
 Get@FileNameJoin@{$ThisDirectory,"SuperChangeCovD.m"};
+Get@FileNameJoin@{$ThisDirectory,"ParallelExpand.m"};
 
 EvaluateLagrangianBG[Lagrangian_,resultsFileName_]:=Module[{lagrangian=Lagrangian,torsionC,einsteinC,maxwellC,maxwellCurl},
 
@@ -36,13 +45,11 @@ EvaluateLagrangianBG[Lagrangian_,resultsFileName_]:=Module[{lagrangian=Lagrangia
 
 	Comment@"Calculating einstein field equations";
 	einsteinField=ApplyParallel[lagrangian, {VarD[H[r,s],CDT]}];
-	einsteinField//=Expand;
 	einsteinField=ApplyParallel[einsteinField, {ToCanonical,ContractMetric,ScreenDollarIndices}];
 	einsteinField//=Expand;
 	einsteinField=ApplyParallel[einsteinField,{funcPertAtoF}];
 	einsteinField//=Expand;
 	einsteinField//=SuperChangeCovD;
-	einsteinField//=Expand;
 	einsteinField=ApplyParallel[einsteinField, {funcTtoVec,funcPertAtoF}];
 	einsteinField//=Expand;
 	einsteinField=ApplyParallel[einsteinField, {funcLorentz,funcCD}];
@@ -61,28 +68,26 @@ EvaluateLagrangianBG[Lagrangian_,resultsFileName_]:=Module[{lagrangian=Lagrangia
 	maxwellField=ApplyParallel[maxwellField,{DeleteFirstOrderPart}];
 
 	Comment@"Evaluating torsion component eqs...";
-	torsionField//=Expand;
+	torsionField//=ParallelExpand;
 	torsionC=ApplyParallel[torsionField,{funcPertTtoVec,funcTtoVec,ToBasis[cartesian]}];
-	torsionC//=Expand;
+	torsionField//=ParallelExpand;
 	torsionExpr=ApplyParallel[torsionC,{funcChristCartZero,ToBasis[cartesian],funcChristCartZero,ToBasis[cartesian],funcChristCartZero,TraceBasisDummy,TraceBasisDummy,ComponentArray,ToValues,ToValues,ToValues,ToCanonical,SeparateMetric[metric],ToBasis[cartesian],ToBasis[cartesian],TraceBasisDummy,TraceBasisDummy,ToCanonical,ToValues}];
 	torsionExpr//DisplayExpression;
 
 	Comment@"Evaluating Einstein component eqs...";
-	einsteinField//=Expand;
+	einsteinField//=ParallelExpand;
 	einsteinC=ApplyParallel[einsteinField,{funcPertTtoVec,funcTtoVec,funcPertAtoF, SeparateMetric[metric],ToCanonical,ToBasis[cartesian]}];
-	einsteinC//=Expand;
+	einsteinField//=ParallelExpand;
 	einsteinExpr=ApplyParallel[einsteinC, {funcChristCartZero,ToBasis[cartesian],funcChristCartZero,ToBasis[cartesian],funcChristCartZero,TraceBasisDummy,TraceBasisDummy,TraceBasisDummy,ComponentArray,ToValues,ToValues,ToValues,ToCanonical}];
-	einsteinExpr//DisplayExpression;
+	Map[TraditionalForm,einsteinExpr,{2}]//DisplayExpression;
+	Map[TraditionalForm,einsteinExpr,{2}]//Print;
 
 	Comment@"Evaluating Maxwell component eqs";
-	DefTensor[u[a],M];
-	u~AutomaticRules ~MakeRule[{u[a]u[-a],1},MetricOn->All,ContractMetrics->True];
-	AllComponentValues[u[-{a,cartesian}],{1,0,0,0}];
-	maxwellField//=Expand;
+	maxwellField//=ParallelExpand;
 	maxwellC=ApplyParallel[maxwellField,{funcPertTtoVec,funcTtoVec, ToCanonical,ToBasis[cartesian], ToBasis[cartesian]}];
 	maxwellC=maxwellC/.ChristoffelCDPDcartesian->Zero;
 	maxwellCurl=u[-{l,cartesian}]epsilonmetric[{l,cartesian},{i,cartesian},{f,cartesian},{k,cartesian}]CD[-{i,cartesian}][maxwellC];
-	maxwellCurl//=Expand;
+	maxwellCurl=ApplyParallel[maxwellCurl,{Expand}];
 	maxwellExpr=ApplyParallel[maxwellCurl,{ContractMetric,TraceBasisDummy,TraceBasisDummy,ComponentArray,ToValues,ToValues,ToCanonical,SeparateMetric[metric],ToBasis[cartesian],ToBasis[cartesian],TraceBasisDummy,TraceBasisDummy,ToCanonical,ToValues}];
 	maxwellExpr//DisplayExpression;
 

@@ -3,6 +3,7 @@
 (*=================*)
 
 InitialExpand[InputExpr_]:=Module[{lagrangian=InputExpr},
+	Comment@"InitialExpand";
 	lagrangian=lagrangian/.FtoA;
 	lagrangian=ChangeCovD[lagrangian,CDT,CD];
 	lagrangian//=ToCanonical;

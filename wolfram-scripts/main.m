@@ -1,10 +1,12 @@
 (* ::Package:: *)
 
+(*========*)
+(*  main  *)
+(*========*)
+
 $ThisDirectory=If[NotebookDirectory[]==$Failed,Directory[],NotebookDirectory[],NotebookDirectory[]];
 Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg.m"};
 
-
-(*Put your lagrangian here*)
 DefConstantSymbol[\[Kappa]];
 DefConstantSymbol[\[Kappa]4];
 DefConstantSymbol[\[Lambda]];
@@ -14,4 +16,4 @@ resultsFileName="rr4-bg";
 
 resultList=EvaluateLagrangianBG[lagrangian,resultsFileName];
 (*EvaluateLagrangianNoBG[lagrangian,resultsFileName];*)(*-this will be a thing in the future*)
-Quit[]
+Quit[];

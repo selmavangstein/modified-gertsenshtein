@@ -43,3 +43,6 @@ DefConstantSymbol[q0];
 AllComponentValues[Q[-{a,cartesian}],{q0,0,0,0}];
 ChangeComponents[Q[{a,cartesian}],Q[-{a,cartesian}]];
 funcChristCartZero[expr_]:=expr/.ChristoffelCDPDcartesian->Zero;
+DefTensor[u[a],M];
+u~AutomaticRules ~MakeRule[{u[a]u[-a],1},MetricOn->All,ContractMetrics->True];
+AllComponentValues[u[-{a,cartesian}],{1,0,0,0}];

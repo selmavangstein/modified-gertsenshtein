@@ -3,6 +3,7 @@
 (*=================*)
 
 FurtherExpand[InputExpr_]:=Module[{lagrangian=InputExpr},
+	Comment@"FurtherExpand";
 	lagrangian//=NoScalar;
 	lagrangian//=ContractMetric;
 	lagrangian//=ToCanonical;

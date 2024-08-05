@@ -3,7 +3,7 @@
 (*===================*)
 (*  ProcessOperator  *)
 (*===================*)
-Print["In ProcessOperator"];
+
 ProcessOperator::identify="Studying the operator `1` now.";
 
 ProcessOperator[commands_List]:=Module[{Expr},

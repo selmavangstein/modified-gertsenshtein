@@ -3,6 +3,7 @@
 (*===========================*)
 
 ImposeBackgroundTorsion[InputExpr_]:=Module[{linearizedAction=InputExpr},
+	Comment@"ImposeBackgroundTorsion";
 	linearizedAction//=Expand;
 	linearizedAction=ApplyParallel[linearizedAction,{funcTtoVec,ToCanonical,ContractMetric}];
 	linearizedAction//DisplayExpression;
