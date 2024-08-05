@@ -2,6 +2,8 @@
 
 $ThisDirectory=If[NotebookDirectory[]==$Failed,Directory[],NotebookDirectory[],NotebookDirectory[]];
 
+
+
 (* ::Title:: *)
 (*The Gertsenshtein Effect*)
 
@@ -10,12 +12,12 @@ $ThisDirectory=If[NotebookDirectory[]==$Failed,Directory[],NotebookDirectory[],N
 (*Following Palessandro and Rothman 2023*)
 
 
-(* ::Section::Initialization::Closed:: *)
-(*(*(*(*(*(*(*(*(*Setup*)*)*)*)*)*)*)*)*)
+(* ::Section::Initialization:: *)
+(*(*(*(*(*(*(*(*(*(*(*Setup*)*)*)*)*)*)*)*)*)*)*)
 
 
-(* ::Subsection::Initialization::Closed:: *)
-(*(*(*(*(*(*(*(*(*Loading packages*)*)*)*)*)*)*)*)*)
+(* ::Subsection::Initialization:: *)
+(*(*(*(*(*(*(*(*(*(*(*Loading packages*)*)*)*)*)*)*)*)*)*)*)
 
 
 (* ::Input:: *)
@@ -23,7 +25,7 @@ $ThisDirectory=If[NotebookDirectory[]==$Failed,Directory[],NotebookDirectory[],N
 
 
 (* ::Text::Initialization:: *)
-(*(*(*(*(*(*(*(*(*xTras should load all the packages we need*)*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*(*xTras should load all the packages we need*)*)*)*)*)*)*)*)*)*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -35,7 +37,7 @@ Title@"Welcome to the SANDBOX"
 
 
 (* ::Text::Initialization:: *)
-(*(*(*(*(*(*(*(*(*Some convenient settings*)*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*(*Some convenient settings*)*)*)*)*)*)*)*)*)*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -53,7 +55,7 @@ Comment@"getting parallelization";
 Get@FileNameJoin@{$ThisDirectory,"Parallelisation.m"};
 
 
-(* ::Subsection::Closed:: *)
+(* ::Subsection:: *)
 (*Manifold, basis, metric*)
 
 
@@ -93,8 +95,8 @@ bgRules = SymmetricSpaceRules[CD,0];
 SetOptions[ToBackground,BackgroundSolution->bgRules];
 
 
-(* ::Subsection::Initialization::Closed:: *)
-(*(*(*(*(*(*(*(*(*Defining our tensors*)*)*)*)*)*)*)*)*)
+(* ::Subsection::Initialization:: *)
+(*(*(*(*(*(*(*(*(*(*(*Defining our tensors*)*)*)*)*)*)*)*)*)*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -106,7 +108,7 @@ DefTensor[F[-a,-b],M,Antisymmetric[{-a,-b}]]
 
 
 (* ::Text::Initialization:: *)
-(*(*(*(*(*(*(*(*(*Perturbations:*)*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*(*Perturbations:*)*)*)*)*)*)*)*)*)*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -124,12 +126,12 @@ DefTensor[pertF[-a,-b],M, Antisymmetric[{-a,-b}], PrintAs->"\[ScriptCapitalF]"]
 DefTensor[pertT[a,-b,-c],M, Antisymmetric[{-b,-c}], PrintAs->"\[ScriptCapitalT]"];
 
 
-(* ::Section::Initialization::Closed:: *)
-(*(*(*(*(*(*(*(*Rules*)*)*)*)*)*)*)*)
+(* ::Section::Initialization:: *)
+(*(*(*(*(*(*(*(*(*(*Rules*)*)*)*)*)*)*)*)*)*)
 
 
 (* ::Subsection::Initialization::Closed:: *)
-(*(*(*(*(*(*(*(*Going between F and A*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*Going between F and A*)*)*)*)*)*)*)*)*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -141,12 +143,12 @@ AtoF = MakeRule[{CD[-a]@A[-b],(1/2)*F[-a,-b]+(1/2)*(CD[-a]@A[-b]+CD[-b]@A[-a])},
 funcAtoF[expr_]:=expr/.AtoF;
 
 
-(* ::Subsection::Initialization::Closed:: *)
-(*(*(*(*(*(*(*(*Perturbation rules*)*)*)*)*)*)*)*)
+(* ::Subsection::Initialization:: *)
+(*(*(*(*(*(*(*(*(*(*Perturbation rules*)*)*)*)*)*)*)*)*)*)
 
 
 (* ::Text::Initialization:: *)
-(*(*(*(*(*(*(*(*Setting h as perturbation on the metric*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*Setting h as perturbation on the metric*)*)*)*)*)*)*)*)*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -156,7 +158,7 @@ funcToH[expr_]:=expr/.toH;
 
 
 (* ::Text::Initialization:: *)
-(*(*(*(*(*(*(*(*Defining a perturbation on A, and setting it to pertA*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*Defining a perturbation on A, and setting it to pertA*)*)*)*)*)*)*)*)*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -179,21 +181,16 @@ topertT= MakeRule[{perturbationT[LI[1],a,-b,-c],pertT[a,-b,-c]},MetricOn-> All, 
 funcToPertT[expr_]:=expr/.topertT;
 
 
-(* ::Input::Initialization:: *)
-DefTensorPerturbation[perturbationR[LI[order],a,-b,-c],RicciScalarCDT[],M];
-perturbationR[LI[n_],___]/;n>1:=0;
-
-
 (* ::Text::Initialization:: *)
-(*(*(*(*(*(*(*(*Note that both of these get rid of perturbations of second order and higher. They do that in the paper as well.*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*Note that both of these get rid of perturbations of second order and higher. They do that in the paper as well.*)*)*)*)*)*)*)*)*)*)
 
 
 (* ::Subsection::Initialization::Closed:: *)
-(*(*(*(*(*(*(*(*Between \[ScriptCapitalA] and \[ScriptCapitalF]*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*Between \[ScriptCapitalA] and \[ScriptCapitalF]*)*)*)*)*)*)*)*)*)*)
 
 
 (* ::Text::Initialization:: *)
-(*(*(*(*(*(*(*(*Now we connect the two perts:*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*Now we connect the two perts:*)*)*)*)*)*)*)*)*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -205,12 +202,12 @@ pertAtoF = MakeRule[{CD[-a]@pertA[-b],(1/2)*pertF[-a,-b]+(1/2)*(CD[-a]@pertA[-b]
 funcPertAtoF[expr_]:=expr/.pertAtoF;
 
 
-(* ::Section::Initialization::Closed:: *)
-(*(*(*(*(*(*(*(*Defining and expanding Lagrangian*)*)*)*)*)*)*)*)
+(* ::Section::Initialization:: *)
+(*(*(*(*(*(*(*(*(*(*Defining and expanding Lagrangian*)*)*)*)*)*)*)*)*)*)
 
 
 (* ::Subsection::Initialization:: *)
-(*(*(*(*(*(*(*(*Defining Lagrangian*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*Defining Lagrangian*)*)*)*)*)*)*)*)*)*)
 
 
 Comment@"Defining and expanding lagrangian"
@@ -222,26 +219,35 @@ DefConstantSymbol[\[Lambda]];
 
 
 (* ::Input::Initialization:: *)
-\[ScriptCapitalL]=(Sqrt[-Detmetric[]](RicciScalarCDT[]+ F[-a,-b]F[a,b]))/.FtoA
+\[ScriptCapitalL]=(Sqrt[-Detmetric[]](\[Kappa] RicciScalarCDT[]+\[Lambda] F[-a,-b]F[a,b]))/.FtoA;
+Print["Initial lagrangian:"]
+Print[\[ScriptCapitalL]];
 
 
 (* ::Subsection::Initialization:: *)
-(*(*(*(*(*(*(*(*Writing it in terms of torsion*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*Writing it in terms of torsion*)*)*)*)*)*)*)*)*)*)
 
 
 Comment["Writing in terms of torsion"]
 
 
 (* ::Input::Initialization:: *)
-\[ScriptCapitalL]=ChangeCovD[\[ScriptCapitalL],CDT,CD];(*redundant step - no CDT's in lagrangian*)
+\[ScriptCapitalL]=ChangeCovD[\[ScriptCapitalL],CDT,CD]//ScreenDollarIndices;(*redundant step - no CDT's in lagrangian*)
+Print["ChangeCovD:"]
+Print[\[ScriptCapitalL]];
 
 
 (* ::Input::Initialization:: *)
-\[ScriptCapitalL]=ChangeCurvature[\[ScriptCapitalL],CDT,CD]//ChristoffelToGradMetric//ContractMetric//ToCanonical
+\[ScriptCapitalL]=ChangeCurvature[\[ScriptCapitalL],CDT,CD]//ScreenDollarIndices;
+Print["Written in terms of Christoffel:"];
+Print[\[ScriptCapitalL]];
+\[ScriptCapitalL]//=ChristoffelToGradMetric//ContractMetric//ToCanonical//ScreenDollarIndices;
+Print["Written in terms of torsion:"];
+Print[\[ScriptCapitalL]];
 
 
 (* ::Subsection::Initialization:: *)
-(*(*(*(*(*(*(*(*Expanding Lagrangian*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*Expanding Lagrangian*)*)*)*)*)*)*)*)*)*)
 
 
 Comment["expanding lagrangian"]
@@ -263,12 +269,14 @@ Comment["Simplifying linearized action"]
 
 
 (* ::Input::Initialization:: *)
-linearizedAction=ApplyParallel[linearizedAction,{funcToH,funcToPertA, funcAtoF,funcToPertT,ToCanonical}]
+linearizedAction=ApplyParallel[linearizedAction,{funcToH,funcToPertA, funcAtoF,funcToPertT,ToCanonical,ScreenDollarIndices}]
 (*linearizedAction=linearizedAction/.toH/.topertA/.AtoF//ToCanonical;*)
 
 
 (* ::Input::Initialization:: *)
 linearizedAction = linearizedAction/.Sqrt[-Detmetric[]]->1;
+Print["Expanded and linearized:"];
+Print[lagrangian];
 
 
 (* ::Subsection:: *)
@@ -288,11 +296,13 @@ funcTtoVec[expr_]:=expr/.TtoVec;
 
 
 (* ::Input::Initialization:: *)
-linearizedAction=ApplyParallel[linearizedAction,{funcTtoVec,ToCanonical,ContractMetric}]
+linearizedAction=ApplyParallel[linearizedAction,{funcTtoVec,ToCanonical,ContractMetric}];
+Print["Imposed bg torsion:"];
+Print[linearizedAction];
 
 
-(* ::Subsection::Initialization::Closed:: *)
-(*(*(*(*(*(*(*(*Adding in traceless \[ScriptH] and Lorentz gauge*)*)*)*)*)*)*)*)
+(* ::Subsection::Initialization:: *)
+(*(*(*(*(*(*(*(*(*(*Adding in traceless \[ScriptH] and Lorentz gauge*)*)*)*)*)*)*)*)*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -309,14 +319,15 @@ funcCD[expr_]:=expr/.commuteCD;
 
 (* ::Input::Initialization:: *)
 linearizedAction=linearizedAction/.commuteCD/.lorentz//ToCanonical//CollectTensors;
+Quit[]
 
 
 (* ::Section::Initialization:: *)
-(*(*(*(*(*(*(*(*Field Equations*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*Field Equations*)*)*)*)*)*)*)*)*)*)
 
 
 (* ::Subsection::Initialization:: *)
-(*(*(*(*(*(*(*(*With respect to torsion tensor:*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*With respect to torsion tensor:*)*)*)*)*)*)*)*)*)*)
 
 
 Comment@"Calculating torsion field equations"
@@ -336,7 +347,7 @@ torsionField=ApplyParallel[torsionField,{funcLorentz,funcCD,funcTtoVec,ToCanonic
 
 
 (* ::Subsection::Initialization:: *)
-(*(*(*(*(*(*(*(*With respect to H:*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*With respect to H:*)*)*)*)*)*)*)*)*)*)
 
 
 Comment@"Calculating einstein field equations"
@@ -360,7 +371,7 @@ einsteinField=ApplyParallel[einsteinField, {funcLorentz,funcCD,ToCanonical,Contr
 
 
 (* ::Subsection::Initialization:: *)
-(*(*(*(*(*(*(*(*With respect to pertA:*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*With respect to pertA:*)*)*)*)*)*)*)*)*)*)
 
 
 Comment@"Calculating maxwell field equations"
@@ -383,11 +394,11 @@ maxwellField=ApplyParallel[maxwellField,{funcTtoVec,funcLorentz,funcCD,ToCanonic
 
 
 (* ::Subsection::Initialization:: *)
-(*(*(*(*(*(*(*(*Removing terms with \[ScriptH] but keeping CD[\[ScriptH]]*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*Removing terms with \[ScriptH] but keeping CD[\[ScriptH]]*)*)*)*)*)*)*)*)*)*)
 
 
 (* ::Text::Initialization:: *)
-(*(*(*(*(*(*(*(*Note that this only works with equations linear in h*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*Note that this only works with equations linear in h*)*)*)*)*)*)*)*)*)*)
 
 
 Comment@"Simplifying field eqs"
@@ -452,18 +463,18 @@ torsionField=ApplyParallel[torsionField,{DeleteFirstOrderPart}];
 
 
 (* ::Section::Initialization:: *)
-(*(*(*(*(*(*(*(*Components - enter xCoba*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*Components - enter xCoba*)*)*)*)*)*)*)*)*)*)
 
 
 (* ::Text::Initialization:: *)
-(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*We now want to define the components of our tensors.*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*We now want to define the components of our tensors.*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)
 
 
 Comment@"Setting all components"
 
 
 (* ::Subsection::Initialization::Closed:: *)
-(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*\[Epsilon]:*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*\[Epsilon]:*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -475,11 +486,11 @@ epsilonmetric~AutomaticRules~MakeRule[{epsilonmetric[{0,-cartesian},{1,-cartesia
 
 
 (* ::Subsection::Initialization::Closed:: *)
-(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*\[ScriptH]:*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*\[ScriptH]:*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)
 
 
 (* ::Text::Initialization:: *)
-(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*Setting them all to zero first:*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*Setting them all to zero first:*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -491,7 +502,7 @@ ComponentValue[ComponentArray@H[-{a,cartesian},-{b,-cartesian}],zerovalues];
 
 
 (* ::Text::Initialization:: *)
-(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*Setting the non-zero components*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*Setting the non-zero components*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -511,7 +522,7 @@ ComponentValue[H[{1,-cartesian},{2,-cartesian}],h2[t[],z[]]];
 
 
 (* ::Text::Initialization:: *)
-(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*With indices up*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*With indices up*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -519,11 +530,11 @@ ChangeComponents[H[{a,cartesian},{b,cartesian}],H[-{a,cartesian},-{b,cartesian}]
 
 
 (* ::Subsection::Initialization::Closed:: *)
-(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*F:*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*F:*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)
 
 
 (* ::Text::Initialization:: *)
-(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*Setting all to zero:*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*Setting all to zero:*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -531,7 +542,7 @@ ComponentValue[ComponentArray@F[-{a,cartesian},-{b,-cartesian}],zerovalues];
 
 
 (* ::Text::Initialization:: *)
-(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*Giving it a constant B-field in the x-direction:*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*Giving it a constant B-field in the x-direction:*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -551,7 +562,7 @@ ChangeComponents[F[{a,cartesian},{b,cartesian}],F[-{a,cartesian},-{b,cartesian}]
 
 
 (* ::Subsection::Initialization::Closed:: *)
-(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*\[ScriptCapitalF]:*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*\[ScriptCapitalF]:*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -579,11 +590,11 @@ ChangeComponents[pertF[{a,cartesian},{b,cartesian}],pertF[-{a,cartesian},-{b,car
 
 
 (* ::Subsection::Initialization::Closed:: *)
-(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*\[ScriptCapitalT]:*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*\[ScriptCapitalT]:*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)
 
 
 (* ::Text::Initialization:: *)
-(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*We define two 4-vectors that \[ScriptCapitalT] is built from:*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*We define two 4-vectors that \[ScriptCapitalT] is built from:*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -617,7 +628,7 @@ ChangeComponents[pertU[{a,cartesian}],pertU[-{a,cartesian}]];
 
 
 (* ::Subsection::Initialization:: *)
-(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*T:*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*T:*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)
 
 
 (* ::Input::Initialization:: *)
@@ -637,7 +648,7 @@ ChangeComponents[Q[{a,cartesian}],Q[-{a,cartesian}]];
 
 
 (* ::Subsection::Initialization:: *)
-(*(*(*(*(*(*(*(*Evaluating Torsion field equation*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*Evaluating Torsion field equation*)*)*)*)*)*)*)*)*)*)
 
 
 Comment@"Evaluating torsion component eqs..."
@@ -656,7 +667,7 @@ torsionExpr=ApplyParallel[torsionC,{funcChristCartZero,ToBasis[cartesian],funcCh
 
 
 (* ::Subsection::Initialization:: *)
-(*(*(*(*(*(*(*(*Evaluating Einstein*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*Evaluating Einstein*)*)*)*)*)*)*)*)*)*)
 
 
 Comment["Evaluating Einstein component eqs..."];
@@ -668,7 +679,7 @@ einsteinExpr=ApplyParallel[einsteinC, {funcChristCartZero,ToBasis[cartesian],fun
 
 
 (* ::Subsection::Initialization:: *)
-(*(*(*(*(*(*(*(*(*(*(*(*(*(*Curl of Maxwell*)*)*)*)*)*)*)*)*)*)*)*)*)*)
+(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*(*Curl of Maxwell*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)*)
 
 
 Comment@"Evaluating Maxwell component eqs"
