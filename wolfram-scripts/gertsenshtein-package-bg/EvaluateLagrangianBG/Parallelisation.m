@@ -25,10 +25,10 @@ Unprotect@AutomaticRules;
 Options[AutomaticRules]={Verbose->False};
 Protect@AutomaticRules;
 
-Get@FileNameJoin@{$ThisDirectory,"Parallelisation","PrepareFiles.m"};
-Get@FileNameJoin@{$ThisDirectory,"Parallelisation","QuietParallelSubmit.m"};
-Get@FileNameJoin@{$ThisDirectory,"Parallelisation","ProcessOperator.m"};
-Get@FileNameJoin@{$ThisDirectory,"Parallelisation","ApplyParallel.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG","Parallelisation","PrepareFiles.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG","Parallelisation","QuietParallelSubmit.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG","Parallelisation","ProcessOperator.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG","Parallelisation","ApplyParallel.m"};
 
 DistributeDefinitions@$ThisDirectory;
 Comment@"If there were no errors above, then the kernel should be ready for parallel computing.";

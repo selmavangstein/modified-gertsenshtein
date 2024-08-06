@@ -29,4 +29,4 @@ $CVVerbose=False;
 SetOptions[ToCanonical,UseMetricOnVBundle->All];
 SetOptions[ContractMetric,AllowUpperDerivatives->True];
 
-Get@FileNameJoin@{$ThisDirectory,"EvaluateLagrangianBG.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG.m"};

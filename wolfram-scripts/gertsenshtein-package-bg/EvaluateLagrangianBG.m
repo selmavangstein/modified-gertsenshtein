@@ -4,26 +4,18 @@
 (*  EvaluateLagrangianBG  *)
 (*========================*)
 
-Get@FileNameJoin@{$ThisDirectory,"Parallelisation.m"};
-Get@FileNameJoin@{$ThisDirectory,"Geometry.m"};
-Get@FileNameJoin@{$ThisDirectory,"DefFields.m"};
-Get@FileNameJoin@{$ThisDirectory,"DefRules.m"};
-Get@FileNameJoin@{$ThisDirectory,"DeleteFirstOrderPart.m"};
-
-
-Expr=D[Sincc[x,y],{x,2},{y,2}];
-Expr//DisplayExpression;
-Expr//=TraditionalForm;
-Expr//DisplayExpression;
-Quit[];
-
-Get@FileNameJoin@{$ThisDirectory,"Components.m"};
-Get@FileNameJoin@{$ThisDirectory,"InitialExpand.m"};
-Get@FileNameJoin@{$ThisDirectory,"FurtherExpand.m"};
-Get@FileNameJoin@{$ThisDirectory,"SimplifyLagrangian.m"};
-Get@FileNameJoin@{$ThisDirectory,"ImposeBackgroundTorsion.m"};
-Get@FileNameJoin@{$ThisDirectory,"SuperChangeCovD.m"};
-Get@FileNameJoin@{$ThisDirectory,"ParallelExpand.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG","Parallelisation.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG","Geometry.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG","DefFields.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG","DefRules.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG","DeleteFirstOrderPart.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG","Components.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG","InitialExpand.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG","FurtherExpand.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG","SimplifyLagrangian.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG","ImposeBackgroundTorsion.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG","SuperChangeCovD.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG","ParallelExpand.m"};
 
 EvaluateLagrangianBG[Lagrangian_,resultsFileName_]:=Module[{lagrangian=Lagrangian,torsionC,einsteinC,maxwellC,maxwellCurl},
 
@@ -79,8 +71,7 @@ EvaluateLagrangianBG[Lagrangian_,resultsFileName_]:=Module[{lagrangian=Lagrangia
 	einsteinC=ApplyParallel[einsteinField,{funcPertTtoVec,funcTtoVec,funcPertAtoF, SeparateMetric[metric],ToCanonical,ToBasis[cartesian]}];
 	einsteinField//=ParallelExpand;
 	einsteinExpr=ApplyParallel[einsteinC, {funcChristCartZero,ToBasis[cartesian],funcChristCartZero,ToBasis[cartesian],funcChristCartZero,TraceBasisDummy,TraceBasisDummy,TraceBasisDummy,ComponentArray,ToValues,ToValues,ToValues,ToCanonical}];
-	Map[TraditionalForm,einsteinExpr,{2}]//DisplayExpression;
-	Map[TraditionalForm,einsteinExpr,{2}]//Print;
+	einsteinExpr//DisplayExpression;
 
 	Comment@"Evaluating Maxwell component eqs";
 	maxwellField//=ParallelExpand;
