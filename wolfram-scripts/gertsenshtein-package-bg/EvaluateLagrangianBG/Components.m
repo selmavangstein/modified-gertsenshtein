@@ -3,7 +3,6 @@
 (*==============*)
 
 Comment@"The metric perturbation in the transverse-traceless gauge.";
-(*\[ScriptH]:*)
 zerovalues=Table[0,{i,0,3},{j,0,3}];
 Block[{Print=Null},
 	ComponentValue[ComponentArray@H[-{a,cartesian},-{b,-cartesian}],zerovalues];

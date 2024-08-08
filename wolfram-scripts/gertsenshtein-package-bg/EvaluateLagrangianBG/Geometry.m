@@ -2,6 +2,8 @@
 (*  Geometry  *)
 (*============*)
 
+Section@"Components of the fields, background, and perturbations";
+
 DemonstrateComponents[InputExpr_]:=Module[{Expr=InputExpr},
 	Expr//=ComponentArray;
 	Expr//=ToValues;
@@ -10,7 +12,6 @@ DemonstrateComponents[InputExpr_]:=Module[{Expr=InputExpr},
 	(InputExpr->Expr)//DisplayExpression;
 ];
 
-Comment@"Setup of manifold and metric.";
 DefManifold[M,4,IndexRange[{a,s}]]; 
 DefMetric[-1,metric[-a,-b],CD,PrintAs->"g",SymCovDQ->True];
 DefCovD[CDT[-a],Torsion->True, SymbolOfCovD->{"#","D"},FromMetric->metric];

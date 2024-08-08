@@ -1,0 +1,1 @@
+In[#]:= $ErrorFiles = FileNames["results/BadEvaluation * "]; DeleteFile /@ $ErrorFiles; MultipleSteps[1]; $ErrorFiles = FileNames["results/BadEvaluation * "]; ReadErrors /@ $ErrorFiles; 

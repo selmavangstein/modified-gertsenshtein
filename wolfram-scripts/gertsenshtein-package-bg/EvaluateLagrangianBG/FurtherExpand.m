@@ -12,7 +12,7 @@ FurtherExpand[InputExpr_]:=Module[{lagrangian=InputExpr},
 	lagrangian//=ContractMetric;
 	lagrangian//=ToCanonical;
 	lagrangian//=ScreenDollarIndices;
-	linearizedAction=PerturbBackground[lagrangian,2, BackgroundSolution->bgRules];
+	linearizedAction=PerturbBackground[lagrangian,1, BackgroundSolution->bgRules];
 	linearizedAction//=ExpandPerturbation;
 	linearizedAction//=ToBackground;
 	linearizedAction//=CollectTensors;

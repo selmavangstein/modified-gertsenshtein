@@ -1,30 +1,44 @@
-(* ::Package:: *)
-
 (*========================*)
 (*  EvaluateLagrangianBG  *)
 (*========================*)
 
-Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG","Parallelisation.m"};
-Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG","Geometry.m"};
-Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG","DefFields.m"};
-Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG","DefRules.m"};
-Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG","DeleteFirstOrderPart.m"};
-Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG","Components.m"};
-Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG","InitialExpand.m"};
-Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG","FurtherExpand.m"};
-Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG","SimplifyLagrangian.m"};
-Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG","ImposeBackgroundTorsion.m"};
-Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG","SuperChangeCovD.m"};
-Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG","ParallelExpand.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG",
+	"Parallelisation.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG",
+	"Geometry.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG",
+	"DefFields.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG",
+	"DefRules.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG",
+	"DeleteFirstOrderPart.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG",
+	"Components.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG",
+	"InitialExpand.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG",
+	"FurtherExpand.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG",
+	"SimplifyLagrangian.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG",
+	"ImposeBackgroundTorsion.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG",
+	"SuperChangeCovD.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG",
+	"ParallelExpand.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG",
+	"ToCanonicalCheck.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG",
+	"Lagrangian.m"};
 
-EvaluateLagrangianBG[Lagrangian_,resultsFileName_]:=Module[{lagrangian=Lagrangian,torsionC,einsteinC,maxwellC,maxwellCurl},
+EvaluateLagrangianBG[Lagrangian_,resultsFileName_]:=Module[{lagrangian=Lagrangian,maxwellCurl},
 
 	lagrangian//=InitialExpand;
 	lagrangian//=FurtherExpand;
 	lagrangian//=SimplifyLagrangian;
 	lagrangian//=ImposeBackgroundTorsion;
 
-	Comment@"Calculating torsion field equations";
+	Comment@"Calculating Cartan field equations.";
 	torsionField=ApplyParallel[lagrangian, {VarD[pertT[k,-l,-m],CDT],ScreenDollarIndices}];
 	torsionField//=Expand;
 	torsionField=ApplyParallel[torsionField, {ToCanonical,ContractMetric,ScreenDollarIndices}];
@@ -35,7 +49,7 @@ EvaluateLagrangianBG[Lagrangian_,resultsFileName_]:=Module[{lagrangian=Lagrangia
 	torsionField//=Expand;
 	torsionField=ApplyParallel[torsionField,{DeleteFirstOrderPart}];
 
-	Comment@"Calculating einstein field equations";
+	Comment@"Calculating Einstein field equations.";
 	einsteinField=ApplyParallel[lagrangian, {VarD[H[r,s],CDT]}];
 	einsteinField=ApplyParallel[einsteinField, {ToCanonical,ContractMetric,ScreenDollarIndices}];
 	einsteinField//=Expand;
@@ -48,7 +62,7 @@ EvaluateLagrangianBG[Lagrangian_,resultsFileName_]:=Module[{lagrangian=Lagrangia
 	einsteinField//=Expand;
 	einsteinField=ApplyParallel[einsteinField,{DeleteFirstOrderPart}];
 
-	Comment@"Calculating maxwell field equations";
+	Comment@"Calculating Maxwell field equations.";
 	maxwellField=ApplyParallel[lagrangian,{VarD[pertA[k],CDT],ToCanonical,ContractMetric,ScreenDollarIndices}];
 	maxwellField//=Expand;
 	maxwellField=ApplyParallel[maxwellField,{funcPertAtoF}];
@@ -59,30 +73,133 @@ EvaluateLagrangianBG[Lagrangian_,resultsFileName_]:=Module[{lagrangian=Lagrangia
 	maxwellField//=Expand;
 	maxwellField=ApplyParallel[maxwellField,{DeleteFirstOrderPart}];
 
-	Comment@"Evaluating torsion component eqs...";
-	torsionField//=ParallelExpand;
-	torsionC=ApplyParallel[torsionField,{funcPertTtoVec,funcTtoVec,ToBasis[cartesian]}];
-	torsionField//=ParallelExpand;
-	torsionExpr=ApplyParallel[torsionC,{funcChristCartZero,ToBasis[cartesian],funcChristCartZero,ToBasis[cartesian],funcChristCartZero,TraceBasisDummy,TraceBasisDummy,ComponentArray,ToValues,ToValues,ToValues,ToCanonical,SeparateMetric[metric],ToBasis[cartesian],ToBasis[cartesian],TraceBasisDummy,TraceBasisDummy,ToCanonical,ToValues}];
-	torsionExpr//DisplayExpression;
+	DumpSave[FileNameJoin[{$ThisDirectory,"results","FO"<>"fields"<>resultsFileName<>".mx"}],{lagrangian,maxwellField,einsteinField,torsionField}];
+(**)
+(**)
+	Get@FileNameJoin@{$ThisDirectory,"results","FO"<>"fields"<>resultsFileName<>".mx"};
+	$ErrorFiles=FileNames["results/BadEvaluation*"];
+	DeleteFile/@$ErrorFiles;
 
-	Comment@"Evaluating Einstein component eqs...";
-	einsteinField//=ParallelExpand;
-	einsteinC=ApplyParallel[einsteinField,{funcPertTtoVec,funcTtoVec,funcPertAtoF, SeparateMetric[metric],ToCanonical,ToBasis[cartesian]}];
-	einsteinField//=ParallelExpand;
-	einsteinExpr=ApplyParallel[einsteinC, {funcChristCartZero,ToBasis[cartesian],funcChristCartZero,ToBasis[cartesian],funcChristCartZero,TraceBasisDummy,TraceBasisDummy,TraceBasisDummy,ComponentArray,ToValues,ToValues,ToValues,ToCanonical}];
-	einsteinExpr//DisplayExpression;
+	Comment@"Calculating Cartan component equations.";
+	Comment@"The first parallelisation.";
+	torsionField//=ParallelExpand;
+	torsionField//=funcPertAtoF;
+	Comment@"The second parallelisation.";
+	torsionField//=(ApplyParallel[#,{
+		funcPertTtoVec,
+		funcTtoVec
+	}])&;
+	torsionField//=ToCanonical;
+	torsionField//=ContractMetric;
+	torsionField//=ScreenDollarIndices;
+	Comment@"The third parallelisation.";
+	torsionField//=(ApplyParallel[#,{
+		ToBasis[cartesian]
+	}])&;
+	Comment@"The fourth parallelisation.";
+	torsionField//=ParallelExpandMinimal;
+	Commment@"The fifth parallelisation.";
+	torsionField//=(ApplyParallel[#,{
+		MultipleStepsTorsion
+	}])&;
+	torsionField//DisplayExpression;
 
-	Comment@"Evaluating Maxwell component eqs";
+	Comment@"Evaluating Einstein component equations.";
+	einsteinField//=ParallelExpand;
+	einsteinField//=funcPertAtoF;
+	einsteinField//=funcPertAtoF;
+	einsteinField//=funcPertAtoF;
+	einsteinField//=funcPertAtoF;
+	Comment@"The first parallelisation.";
+	einsteinField//=(ApplyParallel[#,{
+		funcPertTtoVec,
+		funcTtoVec,
+		funcPertAtoF,
+		SeparateMetric[metric],
+		ToCanonical,
+		ToBasis[cartesian]
+	}])&;
+	Comment@"The second parallelisation.";
+	einsteinField//=ParallelExpandMinimal;
+	Comment@"The third parallelisation.";
+	einsteinField//=(ApplyParallel[#,{
+		MultipleStepsEinstein
+	}])&;
+	einsteinField//DisplayExpression;
+
+	Comment@"Evaluating Maxwell component equations.";
 	maxwellField//=ParallelExpand;
-	maxwellC=ApplyParallel[maxwellField,{funcPertTtoVec,funcTtoVec, ToCanonical,ToBasis[cartesian], ToBasis[cartesian]}];
-	maxwellC=maxwellC/.ChristoffelCDPDcartesian->Zero;
-	maxwellCurl=u[-{l,cartesian}]epsilonmetric[{l,cartesian},{i,cartesian},{f,cartesian},{k,cartesian}]CD[-{i,cartesian}][maxwellC];
-	maxwellCurl=ApplyParallel[maxwellCurl,{Expand}];
-	maxwellExpr=ApplyParallel[maxwellCurl,{ContractMetric,TraceBasisDummy,TraceBasisDummy,ComponentArray,ToValues,ToValues,ToCanonical,SeparateMetric[metric],ToBasis[cartesian],ToBasis[cartesian],TraceBasisDummy,TraceBasisDummy,ToCanonical,ToValues}];
-	maxwellExpr//DisplayExpression;
+	maxwellField//=(ApplyParallel[#,{
+		funcPertTtoVec,
+		funcTtoVec,
+		ToCanonical,
+		ToBasis[cartesian],
+		ToBasis[cartesian]
+	}])&;
+	maxwellField=maxwellField/.ChristoffelCDPDcartesian->Zero;
+	maxwellField//=(u[-{l,cartesian}]epsilonmetric[{l,cartesian},{i,cartesian},{f,cartesian},{k,cartesian}]CD[-{i,cartesian}][#])&;
+	maxwellField//=ParallelExpandMinimal;
+	maxwellField//=(ApplyParallel[#,{
+		ContractMetric,
+		TraceBasisDummy,
+		TraceBasisDummy,
+		ComponentArray,
+		ToValues,
+		ToValues,
+		ToCanonical,
+		SeparateMetric[metric],
+		ToBasis[cartesian],
+		ToBasis[cartesian],
+		TraceBasisDummy,
+		TraceBasisDummy,
+		ToCanonical,
+		ToValues
+	}])&;
+	maxwellField//DisplayExpression;
 
 	Comment@"Saving results...";
-	DumpSave[FileNameJoin[{$ThisDirectory,"results",resultsFileName<>".mx"}],{lagrangian,maxwellField,maxwellExpr,einsteinField,einsteinExpr,torsionField,torsionExpr}];
-	Comment@"Goodbye and thanks for all the fish";
-{lagrangian,maxwellField,resultMaxwell,einsteinField,resultEinstein,torsionField,resultTorsion}];
+	DumpSave[FileNameJoin[{$ThisDirectory,"results","FO"<>resultsFileName<>".mx"}],
+		{lagrangian,maxwellField,einsteinField,torsionField}];
+];
+
+StudySystem[InputRules_]:=Module[{rules=InputRules,myLagrangian,myComponents},
+
+	Comment@"Here is the list of rules.";
+	DisplayExpression@(rules~MyRaggedBlock~5);
+
+	Comment@"Here is the non-linear Lagrangian.";
+	myLagrangian=lagrangian/.rules;
+	myLagrangian//ToCanonical;
+	myLagrangian//ContractMetric;
+	myLagrangian//ScreenDollarIndices;
+	myLagrangian//DisplayExpression;
+
+	Subsection@"Here are the zeroth-order equations.";
+	Get@FileNameJoin@{$ThisDirectory,"results","FO"<>resultsFileName<>".mx"};
+	Comment@"The Cartan components.";
+	ShowComponents[torsionField,rules];
+	Comment@"The Einstein components.";
+	ShowComponents[einsteinField,rules];
+	Comment@"The Maxwell components.";
+	ShowComponents[maxwellField,rules];
+
+	Subsection@"Here are the first-order equations.";
+	Get@FileNameJoin@{$ThisDirectory,"results",resultsFileName<>".mx"};
+	Comment@"The Cartan components.";
+	ShowComponents[torsionField,rules];
+	Comment@"The Einstein components.";
+	ShowComponents[einsteinField,rules];
+	Comment@"The Maxwell components.";
+	ShowComponents[maxwellField,rules];
+];
+
+ShowComponents[InputComponents_,InputRules_]:=Module[{myComponents=InputComponents},
+	myComponents=myComponents/.InputRules;
+	myComponents//=Flatten;
+	myComponents//=DeleteDuplicates;
+	myComponents//=((#==0)&/@#)&;
+	myComponents//=((#//FullSimplify)&/@#)&;
+	myComponents//=DeleteDuplicates;
+	myComponents//=DeleteCases[#,True]&;
+	DisplayExpression@(myComponents~MyRaggedBlock~1);
+];

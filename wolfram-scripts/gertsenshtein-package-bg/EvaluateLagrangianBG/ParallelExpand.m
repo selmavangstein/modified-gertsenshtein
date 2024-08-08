@@ -8,3 +8,7 @@ ParallelExpand[InputExpr_]:=Module[{Expr=InputExpr},
 	Expr//=ContractMetric;
 	Expr//=ScreenDollarIndices;
 Expr];
+
+ParallelExpandMinimal[InputExpr_]:=Module[{Expr=InputExpr},
+	Expr//=ApplyParallel[#,{Expand}]&;
+Expr];

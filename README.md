@@ -1,4 +1,4 @@
 # modified-gertsenshtein
 
-- Minimal example of ToCanonical not allowing subsequent application of rules
-- Consolidate script so that you can pass different terms as inputs
+- Do we always have only dependence on the t and z coordinates?
+- Try the linear algebra approach
