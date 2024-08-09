@@ -3,7 +3,6 @@
 (*============================*)
 
 Off@ValidateSymbol::used;
-Quiet@Block[{Print=Null},
 	$ThisDirectory=If[NotebookDirectory[]==$Failed,
 		Directory[],
 		NotebookDirectory[],
@@ -16,7 +15,6 @@ ParallelNeeds["xAct`xPlain`"];
 ParallelNeeds["xAct`xTensor`"];
 ParallelNeeds["xAct`xTras`"];
 ParallelNeeds["xAct`xCoba`"];
-];
 $DefInfoQ=False;
 On@ValidateSymbol::used;
 Title@"The Gertsenshtein effect in gauge theories of gravity";

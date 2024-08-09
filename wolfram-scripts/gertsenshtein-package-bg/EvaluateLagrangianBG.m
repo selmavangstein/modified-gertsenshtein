@@ -30,6 +30,8 @@ Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianB
 	"ToCanonicalCheck.m"};
 Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG",
 	"Lagrangian.m"};
+Get@FileNameJoin@{$ThisDirectory,"gertsenshtein-package-bg","EvaluateLagrangianBG",
+	"Cleaning.m"};
 
 EvaluateLagrangianBG[Lagrangian_,resultsFileName_]:=Module[{lagrangian=Lagrangian,maxwellCurl},
 
@@ -73,10 +75,11 @@ EvaluateLagrangianBG[Lagrangian_,resultsFileName_]:=Module[{lagrangian=Lagrangia
 	maxwellField//=Expand;
 	maxwellField=ApplyParallel[maxwellField,{DeleteFirstOrderPart}];
 
-	DumpSave[FileNameJoin[{$ThisDirectory,"results","FO"<>"fields"<>resultsFileName<>".mx"}],{lagrangian,maxwellField,einsteinField,torsionField}];
-(**)
-(**)
-	Get@FileNameJoin@{$ThisDirectory,"results","FO"<>"fields"<>resultsFileName<>".mx"};
+	DumpSave[FileNameJoin[{$ThisDirectory,"results","fields"<>resultsFileName<>".mx"}],{lagrangian,maxwellField,einsteinField,torsionField}];
+	(*DumpSave[FileNameJoin[{$ThisDirectory,"results","FO"<>"fields"<>resultsFileName<>".mx"}],{lagrangian,maxwellField,einsteinField,torsionField}];*)
+
+	Get@FileNameJoin@{$ThisDirectory,"results","fields"<>resultsFileName<>".mx"};
+	(*Get@FileNameJoin@{$ThisDirectory,"results","FO"<>"fields"<>resultsFileName<>".mx"};*)
 	$ErrorFiles=FileNames["results/BadEvaluation*"];
 	DeleteFile/@$ErrorFiles;
 
@@ -158,11 +161,13 @@ EvaluateLagrangianBG[Lagrangian_,resultsFileName_]:=Module[{lagrangian=Lagrangia
 	maxwellField//DisplayExpression;
 
 	Comment@"Saving results...";
-	DumpSave[FileNameJoin[{$ThisDirectory,"results","FO"<>resultsFileName<>".mx"}],
+	DumpSave[FileNameJoin[{$ThisDirectory,"results",resultsFileName<>".mx"}],
 		{lagrangian,maxwellField,einsteinField,torsionField}];
+	(*DumpSave[FileNameJoin[{$ThisDirectory,"results","FO"<>resultsFileName<>".mx"}],
+		{lagrangian,maxwellField,einsteinField,torsionField}];*)
 ];
 
-StudySystem[InputRules_]:=Module[{rules=InputRules,myLagrangian,myComponents},
+StudySystem[InputRules_]:=Module[{rules=InputRules,myLagrangian,myComponents,tList,eList,mList,expr,finalExpr},
 
 	Comment@"Here is the list of rules.";
 	DisplayExpression@(rules~MyRaggedBlock~5);
@@ -191,6 +196,16 @@ StudySystem[InputRules_]:=Module[{rules=InputRules,myLagrangian,myComponents},
 	ShowComponents[einsteinField,rules];
 	Comment@"The Maxwell components.";
 	ShowComponents[maxwellField,rules];
+
+	Subsection@"Here is the reduced set of first-order equations.";
+
+	tList=torsionField//Flatten;
+	eList=einsteinField//Flatten;
+	mList=maxwellField//Flatten;
+	expr=Join[tList,eList,mList];
+
+	finalExpr=fullySimplify[expr,rules];
+	DisplayExpression@(finalExpr~MyRaggedBlock~1);
 ];
 
 ShowComponents[InputComponents_,InputRules_]:=Module[{myComponents=InputComponents},
