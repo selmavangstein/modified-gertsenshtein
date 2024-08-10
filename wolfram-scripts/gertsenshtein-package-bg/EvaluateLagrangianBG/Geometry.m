@@ -12,6 +12,7 @@ DemonstrateComponents[InputExpr_]:=Module[{Expr=InputExpr},
 	(InputExpr->Expr)//DisplayExpression;
 ];
 
+Comment@"The background metric tensor.";
 DefManifold[M,4,IndexRange[{a,s}]]; 
 DefMetric[-1,metric[-a,-b],CD,PrintAs->"g",SymCovDQ->True];
 DefCovD[CDT[-a],Torsion->True, SymbolOfCovD->{"#","D"},FromMetric->metric];
