@@ -1,0 +1,84 @@
+\documentclass[aps,prd,reprint,preprintnumbers,showpacs,floatfix,nofootinbib,superscript address,longbibliography]{revtex4-2}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{hhline}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{multirow,tabularx}
+\usepackage{siunitx}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{tikz}
+\usepackage{tikz-feynman}
+\usepackage{mhchem}
+\usetikzlibrary{positioning,arrows.meta,fadings,through,backgrounds}
+\tikzfeynmanset{compat=1.0.0}
+\tikzset{graviton/.style={decorate, decoration={snake, amplitude=.4mm, segment length=1.5mm, pre length=.1mm, post length=.1mm}, double=white}}
+
+%\input{MacrosMAG.tex}
+\input{MacrosTextual.tex}
+\input{MacrosJournalNames.tex}
+\input{MacrosMAG.tex}
+
+\usepackage{hyperref}
+\hypersetup{%
+     colorlinks = true,%
+     linkcolor = Blue,%
+     citecolor = Blue,%
+     filecolor = Blue,%
+     urlcolor = Blue% 
+     }%
+\usepackage[capitalize,nameinlink]{cleveref}
+
+\begin{document}
+
+\title{Constraints on the production of artificial gravitational fields}
+
+%\author{Will Barker}
+%\email{wb263@cam.ac.uk}
+%\affiliation{Astrophysics Group, Cavendish Laboratory, JJ Thomson Avenue, Cambridge CB3 0HE, UK}
+%\affiliation{Kavli Institute for Cosmology, Madingley Road, Cambridge CB3 0HA, UK}
+\author{Cavendish Gravity Group}
+\affiliation{Astrophysics Group, Cavendish Laboratory, JJ Thomson Avenue, Cambridge CB3 0HE, UK}
+\affiliation{Kavli Institute for Cosmology, Madingley Road, Cambridge CB3 0HA, UK}
+
+%\date{}
+
+\begin{abstract}
+	There is a clear public interest in the artificial generation of gravitational fields, with supposed applications extending to reactionless or superluminal propulsion technologies. Despite this enthusiasm, the paradigms of modern physics are expected to impose severe constraints on such technologies. The public understanding of these constraints appears to be very limited, establishing the need for a clear commentary on the topic. In this whitepaper we offer a narrow perspective -- from within the physics community -- on the outlook for artificial gravity.
+\end{abstract}
+
+\maketitle
+
+\paragraph*{Public interest} Recent developments in North America have sparked a public interest in artificial gravitational fields. One interpretation of `artificial gravity', which goes beyond the commonplace use of rotating frames to exploit the equivalence principle, is the \emph{efficient} conversion of matter energy-momentum into gravitational waves (GW) by technical means other than those involving unthinkable energy densities or astrophysical masses. As every physicist will confirm, efficient GW production of this kind is impossible within the twin paradigms of matter, described by the standard model (SM) of particle physics, and of gravity, described by general relativity (GR). Frankly, such effects need new physics. Usually in physics, we reverse-engineer the fundamental interactions from our observations, or we work forwards from a theoretically compelling foundation to match the phenomenology. We have no (credible) observations of efficient GW production, nor does it show up in the phenomenology of compelling theoretical frameworks (e.g. supersymmetry). In this whitepaper, therefore, we will indulge in some very irresponsible model-building by asking:
+{
+\center
+``\textit{What new physics would be required for efficient GW production to be possible, but for this possibility to have gone unnoticed in the observed phenomena?}''\par}
+This question is hard enough to sound interesting, and has the advantage of contributing to the public understanding of science.
+\paragraph*{Viability of recent patents} The reason we focus on GWs, rather than (e.g.) antigravity-type effects, is because GW production has already enjoyed some attention through the \emph{Gertsenshtein effect}~\cite{Palessandro:2023tee}. This is a real phenomenon, whereby an electromagnetic wave passing through a background $\textbf{B}$-field with strength $B_0$ is expected to convert into a GW after propagating a characteristic distance
+\begin{equation}\label{Gertsenshtein}
+	L\equiv4\sqrt{2\pi}\frac{\MPl}{B_0}\approx 2.25\text{MPc}\left(\frac{1\text{Gauss}}{B_0}\right).
+	%	(6.395e-30)*(4*sqrt(2*pi)*2.4353e27)/(6.925e-2) 
+\end{equation}
+In~\cite{Palessandro:2023tee} the derivation is entirely classical, and relies on no ingredients beyond GR and the SM. Specifically, it is an exercise in linearised Einstein--Maxwell theory. The final equality in~\cref{Gertsenshtein} makes it clear that laboratory GW production rates will be utterly tiny, just as we expect. Nevertheless, there are some funny stories on the internet about a guy called Salvatore Pais, who has apparently patented a `high frequency GW generator'. The Pais device is supposed to exploit the Gertsenshtein effect, but it obviously won't work (exercise). That being the case, it is more interesting to speculate about new physics which could give rise to \emph{amplified} Gertsenshtein-type effects.
+\paragraph*{Alternative perspective} A first step could be to think about casting the Gertsenshtein effect in a QFT framework. We will use a convention where the initial and final states run left to right. Obviously there is no vertex $\feynmandiagram[scale=0.7,transform shape, inline=(d.base), horizontal=a to b]{a -- [photon] d [dot] -- [graviton] b}$ corresponding to direct conversion, since the photon and graviton have different spins. The first vertex which exists is $\feynmandiagram[scale=0.5,transform shape, inline=(d.base)]{a -- [graviton] d [dot] -- [photon] {b,c}}$, not only because the spins match but also because there is certainly a Maxwell stress-energy tensor on Minkowski spacetime. However, the existence of a centre of momentum frame precludes this vertex from becoming a diagram. At next-to-leading order away from the Minkowski background, there is no doubt a `seagull' vertex $\feynmandiagram[scale=0.45,transform shape, inline=(b), horizontal=a to d]{a -- [graviton] b [dot] -- [photon] c,d -- [graviton] b -- [photon] e}$ which \emph{can} be a diagram. However it is not clear that the Gertsenshtein effect can be interpreted this way (i.e. as a massless two-to-two scattering process) when you read~\cite{Palessandro:2023tee}, because it is catalysed by a $\textbf{B}$ field in the background. The $\textbf{B}$ field cannot be an external leg and must come from somewhere: most likely it is sourced by an electron current. This is the point where we begin to suspect that the Gertsenshtein effect could be related to a gravitational analogue of the Compton effect. Particularly, there is a diagram which contributes to Compton-type scattering 
+\begin{equation}\label{Compton}
+\feynmandiagram [scale=0.7,transform shape, inline=(b.base),vertical'=a to b] {
+i1 
+-- [graviton] a [dot]
+-- [photon] f1,
+a -- [photon] b,
+i2 
+-- [fermion] b
+-- [fermion] f2,
+};
+\end{equation}
+via basic QED and gravitational vertices, and which involves the exchange of a virtual (possibly magnetic) photon. In the right frame, one could perhaps try to extract the Gertsenshtein effect from~\cref{Compton} and similar diagrams (exercise).
+\paragraph*{A systematic approach} Someone must have computed the miniscule Compton- and bremsstrahlung-type GW production rates in the LHC (probably you can find this data on Google). As stated above, really efficient GW production calls for new physics. The diagrammatic approach systematises the investigation of new physics: vertices and/or new species are proposed, and the production rate is re-computed. The diagrammatic approach also reminds us how hard GW production is going to be. Let's say we open a really efficient channel to GW production, where all our initial states have SM quantum numbers. Then in all likelihood, this channel is already known not to exist by 2024 because otherwise we'd have noticed an energy or (angular) momentum leak at the LHC. To take one example, there are constraints on nonlinear QED from heavy-ion collisions~\cite{NiauAkmansoy:2018ilv}. In the broadest sense, the problem we face feels similar to the hunt for CDM which -- like the graviton -- is not expected to leave any trace as it exits the beamline. We might save a lot of time by thinking about CDM models that the LHC has thus-far poorly constrained, and \textit{non}-minimally coupling them to gravity so that they promptly radiate GWs. The point is that you need a narrow door out of the SM, followed by a wide door into the gravity sector. This is quite dangerous, because channels work both ways. To avoid interactions with the abundant low-energy GWs in astrophysics and cosmology we could think about amplitudes which contain high powers of the external GW momentum. These vertices arise naturally with non-minimal coupling, but they are usually very sick.
+\paragraph*{Modified gravity} In the case that interactions are found which satisfy the above constraints, the challenge will be to embed these interactions within some classical gravity model. My strong inclination would be to use a non-Riemannian setting, since this provides (i) abundant new species (ii) abundant couplings to the SM and (iii) as many non-minimal couplings to the Riemannian sector as you care to add. This is also an opportunity for further constraints, since the full non-linear model may have some sick properties that have nothing to do with GW production.
+	
+%\bibliographystyle{apsrev4-1}
+\bibliography{Manuscript}
+
+\end{document}
