@@ -1,0 +1,30 @@
+%MacrosTextual
+
+\usepackage{xspace}
+\usepackage{xstring}
+\usepackage{titlesec}
+\usepackage{parskip}
+\usepackage{stix}
+\allowdisplaybreaks
+\parskip 1mm
+\parindent 2mm
+
+%	Basic abbreviations
+\newcommand*{\ie}{i.e., }
+\newcommand*{\eg}{e.g., }
+\newcommand*{\fig}{fig.\@\xspace}
+\newcommand*{\eq}{eq.\@\xspace}
+\newcommand*{\eqs}{eqs.\@\xspace}
+\newcommand*{\wrt}{w.r.t.\@\xspace}
+
+%	Comments
+\newcommand{\sz}[1]{{\color[RGB]{0,34,170}{#1}}}
+\newcommand{\wb}[1]{{\color[RGB]{0,100,154}{#1}}}
+\newcommand{\wbn}[1]{{\color[RGB]{0,100,154}{[WB narrative: ``\textit{#1}'']}}}
+\newcommand{\szC}[1]{{\color[RGB]{0,34,170}{[\textbf{SZ: #1]}}}}
+
+%	PRL paragraph
+\newrobustcmd{\pea}[1]{%
+	\emph{#1}\textbf{\ \ \ ---}
+}
+\titleformat{\paragraph}[runin]{\normalfont\normalsize\bfseries}{\emph\theparagraph}{1em}{\pea}
