@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[    383590,      10323]
-NotebookOptionsPosition[    347105,       9715]
-NotebookOutlinePosition[    347546,       9732]
-CellTagsIndexPosition[    347503,       9729]
+NotebookDataLength[    397045,      10630]
+NotebookOptionsPosition[    360137,      10016]
+NotebookOutlinePosition[    360578,      10033]
+CellTagsIndexPosition[    360535,      10030]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -7089,7 +7089,7 @@ Cell[BoxData[
  CellLabel->
   "Out[128]=",ExpressionUUID->"351428a1-84e5-ce41-8317-bd55470b92fa"]
 }, Open  ]]
-}, Open  ]],
+}, Closed]],
 
 Cell[CellGroupData[{
 
@@ -9686,17 +9686,19 @@ Cell[BoxData[
   3.9321856423144894`*^9, 3.9321856446814175`*^9}, {3.932185709780136*^9, 
   3.932185765666664*^9}, {3.9321858796686153`*^9, 3.9321859012714577`*^9}, {
   3.93218596723411*^9, 3.9321859864847355`*^9}, {3.9321861255134945`*^9, 
-  3.9321861367397614`*^9}},
+  3.9321861367397614`*^9}, {3.932194176757124*^9, 3.9321942337657623`*^9}, {
+  3.9321943450676155`*^9, 3.9321943763516254`*^9}},
  CellLabel->
-  "In[273]:=",ExpressionUUID->"fc223648-afcb-bf48-8131-a6815bfd3f54"],
+  "In[495]:=",ExpressionUUID->"fc223648-afcb-bf48-8131-a6815bfd3f54"],
 
 Cell[BoxData[
  RowBox[{"{", "}"}]], "Output",
  CellChangeTimes->{{3.932185756220289*^9, 3.9321857914315224`*^9}, {
-  3.9321858843971825`*^9, 3.9321859109251194`*^9}, {3.9321859633420925`*^9, 
-  3.9321859868808403`*^9}, {3.932186126233612*^9, 3.932186164732727*^9}},
+   3.9321858843971825`*^9, 3.9321859109251194`*^9}, {3.9321859633420925`*^9, 
+   3.9321859868808403`*^9}, {3.932186126233612*^9, 3.932186164732727*^9}, 
+   3.9321974401527405`*^9},
  CellLabel->
-  "Out[273]=",ExpressionUUID->"e52e0579-d122-a042-9d08-06248378c639"]
+  "Out[495]=",ExpressionUUID->"d09ceb9f-7a00-e144-8c17-e08f809e0e27"]
 }, Open  ]],
 
 Cell["\<\
@@ -9707,8 +9709,307 @@ the same functions.\
 \>", "Text",
  CellChangeTimes->{{3.9321861683387337`*^9, 3.9321862045762615`*^9}, {
   3.9321862423083*^9, 
-  3.9321862698428345`*^9}},ExpressionUUID->"ef526465-207b-a64d-9f06-\
-8a3cbb57cd23"]
+  3.9321862698428345`*^9}},ExpressionUUID->"bcfd0d4f-8886-484f-824b-\
+3190bbb8caec"],
+
+Cell["\<\
+Now I guess we should technically try all the solutions that don\
+\[CloseCurlyQuote]t have derivative=0 to find the most interesting one. I \
+have a sense that they should all give roughly the same thing in this case \
+though.\
+\>", "Text",
+ CellChangeTimes->{{3.9321905474241047`*^9, 3.932190600915556*^9}, 
+   3.932190637065178*^9},ExpressionUUID->"0754193a-6d41-e84d-bcdb-\
+e5a55fcc00b5"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"interestingSolutionSets", "=", 
+  RowBox[{"Select", "[", 
+   RowBox[{"allSolutionsList", ",", 
+    RowBox[{
+     RowBox[{"Not", "[", 
+      RowBox[{"FreeQ", "[", 
+       RowBox[{"#", ",", 
+        RowBox[{"_", "==", "0"}]}], "]"}], "]"}], "&"}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.93219744774037*^9, 3.9321974560091877`*^9}},
+ CellLabel->
+  "In[496]:=",ExpressionUUID->"c40aa5f7-775a-3a45-85b5-2dcee0c0f585"],
+
+Cell[BoxData[
+ TemplateBox[<|"shortenedBoxes" -> TagBox[
+     RowBox[{"{", 
+       RowBox[{
+         RowBox[{"{", 
+           RowBox[{
+             RowBox[{
+               RowBox[{
+                 SuperscriptBox["hr", "\[Prime]", MultilineFunction -> None], 
+                 "[", "u", "]"}], "\[Equal]", 
+               RowBox[{"b13", " ", 
+                 RowBox[{"br", "[", "u", "]"}]}]}], ",", 
+             RowBox[{
+               RowBox[{
+                 SuperscriptBox["hs", "\[Prime]", MultilineFunction -> None], 
+                 "[", "v", "]"}], "\[Equal]", 
+               RowBox[{"-", 
+                 FractionBox[
+                  RowBox[{
+                    InterpretationBox[
+                    StyleBox[
+                    RowBox[{"Bx"}], AutoSpacing -> False, ShowAutoStyles -> 
+                    False], $CellContext`Bx, Editable -> False], " ", 
+                    RowBox[{"bs", "[", "v", "]"}]}], "b13"]}]}], ",", 
+             RowBox[{
+               RowBox[{
+                 SuperscriptBox["br", "\[Prime]", MultilineFunction -> None], 
+                 "[", "u", "]"}], "\[Equal]", 
+               RowBox[{
+                 RowBox[{"b33", " ", 
+                   RowBox[{"br", "[", "u", "]"}]}], "+", 
+                 RowBox[{"b34", " ", 
+                   RowBox[{"bs", "[", "v", "]"}]}], "+", 
+                 RowBox[{"b31", " ", 
+                   RowBox[{"hr", "[", "u", "]"}]}], "+", 
+                 RowBox[{"b32", " ", 
+                   RowBox[{"hs", "[", "v", "]"}]}]}]}], ",", 
+             RowBox[{
+               RowBox[{
+                 SuperscriptBox["bs", "\[Prime]", MultilineFunction -> None], 
+                 "[", "v", "]"}], "\[Equal]", "0"}], ",", 
+             RowBox[{
+               RowBox[{
+                 SuperscriptBox[
+                 "hr", "\[Prime]\[Prime]", MultilineFunction -> None], "[", 
+                 "u", "]"}], "\[Equal]", "0"}]}], "}"}], ",", 
+         RowBox[{"{", 
+           RowBox[{
+             RowBox[{
+               RowBox[{
+                 SuperscriptBox["hr", "\[Prime]", MultilineFunction -> None], 
+                 "[", "u", "]"}], "\[Equal]", 
+               RowBox[{"b14", " ", 
+                 RowBox[{"bs", "[", "v", "]"}]}]}], ",", 
+             RowBox[{
+               RowBox[{
+                 SuperscriptBox["hs", "\[Prime]", MultilineFunction -> None], 
+                 "[", "v", "]"}], "\[Equal]", 
+               RowBox[{"-", 
+                 FractionBox[
+                  RowBox[{
+                    InterpretationBox[
+                    StyleBox[
+                    RowBox[{"Bx"}], AutoSpacing -> False, ShowAutoStyles -> 
+                    False], $CellContext`Bx, Editable -> False], " ", 
+                    RowBox[{"br", "[", "u", "]"}]}], "b14"]}]}], ",", 
+             RowBox[{
+               RowBox[{
+                 SuperscriptBox["br", "\[Prime]", MultilineFunction -> None], 
+                 "[", "u", "]"}], "\[Equal]", 
+               RowBox[{
+                 RowBox[{"b33", " ", 
+                   RowBox[{"br", "[", "u", "]"}]}], "+", 
+                 RowBox[{"b34", " ", 
+                   RowBox[{"bs", "[", "v", "]"}]}], "+", 
+                 RowBox[{"b31", " ", 
+                   RowBox[{"hr", "[", "u", "]"}]}], "+", 
+                 RowBox[{"b32", " ", 
+                   RowBox[{"hs", "[", "v", "]"}]}]}]}], ",", 
+             RowBox[{
+               RowBox[{
+                 SuperscriptBox["bs", "\[Prime]", MultilineFunction -> None], 
+                 "[", "v", "]"}], "\[Equal]", "0"}], ",", 
+             RowBox[{
+               RowBox[{
+                 SuperscriptBox[
+                 "hr", "\[Prime]\[Prime]", MultilineFunction -> None], "[", 
+                 "u", "]"}], "\[Equal]", "0"}]}], "}"}], ",", 
+         RowBox[{"{", 
+           RowBox[{
+             RowBox[{
+               RowBox[{
+                 SuperscriptBox["hr", "\[Prime]", MultilineFunction -> None], 
+                 "[", "u", "]"}], "\[Equal]", 
+               RowBox[{"b14", " ", 
+                 RowBox[{"bs", "[", "v", "]"}]}]}], ",", 
+             RowBox[{
+               RowBox[{
+                 SuperscriptBox["hs", "\[Prime]", MultilineFunction -> None], 
+                 "[", "v", "]"}], "\[Equal]", 
+               RowBox[{"-", 
+                 FractionBox[
+                  RowBox[{
+                    InterpretationBox[
+                    StyleBox[
+                    RowBox[{"Bx"}], AutoSpacing -> False, ShowAutoStyles -> 
+                    False], $CellContext`Bx, Editable -> False], " ", 
+                    RowBox[{"br", "[", "u", "]"}]}], "b14"]}]}], ",", 
+             RowBox[{
+               RowBox[{
+                 SuperscriptBox["br", "\[Prime]", MultilineFunction -> None], 
+                 "[", "u", "]"}], "\[Equal]", 
+               RowBox[{
+                 RowBox[{"b33", " ", 
+                   RowBox[{"br", "[", "u", "]"}]}], "+", 
+                 RowBox[{"b34", " ", 
+                   RowBox[{"bs", "[", "v", "]"}]}], "+", 
+                 RowBox[{"b31", " ", 
+                   RowBox[{"hr", "[", "u", "]"}]}], "+", 
+                 RowBox[{"b32", " ", 
+                   RowBox[{"hs", "[", "v", "]"}]}]}]}], ",", 
+             RowBox[{
+               RowBox[{
+                 SuperscriptBox["bs", "\[Prime]", MultilineFunction -> None], 
+                 "[", "v", "]"}], "\[Equal]", "0"}], ",", 
+             RowBox[{
+               RowBox[{
+                 SuperscriptBox[
+                 "hr", "\[Prime]\[Prime]", MultilineFunction -> None], "[", 
+                 "u", "]"}], "\[Equal]", "0"}]}], "}"}], ",", 
+         TemplateBox[{"226"}, "OutputSizeLimit`Skeleton"], ",", 
+         RowBox[{"{", 
+           RowBox[{
+             RowBox[{
+               RowBox[{
+                 SuperscriptBox["hr", "\[Prime]", MultilineFunction -> None], 
+                 "[", "u", "]"}], "\[Equal]", 
+               RowBox[{"b13", " ", 
+                 RowBox[{"br", "[", "u", "]"}]}]}], ",", 
+             RowBox[{
+               RowBox[{
+                 SuperscriptBox["hs", "\[Prime]", MultilineFunction -> None], 
+                 "[", "v", "]"}], "\[Equal]", 
+               RowBox[{"-", 
+                 FractionBox[
+                  RowBox[{
+                    InterpretationBox[
+                    StyleBox[
+                    RowBox[{"Bx"}], AutoSpacing -> False, ShowAutoStyles -> 
+                    False], $CellContext`Bx, Editable -> False], " ", 
+                    RowBox[{"bs", "[", "v", "]"}]}], "b13"]}]}], ",", 
+             RowBox[{
+               RowBox[{
+                 SuperscriptBox["br", "\[Prime]", MultilineFunction -> None], 
+                 "[", "u", "]"}], "\[Equal]", "0"}], ",", 
+             RowBox[{
+               RowBox[{
+                 SuperscriptBox["bs", "\[Prime]", MultilineFunction -> None], 
+                 "[", "v", "]"}], "\[Equal]", 
+               RowBox[{
+                 RowBox[{"b44", " ", 
+                   RowBox[{"bs", "[", "v", "]"}]}], "+", 
+                 RowBox[{
+                   FractionBox["1", "4"], " ", "a13", " ", 
+                   InterpretationBox[
+                    StyleBox[
+                    RowBox[{"Bx"}], AutoSpacing -> False, ShowAutoStyles -> 
+                    False], $CellContext`Bx, Editable -> False], " ", 
+                   RowBox[{"hs", "[", "v", "]"}]}]}]}], ",", 
+             RowBox[{
+               RowBox[{
+                 SuperscriptBox[
+                 "hr", "\[Prime]\[Prime]", MultilineFunction -> None], "[", 
+                 "u", "]"}], "\[Equal]", "0"}]}], "}"}], ",", 
+         RowBox[{"{", 
+           RowBox[{
+             RowBox[{
+               RowBox[{
+                 SuperscriptBox["hr", "\[Prime]", MultilineFunction -> None], 
+                 "[", "u", "]"}], "\[Equal]", 
+               RowBox[{"b13", " ", 
+                 RowBox[{"br", "[", "u", "]"}]}]}], ",", 
+             RowBox[{
+               RowBox[{
+                 SuperscriptBox["hs", "\[Prime]", MultilineFunction -> None], 
+                 "[", "v", "]"}], "\[Equal]", 
+               RowBox[{"-", 
+                 FractionBox[
+                  RowBox[{
+                    InterpretationBox[
+                    StyleBox[
+                    RowBox[{"Bx"}], AutoSpacing -> False, ShowAutoStyles -> 
+                    False], $CellContext`Bx, Editable -> False], " ", 
+                    RowBox[{"bs", "[", "v", "]"}]}], "b13"]}]}], ",", 
+             RowBox[{
+               RowBox[{
+                 SuperscriptBox["br", "\[Prime]", MultilineFunction -> None], 
+                 "[", "u", "]"}], "\[Equal]", "0"}], ",", 
+             RowBox[{
+               RowBox[{
+                 SuperscriptBox["bs", "\[Prime]", MultilineFunction -> None], 
+                 "[", "v", "]"}], "\[Equal]", 
+               RowBox[{
+                 RowBox[{"b43", " ", 
+                   RowBox[{"br", "[", "u", "]"}]}], "+", 
+                 RowBox[{
+                   FractionBox["1", "4"], " ", "a13", " ", 
+                   InterpretationBox[
+                    StyleBox[
+                    RowBox[{"Bx"}], AutoSpacing -> False, ShowAutoStyles -> 
+                    False], $CellContext`Bx, Editable -> False], " ", 
+                   RowBox[{"hs", "[", "v", "]"}]}]}]}], ",", 
+             RowBox[{
+               RowBox[{
+                 SuperscriptBox[
+                 "hr", "\[Prime]\[Prime]", MultilineFunction -> None], "[", 
+                 "u", "]"}], "\[Equal]", "0"}]}], "}"}], ",", 
+         RowBox[{"{", 
+           RowBox[{
+             RowBox[{
+               RowBox[{
+                 SuperscriptBox["hr", "\[Prime]", MultilineFunction -> None], 
+                 "[", "u", "]"}], "\[Equal]", 
+               RowBox[{"b13", " ", 
+                 RowBox[{"br", "[", "u", "]"}]}]}], ",", 
+             RowBox[{
+               RowBox[{
+                 SuperscriptBox["hs", "\[Prime]", MultilineFunction -> None], 
+                 "[", "v", "]"}], "\[Equal]", 
+               RowBox[{"-", 
+                 FractionBox[
+                  RowBox[{
+                    InterpretationBox[
+                    StyleBox[
+                    RowBox[{"Bx"}], AutoSpacing -> False, ShowAutoStyles -> 
+                    False], $CellContext`Bx, Editable -> False], " ", 
+                    RowBox[{"bs", "[", "v", "]"}]}], "b13"]}]}], ",", 
+             RowBox[{
+               RowBox[{
+                 SuperscriptBox["br", "\[Prime]", MultilineFunction -> None], 
+                 "[", "u", "]"}], "\[Equal]", "0"}], ",", 
+             RowBox[{
+               RowBox[{
+                 SuperscriptBox["bs", "\[Prime]", MultilineFunction -> None], 
+                 "[", "v", "]"}], "\[Equal]", 
+               RowBox[{
+                 RowBox[{"b41", " ", 
+                   RowBox[{"hr", "[", "u", "]"}]}], "+", 
+                 RowBox[{
+                   FractionBox["1", "4"], " ", "a13", " ", 
+                   InterpretationBox[
+                    StyleBox[
+                    RowBox[{"Bx"}], AutoSpacing -> False, ShowAutoStyles -> 
+                    False], $CellContext`Bx, Editable -> False], " ", 
+                   RowBox[{"hs", "[", "v", "]"}]}]}]}], ",", 
+             RowBox[{
+               RowBox[{
+                 SuperscriptBox[
+                 "hr", "\[Prime]\[Prime]", MultilineFunction -> None], "[", 
+                 "u", "]"}], "\[Equal]", "0"}]}], "}"}]}], "}"}], 
+     Short[#, 8]& ], "line" -> 496, "sessionID" -> 17126958621452859172, 
+   "byteCount" -> 432576, "size" -> 8, "stored" -> False, "expr" -> 
+   Missing["NotStored"], "wrap" -> OutputSizeLimit`Defer, "version" -> 1|>,
+  "OutputSizeLimitTemplate"]], "Output",
+ CellChangeTimes->{3.9321974569398193`*^9},
+ CellLabel->
+  "Out[496]=",ExpressionUUID->"13a009f9-840f-6440-80ce-45a706512815"]
+}, Open  ]],
+
+Cell["Then it is at least possible to consider all of these", "Text",
+ CellChangeTimes->{{3.9321974653215675`*^9, 
+  3.9321974760468063`*^9}},ExpressionUUID->"858b531d-416a-d54b-bb70-\
+843826e61371"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]
@@ -10135,7 +10436,7 @@ Cell[201839, 5506, 2622, 86, 51, "Output",ExpressionUUID->"1782d8fd-710c-0d4c-92
 Cell[204476, 5595, 404, 8, 58, "Text",ExpressionUUID->"b9937c9e-fe33-9141-a9dc-f2b14b79d090"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[204917, 5608, 226, 4, 69, "Chapter",ExpressionUUID->"f73f2f20-dcbb-d542-a813-5dd174d4a0d7"],
+Cell[204917, 5608, 226, 4, 58, "Chapter",ExpressionUUID->"f73f2f20-dcbb-d542-a813-5dd174d4a0d7"],
 Cell[CellGroupData[{
 Cell[205168, 5616, 162, 3, 54, "Subsection",ExpressionUUID->"8a3265ea-fdd5-2544-becd-c6025c096856"],
 Cell[CellGroupData[{
@@ -10193,13 +10494,13 @@ Cell[248337, 6966, 516, 12, 48, "Input",ExpressionUUID->"bc298d77-25ae-ee45-adf3
 Cell[248856, 6980, 1211, 37, 32, "Output",ExpressionUUID->"92e00c39-a1b4-e94c-849f-6f000514ea45"],
 Cell[250070, 7019, 2469, 70, 71, "Output",ExpressionUUID->"351428a1-84e5-ce41-8317-bd55470b92fa"]
 }, Open  ]]
-}, Open  ]],
+}, Closed]],
 Cell[CellGroupData[{
-Cell[252588, 7095, 286, 4, 54, "Subsection",ExpressionUUID->"734af06d-3a26-d645-a075-31cf07144ca4"],
+Cell[252588, 7095, 286, 4, 38, "Subsection",ExpressionUUID->"734af06d-3a26-d645-a075-31cf07144ca4"],
 Cell[CellGroupData[{
 Cell[252899, 7103, 404, 8, 48, "Input",ExpressionUUID->"6f6297f8-4733-0e4a-8cdc-edb0dece13f1"],
 Cell[253306, 7113, 1242, 37, 32, "Output",ExpressionUUID->"5d0dfe81-dfa0-2447-a6b9-97b7dab9699c"],
-Cell[254551, 7152, 2469, 70, 94, "Output",ExpressionUUID->"abdeeeb8-1c79-d547-b4b6-a996098e081f"]
+Cell[254551, 7152, 2469, 70, 71, "Output",ExpressionUUID->"abdeeeb8-1c79-d547-b4b6-a996098e081f"]
 }, Open  ]],
 Cell[257035, 7225, 225, 5, 35, "Text",ExpressionUUID->"44c06b14-77b6-8f45-9776-e53a182a6174"],
 Cell[CellGroupData[{
@@ -10318,10 +10619,16 @@ Cell[335256, 9435, 300, 7, 28, "Input",ExpressionUUID->"fc4589b9-8350-0842-bb33-
 Cell[335559, 9444, 9832, 221, 183, "Output",ExpressionUUID->"0dba14d6-202e-3341-a303-1dcc5533c34a"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[345428, 9670, 829, 20, 28, "Input",ExpressionUUID->"fc223648-afcb-bf48-8131-a6815bfd3f54"],
-Cell[346260, 9692, 348, 6, 32, "Output",ExpressionUUID->"e52e0579-d122-a042-9d08-06248378c639"]
+Cell[345428, 9670, 930, 21, 28, "Input",ExpressionUUID->"fc223648-afcb-bf48-8131-a6815bfd3f54"],
+Cell[346361, 9693, 378, 7, 32, "Output",ExpressionUUID->"d09ceb9f-7a00-e144-8c17-e08f809e0e27"]
 }, Open  ]],
-Cell[346623, 9701, 442, 9, 58, "Text",ExpressionUUID->"ef526465-207b-a64d-9f06-8a3cbb57cd23"]
+Cell[346754, 9703, 442, 9, 58, "Text",ExpressionUUID->"bcfd0d4f-8886-484f-824b-3190bbb8caec"],
+Cell[347199, 9714, 401, 8, 58, "Text",ExpressionUUID->"0754193a-6d41-e84d-bcdb-e5a55fcc00b5"],
+Cell[CellGroupData[{
+Cell[347625, 9726, 440, 11, 28, "Input",ExpressionUUID->"c40aa5f7-775a-3a45-85b5-2dcee0c0f585"],
+Cell[348068, 9739, 11815, 266, 211, "Output",ExpressionUUID->"13a009f9-840f-6440-80ce-45a706512815"]
+}, Open  ]],
+Cell[359898, 10008, 199, 3, 35, "Text",ExpressionUUID->"858b531d-416a-d54b-bb70-843826e61371"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]
