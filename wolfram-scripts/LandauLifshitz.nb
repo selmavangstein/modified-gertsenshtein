@@ -1,0 +1,49 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 14.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      1087,         41]
+NotebookOptionsPosition[       561,         21]
+NotebookOutlinePosition[      1227,         44]
+CellTagsIndexPosition[      1184,         41]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+},
+Evaluator->"climath",
+WindowSize->{1680, 1010.25},
+WindowMargins->{{0, Automatic}, {Automatic, 19.5}},
+PrintingCopies->1,
+PrintingPageRange->{Automatic, Automatic},
+PrintingOptions->{"PaperOrientation"->"Landscape",
+"PaperSize"->{1684, 1191},
+"PostScriptOutputFile"->"/home/williamb/Documents/modified-gertsenshtein/\
+wolfram-scripts/print.pdf"},
+FrontEndVersion->"14.0 for Linux x86 (64-bit) (December 12, 2023)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"9198de8f-39d5-4fcf-a60a-7167e6ae18ba"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+}
+]
+*)
+
