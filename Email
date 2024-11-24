@@ -1,0 +1,70 @@
+Dear Selma,
+
+Well done on what looks like a successful integration of the GR equations. I
+think we can divide this project into two portions: (i) the algebraic pipeline,
+which you completed over the summer, and (ii) the numerical pipeline.
+
+I suggested towards the end of next week for you to revisit the algebraic
+pipeline so that we can be sure of where our equations are coming from, but I
+now think it would be more efficient if I did that myself. After all, the
+consolidation of the sources and the HPC integration was done from my side.
+
+Instead, I'd suggest you spend this week on the numerics, continuing to use the
+GR equations as an example. The functionality we want is as follows;
+
+#=========================#
+#  Scales and dimensions  #
+#=========================#
+
+We should 
+
+astrophysics
+Tens to hundred of Hz with strains of 1e-21
+
+cavities in the GHz range
+
+#===============================#
+#  Standard initial conditions  #
+#===============================#
+
+We should retain the freedom to define arbitrary profiles in the initial
+`u`-slices, but we do probably want to follow the literature and focus on
+high-frequency sinusoids, without support. As a start, we can transfer all the
+dimensionality to the low-frequency factors and use unit-sinusoids for the
+high-frequency parts. The high-frequency parts will then be parameterised by:
+
+- Frequency `f` representative of GWs, we assume the EM frequency is the same.
+- Completely general phase shift `phi` between the GW and EM parts.
+
+Once these parameters are specified, we still need to provide initial data for
+the low-frequency parts. We expect there to be a phase shift between the GW and
+EM parts in the `v` direction, but we only know what this phase shift will be
+in the case of the GR solution which, up to some approximations, is analytic.
+It therefore makes sense to consider:
+
+- For the metric, zero derivative and an amplitude `h` which is given by some
+  fiducial strain representative of GWs.
+- For the magnetic field perturbation, completely general amplitude `b` and
+  derivative `db` within some range of values that isn't utterly absurd (for
+example, with energy densities not exceeding those that might be found in a
+microwave oven, if you multiply the square of the derivative by the square of
+the amplitude and include the appropriate fictional SI constants).
+
+We also need to specify the background field:
+
+- For the background magnetic field `B`, some fiducial value representative of
+  laboratory magnetic fields.
+
+#============================#
+#  Testing of a given model  #
+#============================#
+
+Perform the integration over a square of spacetime with side-length `l`,
+starting at an integer number `N` of evenly-spaced points in the initial
+`u`-slice and propagating each point across the square in the `v` direction.
+
+
+
+
+
+

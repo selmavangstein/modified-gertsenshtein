@@ -167,6 +167,17 @@ EvaluateLagrangianBG[Lagrangian_,resultsFileName_]:=Module[{lagrangian=Lagrangia
 		{lagrangian,maxwellField,einsteinField,torsionField}];*)
 ];
 
+ShowComponents[InputComponents_,InputRules_]:=Module[{myComponents=InputComponents},
+	myComponents=myComponents/.InputRules;
+	myComponents//=Flatten;
+	myComponents//=DeleteDuplicates;
+	myComponents//=((#==0)&/@#)&;
+	myComponents//=((#//FullSimplify)&/@#)&;
+	myComponents//=DeleteDuplicates;
+	myComponents//=DeleteCases[#,True]&;
+	DisplayExpression@(myComponents~MyRaggedBlock~1);
+];
+
 StudySystem[InputRules_]:=Module[{rules=InputRules,myLagrangian,myComponents,tList,eList,mList,expr,finalExpr},
 
 	Comment@"Here is the list of rules.";
@@ -206,15 +217,4 @@ StudySystem[InputRules_]:=Module[{rules=InputRules,myLagrangian,myComponents,tLi
 
 	finalExpr=fullySimplify[expr,rules];
 	DisplayExpression@(finalExpr~MyRaggedBlock~1);
-];
-
-ShowComponents[InputComponents_,InputRules_]:=Module[{myComponents=InputComponents},
-	myComponents=myComponents/.InputRules;
-	myComponents//=Flatten;
-	myComponents//=DeleteDuplicates;
-	myComponents//=((#==0)&/@#)&;
-	myComponents//=((#//FullSimplify)&/@#)&;
-	myComponents//=DeleteDuplicates;
-	myComponents//=DeleteCases[#,True]&;
-	DisplayExpression@(myComponents~MyRaggedBlock~1);
 ];
